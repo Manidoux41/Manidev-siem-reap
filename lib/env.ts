@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { resolveDatabaseUrl } from "./database-url";
 
 const optionalUrl = z.preprocess(
   (value) => (value === "" ? undefined : value),
@@ -53,4 +54,7 @@ if (
   throw new Error("NEXT_PUBLIC_SITE_URL doit utiliser HTTPS en production.");
 }
 
-export const env = parsedEnvironment.data;
+export const env = {
+  ...parsedEnvironment.data,
+  DATABASE_URL: resolveDatabaseUrl(process.env),
+};

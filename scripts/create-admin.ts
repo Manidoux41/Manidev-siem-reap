@@ -3,12 +3,14 @@ import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
 import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../lib/password";
+import { resolveDatabaseUrl } from "../lib/database-url";
 
 loadEnvConfig(process.cwd());
 
 async function main() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL est nécessaire pour créer un administrateur.");
+  const datasourceUrl = resolveDatabaseUrl(process.env);
+  if (!datasourceUrl) {
+    throw new Error("Une connexion PostgreSQL est nécessaire pour créer un administrateur.");
   }
 
   const terminal = createInterface({ input: stdin, output: stdout });
@@ -24,7 +26,7 @@ async function main() {
       throw new Error("Le mot de passe doit contenir au moins 16 caractères.");
     }
 
-    const prisma = new PrismaClient();
+    const prisma = new PrismaClient({ datasourceUrl });
     try {
       const user = await prisma.adminUser.upsert({
         where: { email },

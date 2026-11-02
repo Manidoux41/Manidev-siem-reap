@@ -1,5 +1,6 @@
 import { loadEnvConfig } from "@next/env";
 import { PrismaClient, ProjectStatus } from "@prisma/client";
+import { resolveDatabaseUrl } from "../lib/database-url";
 
 loadEnvConfig(process.cwd());
 
@@ -42,12 +43,13 @@ async function getPublicRepositories(owner: string): Promise<GitHubRepository[]>
 
 async function main() {
   const owner = process.env.GITHUB_USERNAME ?? "Manidoux41";
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL est nécessaire pour importer les dépôts.");
+  const datasourceUrl = resolveDatabaseUrl(process.env);
+  if (!datasourceUrl) {
+    throw new Error("Une connexion PostgreSQL est nécessaire pour importer les dépôts.");
   }
 
   const repositories = await getPublicRepositories(owner);
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient({ datasourceUrl });
   try {
     const category = await prisma.category.upsert({
       where: { slug: "autres" },

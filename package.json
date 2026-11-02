@@ -11,8 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:deploy": "prisma migrate deploy",
+    "db:migrate": "tsx scripts/prisma-migrate.ts dev",
+    "db:deploy": "tsx scripts/prisma-migrate.ts deploy",
     "db:seed": "tsx prisma/seed.ts",
     "admin:create": "tsx scripts/create-admin.ts",
     "github:sync": "tsx scripts/sync-github.ts"

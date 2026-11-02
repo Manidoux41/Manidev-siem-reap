@@ -1,10 +1,13 @@
 import { loadEnvConfig } from "@next/env";
 import { PrismaClient, ProjectStatus } from "@prisma/client";
 import { verifiedProjects } from "../lib/portfolio-data";
+import { resolveDatabaseUrl } from "../lib/database-url";
 
 loadEnvConfig(process.cwd());
 
-const prisma = new PrismaClient();
+const datasourceUrl = resolveDatabaseUrl(process.env);
+if (!datasourceUrl) throw new Error("A PostgreSQL connection is required for seeding.");
+const prisma = new PrismaClient({ datasourceUrl });
 
 async function main() {
   for (const project of verifiedProjects) {

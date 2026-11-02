@@ -22,11 +22,13 @@ npm install
 cp .env.example .env
 ```
 
-Renseignez `DATABASE_URL` dans `.env` avec une URL PostgreSQL. `DIRECT_URL`
-n'est pas utilisé par cette configuration Prisma : la même URL sert aux
-requêtes applicatives et aux migrations. Configurez également une vraie URL
-`NEXT_PUBLIC_SITE_URL` avant le déploiement.
-Sans PostgreSQL, laissez `DATABASE_URL` vide : n'utilisez pas une URL fictive
+Renseignez une connexion PostgreSQL dans `.env` ou `.env.local`.
+L'application utilise, dans l'ordre, `DATABASE_URL`, `DATABASE_URL_POOLED`,
+`POSTGRES_URL`, puis `PRISMA_DATABASE_URL`. Les commandes npm de migration
+privilégient `POSTGRES_URL`, puis `DATABASE_URL`, `DATABASE_URL_POOLED` et
+`PRISMA_DATABASE_URL`, et transmettent la connexion choisie à Prisma.
+Configurez également une vraie URL `NEXT_PUBLIC_SITE_URL` avant le déploiement.
+Sans PostgreSQL, laissez toutes ces variables vides : n'utilisez pas une URL fictive
 ou les valeurs `USER`, `PASSWORD`, `HOST` et `DATABASE`.
 
 ```bash
@@ -170,7 +172,10 @@ couvertures doivent provenir d'un hôte configuré.
 
 | Variable | Obligatoire | Description |
 |---|---:|---|
-| `DATABASE_URL` | En production | Connexion PostgreSQL de Prisma |
+| `DATABASE_URL` | Si base utilisée | Connexion PostgreSQL explicite, prioritaire pour l'application |
+| `DATABASE_URL_POOLED` | Alternative | Connexion PostgreSQL mutualisée pour l'application |
+| `POSTGRES_URL` | Alternative | Connexion PostgreSQL privilégiée par les migrations |
+| `PRISMA_DATABASE_URL` | Alternative | Prise en charge si URL `postgres://` ou `postgresql://` ; les URL proxy `prisma://` et `prisma+postgres://` nécessitent une connexion PostgreSQL parmi les variables précédentes |
 | `NEXT_PUBLIC_SITE_URL` | En production | Origine HTTPS canonique ; utilisée par le sitemap |
 | `IMAGE_HOSTS` | Si images distantes | Hôtes HTTPS autorisés par Next Image, séparés par des virgules |
 | `GITHUB_USERNAME` | Non | Compte à synchroniser, défaut `Manidoux41` |
@@ -200,8 +205,8 @@ Sur Vercel, utilisez **`npm run build`** comme Build Command. Son script
 sont restaurées depuis le cache. Ne remplacez pas cette commande par
 `next build`, qui ignore le script npm.
 
-Pour publier uniquement le portfolio sans PostgreSQL, ne définissez pas
-`DATABASE_URL` dans Vercel et ne lancez ni migrations ni seed. Le site et les
+Pour publier uniquement le portfolio sans PostgreSQL, ne définissez aucune
+des quatre variables de connexion dans Vercel et ne lancez ni migrations ni seed. Le site et les
 API de lecture utilisent l'instantané public ; Prisma n'est initialisé que
 lorsqu'une fonctionnalité accède réellement à une base configurée.
 Configurez `NEXT_PUBLIC_SITE_URL=https://manidev-siem-reap.vercel.app`, puis
@@ -210,8 +215,16 @@ indisponibles dans ce mode.
 
 Avec une base PostgreSQL :
 
+Les variables fournies par votre intégration Vercel sont utilisables directement :
+aucun renommage vers `DATABASE_URL` n'est nécessaire. `POSTGRES_URL` doit
+pointer vers la même base que `DATABASE_URL_POOLED`. Son nom ne garantit pas
+une connexion directe : si elle utilise aussi un pool incompatible avec les
+migrations, fournissez une connexion directe dans `POSTGRES_URL`.
+Les URL Prisma proxy ne sont pas utilisées pour les migrations.
+Ne définissez `PRISMA_DATABASE_URL` qu'une fois.
+
 1. Créez une base PostgreSQL managée (Neon, Supabase ou équivalent) et configurez
-   sa chaîne de connexion directe dans `DATABASE_URL`.
+   ses variables de connexion (par exemple `POSTGRES_URL` et `DATABASE_URL_POOLED`).
 2. Définissez `NEXT_PUBLIC_SITE_URL` avec le domaine HTTPS réellement attaché.
    Ajoutez `IMAGE_HOSTS` uniquement si un hôte d'images est utilisé.
 3. Configurez les mêmes variables dans l'environnement de production Vercel.

@@ -112,7 +112,8 @@ async function AdminContent() {
       <section className="admin-card">
         <p className="eyebrow">Configuration requise</p>
         <p className="admin-note">
-          Configurez <code>DATABASE_URL</code>, appliquez les migrations,
+          Configurez une connexion PostgreSQL (<code>POSTGRES_URL</code>,
+          {" "}<code>DATABASE_URL_POOLED</code> ou <code>DATABASE_URL</code>), appliquez les migrations,
           exécutez le seed puis créez le premier compte avec{" "}
           <code>npm run admin:create</code>. L’administration ne crée pas
           de compte ou mot de passe par défaut.
