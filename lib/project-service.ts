@@ -1,0 +1,67 @@
+import { prisma, databaseConfigured } from "@/lib/prisma";
+import {
+  verifiedProjects,
+  type PortfolioProject,
+} from "@/lib/portfolio-data";
+
+function mapDatabaseProject(
+  project: Awaited<ReturnType<typeof findDatabaseProjects>>[number],
+): PortfolioProject {
+  return {
+    id: project.id,
+    title: project.title,
+    slug: project.slug,
+    shortDescription: project.shortDescription,
+    description: project.description,
+    problem: project.problem,
+    solution: project.solution,
+    status: project.status,
+    category: project.category,
+    technologies: project.technologies.map(
+      ({ technology }) => technology.name,
+    ),
+    githubUrl: project.githubUrl,
+    liveUrl: project.liveUrl,
+    appUrl: project.appUrl,
+    featured: project.featured,
+    coverImage: project.coverImage,
+    source: "database",
+  };
+}
+
+function findDatabaseProjects() {
+  return prisma.project.findMany({
+    where: { published: true },
+    include: {
+      category: { select: { name: true, slug: true } },
+      technologies: {
+        include: { technology: { select: { name: true } } },
+      },
+    },
+    orderBy: [{ featured: "desc" }, { sortOrder: "asc" }, { createdAt: "desc" }],
+  });
+}
+
+export async function getPublicProjects(): Promise<PortfolioProject[]> {
+  if (!databaseConfigured) return verifiedProjects;
+  return (await findDatabaseProjects()).map(mapDatabaseProject);
+}
+
+export async function getPublicProject(
+  slug: string,
+): Promise<PortfolioProject | null> {
+  if (!databaseConfigured) {
+    return verifiedProjects.find((project) => project.slug === slug) ?? null;
+  }
+
+  const project = await prisma.project.findFirst({
+    where: { slug, published: true },
+    include: {
+      category: { select: { name: true, slug: true } },
+      technologies: {
+        include: { technology: { select: { name: true } } },
+      },
+    },
+  });
+  return project ? mapDatabaseProject(project) : null;
+}
