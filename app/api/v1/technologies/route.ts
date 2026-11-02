@@ -1,12 +1,12 @@
 import { connection } from "next/server";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { verifiedProjects } from "@/lib/portfolio-data";
 
 export async function GET() {
   await connection();
   try {
     const data = databaseConfigured
-      ? await prisma.technology.findMany({
+      ? await getPrisma().technology.findMany({
           where: { projects: { some: { project: { published: true } } } },
           select: { name: true, slug: true, category: true, icon: true },
           orderBy: { name: "asc" },

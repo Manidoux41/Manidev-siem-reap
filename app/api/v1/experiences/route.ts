@@ -1,11 +1,11 @@
 import { connection } from "next/server";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 
 export async function GET() {
   await connection();
   try {
     const data = databaseConfigured
-      ? await prisma.experience.findMany({
+      ? await getPrisma().experience.findMany({
           where: { published: true },
           orderBy: { sortOrder: "asc" },
         })

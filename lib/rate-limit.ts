@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 
 type Bucket = { count: number; resetAt: number };
 
@@ -14,6 +14,7 @@ export async function isRateLimited(
   const hashedKey = createHash("sha256").update(key).digest("hex");
 
   if (databaseConfigured) {
+    const prisma = getPrisma();
     const nowDate = new Date(now);
     const resetAt = new Date(now + windowMs);
     const entry = await prisma.rateLimitEntry.findUnique({

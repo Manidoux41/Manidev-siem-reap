@@ -1,5 +1,5 @@
 import { getAdminUser } from "@/lib/admin-session";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { hasSameOrigin } from "@/lib/rate-limit";
 import { contactStatusSchema } from "@/lib/validation";
 
@@ -33,7 +33,7 @@ export async function PATCH(
 
   try {
     const { id } = await params;
-    await prisma.contactMessage.update({
+    await getPrisma().contactMessage.update({
       where: { id },
       data: { status: status.data },
     });

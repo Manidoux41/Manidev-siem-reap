@@ -1,4 +1,4 @@
-import { databaseConfigured, prisma } from "@/lib/prisma";
+import { databaseConfigured, getPrisma } from "@/lib/prisma";
 
 export type PublicSiteSettings = {
   "site.title": string;
@@ -20,7 +20,7 @@ const defaultSettings: PublicSiteSettings = {
 export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
   if (!databaseConfigured) return defaultSettings;
 
-  const entries = await prisma.siteSetting.findMany({
+  const entries = await getPrisma().siteSetting.findMany({
     where: {
       key: { in: Object.keys(defaultSettings) },
     },

@@ -1,4 +1,4 @@
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import {
   verifiedProjects,
   type PortfolioProject,
@@ -30,7 +30,7 @@ function mapDatabaseProject(
 }
 
 function findDatabaseProjects() {
-  return prisma.project.findMany({
+  return getPrisma().project.findMany({
     where: { published: true },
     include: {
       category: { select: { name: true, slug: true } },
@@ -54,7 +54,7 @@ export async function getPublicProject(
     return verifiedProjects.find((project) => project.slug === slug) ?? null;
   }
 
-  const project = await prisma.project.findFirst({
+  const project = await getPrisma().project.findFirst({
     where: { slug, published: true },
     include: {
       category: { select: { name: true, slug: true } },

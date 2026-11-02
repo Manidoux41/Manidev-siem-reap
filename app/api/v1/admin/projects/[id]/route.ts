@@ -1,6 +1,6 @@
 import { getAdminUser } from "@/lib/admin-session";
 import { updateProject } from "@/lib/admin-projects";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { hasSameOrigin } from "@/lib/rate-limit";
 import { projectInputSchema } from "@/lib/validation";
 
@@ -63,7 +63,7 @@ export async function DELETE(
 
   try {
     const { id } = await params;
-    await prisma.project.delete({ where: { id } });
+    await getPrisma().project.delete({ where: { id } });
     return Response.json({ message: "Projet supprimé." });
   } catch (error) {
     console.error("Erreur lors de la suppression du projet.", error);

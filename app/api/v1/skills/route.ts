@@ -1,12 +1,12 @@
 import { connection } from "next/server";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { verifiedProjects } from "@/lib/portfolio-data";
 
 export async function GET() {
   await connection();
   try {
     const data = databaseConfigured
-      ? await prisma.skill.findMany({
+      ? await getPrisma().skill.findMany({
           where: { published: true },
           orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
         })

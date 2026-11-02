@@ -1,6 +1,6 @@
 import { getAdminUser } from "@/lib/admin-session";
 import { createProject } from "@/lib/admin-projects";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { hasSameOrigin } from "@/lib/rate-limit";
 import { projectInputSchema } from "@/lib/validation";
 
@@ -14,7 +14,7 @@ export async function GET() {
   }
 
   try {
-    const data = await prisma.project.findMany({
+    const data = await getPrisma().project.findMany({
       include: {
         category: { select: { name: true, slug: true } },
         technologies: {

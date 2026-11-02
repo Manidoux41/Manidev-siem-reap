@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createAdminSession } from "@/lib/admin-session";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { isRateLimited, requestAddress, hasSameOrigin } from "@/lib/rate-limit";
 import { verifyPassword } from "@/lib/password";
 
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
   try {
     const email = parsed.data.email.toLowerCase();
-    const user = await prisma.adminUser.findUnique({ where: { email } });
+    const user = await getPrisma().adminUser.findUnique({ where: { email } });
     const valid =
       user && (await verifyPassword(parsed.data.password, user.passwordHash));
     if (!user || !valid) {
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     }
 
     await createAdminSession(user.id);
-    await prisma.adminUser.update({
+    await getPrisma().adminUser.update({
       where: { id: user.id },
       data: { lastLoginAt: new Date() },
     });

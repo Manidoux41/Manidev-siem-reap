@@ -1,5 +1,5 @@
 import { connection } from "next/server";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { getCategoryName, getSiteLocale, isSiteLocale } from "@/lib/i18n";
 import { verifiedProjects } from "@/lib/portfolio-data";
 
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     }
     const locale = getSiteLocale(requestedLocale);
     const categories = databaseConfigured
-      ? await prisma.category.findMany({
+      ? await getPrisma().category.findMany({
           where: { projects: { some: { published: true } } },
           select: { name: true, slug: true, description: true },
           orderBy: { sortOrder: "asc" },

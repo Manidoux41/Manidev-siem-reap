@@ -1,5 +1,5 @@
 import { getAdminUser } from "@/lib/admin-session";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 
 export async function GET() {
   const admin = await getAdminUser();
@@ -11,7 +11,7 @@ export async function GET() {
   }
 
   try {
-    const data = await prisma.contactMessage.findMany({
+    const data = await getPrisma().contactMessage.findMany({
       orderBy: { createdAt: "desc" },
       take: 100,
     });

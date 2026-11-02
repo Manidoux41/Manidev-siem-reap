@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 
 const cookieName = "portfolio_admin_session";
 const sessionDurationMs = 7 * 24 * 60 * 60 * 1000;
@@ -13,7 +13,7 @@ export async function createAdminSession(userId: string): Promise<void> {
   const token = randomBytes(32).toString("base64url");
   const expiresAt = new Date(Date.now() + sessionDurationMs);
 
-  await prisma.adminSession.create({
+  await getPrisma().adminSession.create({
     data: { tokenHash: hashToken(token), userId, expiresAt },
   });
 
@@ -34,7 +34,7 @@ export async function getAdminUser() {
   const token = cookieStore.get(cookieName)?.value;
   if (!token) return null;
 
-  const session = await prisma.adminSession.findFirst({
+  const session = await getPrisma().adminSession.findFirst({
     where: { tokenHash: hashToken(token), expiresAt: { gt: new Date() } },
     include: { user: true },
   });
@@ -46,7 +46,7 @@ export async function deleteAdminSession(): Promise<void> {
   const token = cookieStore.get(cookieName)?.value;
 
   if (token && databaseConfigured) {
-    await prisma.adminSession.deleteMany({
+    await getPrisma().adminSession.deleteMany({
       where: { tokenHash: hashToken(token) },
     });
   }

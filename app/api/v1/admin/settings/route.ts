@@ -1,5 +1,5 @@
 import { getAdminUser } from "@/lib/admin-session";
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { hasSameOrigin } from "@/lib/rate-limit";
 import { siteSettingsSchema } from "@/lib/validation";
 
@@ -13,7 +13,7 @@ export async function GET() {
   }
 
   try {
-    const data = await prisma.siteSetting.findMany({
+    const data = await getPrisma().siteSetting.findMany({
       where: {
         key: {
           in: [
@@ -60,6 +60,7 @@ export async function PATCH(request: Request) {
   }
 
   try {
+    const prisma = getPrisma();
     await prisma.$transaction(
       Object.entries(parsed.data).map(([key, value]) =>
         prisma.siteSetting.upsert({

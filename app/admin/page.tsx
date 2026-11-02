@@ -7,7 +7,7 @@ import {
 } from "@/components/admin-console";
 import { SiteHeader } from "@/components/site-header";
 import { getAdminUser } from "@/lib/admin-session";
-import { databaseConfigured, prisma } from "@/lib/prisma";
+import { databaseConfigured, getPrisma } from "@/lib/prisma";
 
 export default function AdminPage() {
   return (
@@ -44,6 +44,7 @@ async function AdminContent() {
   };
 
   if (admin) {
+    const prisma = getPrisma();
     const [projects, messages, settings] = await Promise.all([
       prisma.project.findMany({
         include: {

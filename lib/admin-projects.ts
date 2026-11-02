@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import type { z } from "zod";
 import { projectInputSchema } from "@/lib/validation";
 
@@ -14,6 +14,7 @@ export function slugify(value: string): string {
 }
 
 async function saveReferences(input: ProjectInput) {
+  const prisma = getPrisma();
   const category = await prisma.category.upsert({
     where: { slug: slugify(input.category) },
     update: { name: input.category },
@@ -37,7 +38,7 @@ async function saveReferences(input: ProjectInput) {
 
 export async function createProject(input: ProjectInput) {
   const { category, technologies } = await saveReferences(input);
-  return prisma.project.create({
+  return getPrisma().project.create({
     data: {
       title: input.title,
       slug: input.slug,
@@ -68,7 +69,7 @@ export async function createProject(input: ProjectInput) {
 
 export async function updateProject(id: string, input: ProjectInput) {
   const { category, technologies } = await saveReferences(input);
-  return prisma.$transaction(async (transaction) => {
+  return getPrisma().$transaction(async (transaction) => {
     await transaction.projectTechnology.deleteMany({ where: { projectId: id } });
     const project = await transaction.project.update({
       where: { id },

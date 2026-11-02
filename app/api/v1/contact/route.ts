@@ -1,4 +1,4 @@
-import { prisma, databaseConfigured } from "@/lib/prisma";
+import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { isRateLimited, requestAddress, hasSameOrigin } from "@/lib/rate-limit";
 import { contactSchema } from "@/lib/validation";
 
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
 
   try {
     const { name, email, subject, message } = parsed.data;
-    await prisma.contactMessage.create({
+    await getPrisma().contactMessage.create({
       data: { name, email, subject, message },
     });
     return Response.json(

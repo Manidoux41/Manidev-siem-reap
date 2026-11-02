@@ -26,6 +26,8 @@ Renseignez `DATABASE_URL` dans `.env` avec une URL PostgreSQL. `DIRECT_URL`
 n'est pas utilisé par cette configuration Prisma : la même URL sert aux
 requêtes applicatives et aux migrations. Configurez également une vraie URL
 `NEXT_PUBLIC_SITE_URL` avant le déploiement.
+Sans PostgreSQL, laissez `DATABASE_URL` vide : n'utilisez pas une URL fictive
+ou les valeurs `USER`, `PASSWORD`, `HOST` et `DATABASE`.
 
 ```bash
 npm run db:generate
@@ -192,6 +194,21 @@ La synchronisation du contenu et la connexion PostgreSQL nécessitent une base
 réelle.
 
 ## Déploiement Vercel / PostgreSQL managé
+
+Sur Vercel, utilisez **`npm run build`** comme Build Command. Son script
+`prebuild` exécute explicitement `prisma generate`, même si les dépendances
+sont restaurées depuis le cache. Ne remplacez pas cette commande par
+`next build`, qui ignore le script npm.
+
+Pour publier uniquement le portfolio sans PostgreSQL, ne définissez pas
+`DATABASE_URL` dans Vercel et ne lancez ni migrations ni seed. Le site et les
+API de lecture utilisent l'instantané public ; Prisma n'est initialisé que
+lorsqu'une fonctionnalité accède réellement à une base configurée.
+Configurez `NEXT_PUBLIC_SITE_URL=https://manidev-siem-reap.vercel.app`, puis
+redéployez. Le formulaire et l'administration restent explicitement
+indisponibles dans ce mode.
+
+Avec une base PostgreSQL :
 
 1. Créez une base PostgreSQL managée (Neon, Supabase ou équivalent) et configurez
    sa chaîne de connexion directe dans `DATABASE_URL`.
