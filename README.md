@@ -13,6 +13,8 @@ Content blocks assemble from alternating left/right edges as they enter the view
 and reverse as they leave it. Progress follows scroll position rather than a one-shot
 timer. Keyboard focus keeps interactive blocks visible; reduced-motion preferences
 disable assembly and parallax. Streamed content is registered as it arrives.
+Service and commercial-offer grids animate as single groups so neighboring cards
+retain their spacing throughout the scroll animation.
 The home hero features a locally cropped, lightly brightened and sharpened
 portrait, optimized as WebP. The original photo is preserved; the portrait
 sits beside the heading on desktop and below it on mobile.

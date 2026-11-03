@@ -66,7 +66,7 @@ export function ScrollEffects() {
         }
       });
       document.querySelectorAll<HTMLElement>(
-        ".reveal, .services-heading, .services-grid > section, .commercial-offer, .ai-tools > header, .ai-tool, .ai-tools-safeguards, .services-copy, .services-contact > div, .services-contact > form",
+        ".reveal, .services-heading, .services-grid, .ai-tools > header, .ai-tool, .ai-tools-safeguards, .services-copy, .services-contact > div, .services-contact > form",
       ).forEach((element) => {
         if (elements.has(element) || element.parentElement?.closest(".scroll-assemble")) return;
         element.style.setProperty("--assembly-direction", elements.size % 2 ? "1" : "-1");
