@@ -5,9 +5,15 @@ import { siteUrl } from "@/lib/seo";
 import { env } from "@/lib/env";
 import "../globals.css";
 
+const googleVerification = "Ylb55vJ9XgoaTwbtG5MkjiBCRnkROCCs_9pjr2CfGaE";
+
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  verification: { google: env.GOOGLE_SITE_VERIFICATION },
+  verification: {
+    google: env.GOOGLE_SITE_VERIFICATION && env.GOOGLE_SITE_VERIFICATION !== googleVerification
+      ? [googleVerification, env.GOOGLE_SITE_VERIFICATION]
+      : googleVerification,
+  },
   title: {
     default: "Manfred Parbatia — Full-Stack Developer",
     template: "%s | Manfred Parbatia",
