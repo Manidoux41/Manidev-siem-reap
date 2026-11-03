@@ -145,6 +145,18 @@ export async function GET() {
       },
       "/admin/messages/{id}": {
         patch: { summary: "Mettre à jour le statut d'un message (administration)", responses: { "200": { description: "Statut mis à jour." }, "401": { description: "Authentification requise." } } },
+        delete: {
+          summary: "Supprimer définitivement un message de la base (administration)",
+          parameters: [{ name: "id", in: "path", required: true, schema: { type: "string" } }],
+          responses: {
+            "200": { description: "Message définitivement supprimé." },
+            "401": { description: "Authentification requise." },
+            "403": { description: "Origine de requête invalide." },
+            "404": { description: "Message introuvable." },
+            "500": { description: "Échec de la suppression." },
+            "503": { description: "Base de données indisponible." },
+          },
+        },
       },
       "/admin/settings": {
         get: { summary: "Lire les paramètres administrables", responses: { "200": { description: "Paramètres." }, "401": { description: "Authentification requise." } } },

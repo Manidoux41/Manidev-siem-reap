@@ -224,6 +224,11 @@ après un changement d'écran ; le bouton « Créer un projet » démarre un nou
 formulaire et demande confirmation avant d'abandonner les modifications en cours.
 Les projets sont recherchables et les messages filtrables par statut.
 Le statut « Répondu » ne déclenche pas l'envoi d'un e-mail.
+Chaque message dispose d'un bouton « Supprimer » avec confirmation irréversible :
+`DELETE /api/v1/admin/messages/{id}` efface réellement la ligne PostgreSQL et son
+suivi de notification, sans archivage. La session administrateur et l'origine de
+la requête sont vérifiées. Les e-mails déjà envoyés ou en cours d'envoi ne sont
+pas rappelés ; la suppression ne concerne que la base de données.
 
 Les ressources publiques sans endpoint d'écriture sont consultées en lecture
 seule. L'explorateur couvre tous les endpoints existants : requêtes GET,

@@ -279,6 +279,31 @@ export function AdminConsole({
     }
   }
 
+  async function deleteMessage(message: ContactMessage) {
+    if (!window.confirm(
+      `Supprimer définitivement « ${message.subject} » de ${message.name} de la base de données ? Cette action est irréversible.`,
+    )) return;
+    setBusy(true);
+    setError(false);
+    setFeedback("");
+    try {
+      await readResponse(
+        await fetch(`/api/v1/admin/messages/${encodeURIComponent(message.id)}`, {
+          method: "DELETE",
+        }),
+      );
+      setMessages((current) => current.filter((item) => item.id !== message.id));
+      setFeedback("Message définitivement supprimé de la base de données.");
+    } catch (reason) {
+      setError(true);
+      setFeedback(
+        reason instanceof Error ? reason.message : "Suppression impossible.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function changeMessageStatus(
     id: string,
     status: ContactMessage["status"],
@@ -719,22 +744,32 @@ export function AdminConsole({
                   </p>
                   <time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString("fr-FR", { timeZone: "UTC" })} UTC</time>
                 </div>
-                <select
-                  aria-label={`Statut du message de ${item.name}`}
-                  value={item.status}
-                  disabled={busy}
-                  onChange={(event) =>
-                    changeMessageStatus(
-                      item.id,
-                      event.target.value as ContactMessage["status"],
-                    )
-                  }
-                >
-                  <option value="NEW">Nouveau</option>
-                  <option value="READ">Lu</option>
-                  <option value="REPLIED">Répondu</option>
-                  <option value="ARCHIVED">Archivé</option>
-                </select>
+                <div className="admin-actions">
+                  <select
+                    aria-label={`Statut du message de ${item.name}`}
+                    value={item.status}
+                    disabled={busy}
+                    onChange={(event) =>
+                      changeMessageStatus(
+                        item.id,
+                        event.target.value as ContactMessage["status"],
+                      )
+                    }
+                  >
+                    <option value="NEW">Nouveau</option>
+                    <option value="READ">Lu</option>
+                    <option value="REPLIED">Répondu</option>
+                    <option value="ARCHIVED">Archivé</option>
+                  </select>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    aria-label={`Supprimer le message « ${item.subject} » de ${item.name}`}
+                    onClick={() => deleteMessage(item)}
+                  >
+                    Supprimer
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
