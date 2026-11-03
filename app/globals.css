@@ -1719,6 +1719,7 @@ textarea:focus-visible {
 }
 
 .contact-form input,
+.contact-form select,
 .contact-form textarea {
   width: 100%;
   border: 0;
@@ -1732,7 +1733,8 @@ textarea:focus-visible {
   outline-offset: 3px;
 }
 
-.contact-form input {
+.contact-form input,
+.contact-form select {
   height: 42px;
 }
 
@@ -1743,6 +1745,7 @@ textarea:focus-visible {
 }
 
 .contact-form input:focus,
+.contact-form select:focus,
 .contact-form textarea:focus {
   border-color: var(--accent);
 }
@@ -3195,6 +3198,19 @@ textarea:focus-visible {
 }
 .testimonial-section {
   scroll-margin-top: 6rem;
+  margin-block: clamp(64px, 10vw, 120px);
+}
+
+.testimonial-section h2 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -.04em;
+  line-height: 1.1;
+}
+
+.testimonial-section .contact-form-wrap {
+  max-width: 900px;
+  margin-top: 2rem;
 }
 
 .testimonial-intro {
@@ -3237,6 +3253,8 @@ textarea:focus-visible {
   display: flex;
   align-items: flex-start;
   gap: .75rem;
+  font-size: .8rem;
+  line-height: 1.5;
 }
 
 .contact-form .testimonial-consent input {

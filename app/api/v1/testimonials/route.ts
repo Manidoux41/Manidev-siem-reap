@@ -5,6 +5,9 @@ import { getPublicTestimonials, testimonialSchema } from "@/lib/testimonials";
 export async function GET(request: Request) {
   try {
     const projectId = new URL(request.url).searchParams.get("projectId") ?? undefined;
+    if (projectId !== undefined && (!projectId.trim() || projectId.length > 100)) {
+      return Response.json({ error: "Invalid project ID." }, { status: 400 });
+    }
     return Response.json({ data: await getPublicTestimonials(projectId) }, {
       headers: { "Cache-Control": "no-store" },
     });

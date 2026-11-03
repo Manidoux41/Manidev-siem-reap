@@ -504,7 +504,8 @@ Le workflow GitHub Actions exécute lint, TypeScript, tests et build sur les
 pull requests et les pushes. L'envoi d'e-mails, l'upload d'images, les
 informations de profil supplémentaires et le dépôt du site de nounou restent
 à configurer ou à fournir.
-# Public moderated testimonials
+
+## Public moderated testimonials
 
 The homepage `#testimonials` and published project pages let visitors submit a
 display name (first name, pseudonym, or chosen name), a published project ID and

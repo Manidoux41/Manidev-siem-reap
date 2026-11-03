@@ -349,33 +349,32 @@ export function AdminConsole({
     } finally {
       setBusy(false);
     }
-
   }
 
   async function moderateTestimonial(item: AdminTestimonial, status?: "APPROVED" | "REJECTED") {
-      if (!status && !window.confirm(`Supprimer définitivement le témoignage de ${item.displayName} ? Cette action est irréversible.`)) return;
-      setBusy(true);
-      setError(false);
-      setFeedback("");
-      try {
-        const result = await readResponse<{ message: string }>(await fetch(
-          `/api/v1/admin/testimonials/${encodeURIComponent(item.id)}`,
-          status ? {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status }),
-          } : { method: "DELETE" },
-        ));
-        setTestimonials(current => status
-          ? current.map(row => row.id === item.id ? { ...row, status } : row)
-          : current.filter(row => row.id !== item.id));
-        setFeedback(result.message);
-      } catch (reason) {
-        setError(true);
-        setFeedback(reason instanceof Error ? reason.message : "Modération impossible.");
-      } finally {
-        setBusy(false);
-      }
+    if (!status && !window.confirm(`Supprimer définitivement le témoignage de ${item.displayName} ? Cette action est irréversible.`)) return;
+    setBusy(true);
+    setError(false);
+    setFeedback("");
+    try {
+      const result = await readResponse<{ message: string }>(await fetch(
+        `/api/v1/admin/testimonials/${encodeURIComponent(item.id)}`,
+        status ? {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status }),
+        } : { method: "DELETE" },
+      ));
+      setTestimonials(current => status
+        ? current.map(row => row.id === item.id ? { ...row, status } : row)
+        : current.filter(row => row.id !== item.id));
+      setFeedback(result.message);
+    } catch (reason) {
+      setError(true);
+      setFeedback(reason instanceof Error ? reason.message : "Modération impossible.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function saveSettings(event: FormEvent<HTMLFormElement>) {

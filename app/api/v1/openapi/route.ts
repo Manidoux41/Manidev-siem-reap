@@ -33,6 +33,7 @@ export async function GET() {
               } } },
             } } } },
             "503": { description: "Témoignages indisponibles." },
+            "400": { description: "Identifiant de projet invalide." },
           },
         },
         post: {
