@@ -26,13 +26,22 @@ test("localized metadata has unique identity/local intent, absolute canonicals a
       assert.equal(metadata.alternates?.canonical, absoluteUrl(`/${locale}${suffix}`));
       assert.deepEqual(metadata.alternates?.languages, languageAlternates(suffix));
       assert.equal(metadata.openGraph?.url, metadata.alternates?.canonical);
+      assert.equal(metadata.description, content.description);
+      assert.equal(metadata.openGraph?.description, content.description);
       assert.ok(metadata.twitter && "card" in metadata.twitter);
       assert.equal(metadata.twitter.card, "summary_large_image");
+      assert.equal(metadata.twitter.description, content.description);
     }
     assert.equal(content.offers.length, 3);
     assert.equal(content.faqs.length, 4);
     assert.ok(content.process.every((step) => step.length > (locale === "zh" || locale === "ja" ? 15 : 60)));
     assert.equal(metadataLocales[locale], pageMetadata(locale, "", content.title, content.description).openGraph?.locale);
+  }
+});
+
+test("metadata is rendered in the initial head for browsers and every sharing crawler", () => {
+  for (const agent of ["", "Mozilla/5.0", "WhatsApp/2.24", "TelegramBot", "facebookexternalhit/1.1", "UnknownPreviewBot"]) {
+    assert.ok(nextConfig.htmlLimitedBots?.test(agent), agent);
   }
 });
 

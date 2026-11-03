@@ -35,9 +35,9 @@ export function pageMetadata(locale: SiteLocale, suffix: string, title: string, 
       locale: openGraphLocales[locale],
       alternateLocale: locales.filter((language) => language !== locale).map((language) =>
         openGraphLocales[language]),
-      images: [{ url: absoluteUrl(socialImage), width: 1200, height: 630, alt: "Manidev — Manfred Parbatia · Web & IT · Siem Reap" }],
+      images: [{ url: absoluteUrl(socialImage), width: 1200, height: 630, type: "image/jpeg", alt: title }],
     },
-    twitter: { card: "summary_large_image", title, description, images: [absoluteUrl(socialImage)] },
+    twitter: { card: "summary_large_image", title, description, images: [{ url: absoluteUrl(socialImage), alt: title }] },
   };
 }
 

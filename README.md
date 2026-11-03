@@ -1,5 +1,26 @@
 # Manfred Parbatia — Portfolio
 
+## Browser security hardening
+
+All pages, APIs and public assets receive `nosniff`, iframe protection
+(`X-Frame-Options: DENY` and CSP `frame-ancestors 'none'`), a
+`strict-origin-when-cross-origin` referrer policy and disabled camera, microphone,
+geolocation, payment and USB permissions. An enforced CSP restricts base URLs,
+blocks plugin objects and limits form destinations to the same origin.
+Production responses advertise one year of HSTS, without `includeSubDomains`
+or preload. HSTS applies only after a browser receives the header over HTTPS;
+the hosting platform remains responsible for TLS and HTTP-to-HTTPS redirects.
+The framework's `X-Powered-By` header is disabled (not a vulnerability fix).
+
+A separate **report-only** CSP evaluates same-origin scripts and connections.
+It does not block scripts or prevent XSS: Next.js inline bootstrap scripts can
+produce expected console violations. No reporting endpoint is configured, so
+these observations are browser-console diagnostics, not centralized monitoring.
+Enforcing strict script rules requires a tested nonce/hash strategy compatible
+with Cache Components and streamed rendering; it is not claimed here.
+These controls do not replace application authorization, input validation,
+dependency patching, backups, secret rotation or deployment access controls.
+
 English-first multilingual portfolio built with Next.js App Router, TypeScript,
 PostgreSQL, and Prisma. The public site is available in English, French, German,
 Spanish, Khmer, simplified Chinese and Japanese at `/en`, `/fr`, `/de`, `/es`,
@@ -94,6 +115,15 @@ les projets et les fils d'Ariane, à partir des informations visibles et vérifi
 Aucun avis, note, prix, horaire ni certification supplémentaire n'est inventé.
 Les questions visibles ne sont pas présentées comme éligibles à un résultat
 enrichi FAQ Google. L'image Open Graph/Twitter optimisée fait 1200 × 630 pixels.
+Les titres, descriptions et images de partage Open Graph/Twitter sont fournis
+dans le `<head>` HTML initial pour tous les clients (`htmlLimitedBots: /.*/`),
+y compris les outils de messagerie non reconnus par Next.js. Cela désactive
+uniquement le streaming des métadonnées et peut retarder le premier octet
+sur les pages qui attendent PostgreSQL ; le streaming du contenu est conservé.
+Chaque accueil, page Services et fiche projet conserve sa description localisée.
+Après déploiement, les messageries peuvent conserver un ancien aperçu en cache :
+utiliser leur outil de réinspection lorsqu'il existe. L'affichage final d'une
+description reste contrôlé par la plateforme de partage.
 
 `/sitemap.xml` liste uniquement les pages publiques canoniques dans les sept
 langues, avec leurs variantes et les dates réelles de modification des projets
