@@ -114,7 +114,17 @@ export function AdminLogin() {
       <p className="admin-note">
         Utilisez le compte créé avec <code>npm run admin:create</code>.
       </p>
-      <form className="admin-form" onSubmit={submit}>
+      <noscript>
+        <p className="admin-message is-error">
+          Activez JavaScript pour vous connecter à l’administration.
+        </p>
+      </noscript>
+      <form
+        className="admin-form"
+        method="post"
+        action="/api/v1/admin/auth/login"
+        onSubmit={submit}
+      >
         <label>
           E-mail
           <input name="email" type="email" autoComplete="username" required />

@@ -84,6 +84,11 @@ passe choisis. La création du compte ne connecte pas automatiquement votre
 navigateur. Si les migrations et le seed n'ont pas encore été exécutés sur
 cette base, lancez d'abord `npm run db:deploy && npm run db:seed`.
 
+La connexion utilise JavaScript et envoie les identifiants par POST, jamais
+dans l'URL, même avant l'hydratation du formulaire. Ne partagez pas le mot de
+passe ni la sortie du terminal qui le contient. Si un mot de passe apparaît
+dans une URL ou un message, remplacez-le avec `npm run admin:create`.
+
 L'interface se trouve sur `/admin`. Elle permet de créer, modifier, publier,
 dépublier, réordonner et supprimer des projets, de gérer leurs catégories,
 technologies et liens, de consulter les messages privés, et de modifier les
