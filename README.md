@@ -11,8 +11,11 @@ The home hero features a locally cropped, lightly brightened and sharpened
 portrait, optimized as WebP. The original photo is preserved; the portrait
 sits beside the heading on desktop and below it on mobile.
 Projects retain their illustrated cards in a horizontal, scroll-snapping
-slideshow with previous/next controls, keyboard arrows and native touch
-swiping. Category filters restart at the first matching project; navigation
+full-width slideshow with a centered, fully visible active card and translucent
+neighbor previews on either side (where a neighbor exists). Previous/next
+controls, keyboard arrows, native touch swiping and mouse dragging are supported.
+Dragging does not open project links; normal clicks still do. Category filters
+restart at the first matching project; navigation
 respects reduced-motion preferences and does not auto-advance.
 The brighter forest-green palette uses high-contrast text and distinct
 form feedback colors, including dark text on the light admin cards.

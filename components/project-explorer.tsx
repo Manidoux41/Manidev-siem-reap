@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { SiteLocale, SiteMessages } from "@/lib/i18n";
 import type { PortfolioProject } from "@/lib/portfolio-data";
 
@@ -17,23 +17,51 @@ function ProjectSlideshow({
   count,
   messages,
 }: {
-  children: ReactNode;
+  children: (activeSlide: number) => ReactNode;
   count: number;
   messages: SiteMessages["projects"];
 }) {
   const track = useRef<HTMLDivElement>(null);
   const [activeSlide, setActiveSlide] = useState(0);
+  const activeIndex = useRef(0);
+  const drag = useRef<{ pointer: number; x: number; left: number; index: number; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
 
-  function goToSlide(index: number) {
+  function goToSlide(index: number, instant = false) {
     const element = track.current;
     const slide = element?.children.item(index);
     if (!element || !(slide instanceof HTMLElement)) return;
     element.scrollTo({
-      left: slide.offsetLeft,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      left: slide.offsetLeft - (element.clientWidth - slide.offsetWidth) / 2,
+      behavior: instant || window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "instant"
         : "smooth",
     });
+  }
+
+  useEffect(() => {
+    const element = track.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => goToSlide(activeIndex.current, true));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  function nearestSlide() {
+    const element = track.current;
+    if (!element) return 0;
+    const center = element.scrollLeft + element.clientWidth / 2;
+    let nearest = 0;
+    let distance = Infinity;
+    Array.from(element.children).forEach((child, index) => {
+      if (!(child instanceof HTMLElement)) return;
+      const difference = Math.abs(child.offsetLeft + child.offsetWidth / 2 - center);
+      if (difference < distance) {
+        nearest = index;
+        distance = difference;
+      }
+    });
+    return nearest;
   }
 
   return (
@@ -43,6 +71,50 @@ function ProjectSlideshow({
         ref={track}
         tabIndex={0}
         aria-label={messages.slideshow}
+        onDragStart={(event) => event.preventDefault()}
+        onClickCapture={(event) => {
+          if (suppressClick.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClick.current = false;
+          }
+        }}
+        onPointerDown={(event) => {
+          suppressClick.current = false;
+          if (event.pointerType !== "mouse" || event.button !== 0) return;
+          drag.current = { pointer: event.pointerId, x: event.clientX, left: event.currentTarget.scrollLeft, index: activeSlide, moved: false };
+        }}
+        onPointerMove={(event) => {
+          const current = drag.current;
+          if (!current || current.pointer !== event.pointerId) return;
+          const delta = event.clientX - current.x;
+          if (!current.moved && Math.abs(delta) < 8) return;
+          current.moved = true;
+          suppressClick.current = true;
+          event.currentTarget.dataset.dragging = "true";
+          event.currentTarget.setPointerCapture(event.pointerId);
+          event.currentTarget.scrollLeft = current.left - delta;
+        }}
+        onPointerUp={(event) => {
+          const current = drag.current;
+          drag.current = null;
+          if (!current?.moved) return;
+          delete event.currentTarget.dataset.dragging;
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
+          let index = nearestSlide();
+          const delta = current.x - event.clientX;
+          if (index === current.index && Math.abs(delta) > 50) {
+            index += delta > 0 ? 1 : -1;
+          }
+          goToSlide(Math.max(0, Math.min(count - 1, index)));
+        }}
+        onPointerCancel={(event) => {
+          drag.current = null;
+          delete event.currentTarget.dataset.dragging;
+          goToSlide(nearestSlide());
+        }}
         onKeyDown={(event) => {
           if (event.target !== event.currentTarget) return;
           if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
@@ -53,22 +125,12 @@ function ProjectSlideshow({
           }
         }}
         onScroll={() => {
-          const element = track.current;
-          if (!element) return;
-          let nearest = 0;
-          let distance = Infinity;
-          Array.from(element.children).forEach((child, index) => {
-            if (!(child instanceof HTMLElement)) return;
-            const difference = Math.abs(child.offsetLeft - element.scrollLeft);
-            if (difference < distance) {
-              nearest = index;
-              distance = difference;
-            }
-          });
+          const nearest = nearestSlide();
+          activeIndex.current = nearest;
           setActiveSlide(nearest);
         }}
       >
-        {children}
+        {children(activeSlide)}
       </div>
       <div className="project-slideshow-controls">
         <button
@@ -225,9 +287,9 @@ export function ProjectExplorer({ projects, locale, messages }: Props) {
           count={visibleProjects.length}
           messages={messages.projects}
         >
-          {visibleProjects.map((project, index) => (
+          {(activeSlide) => visibleProjects.map((project, index) => (
             <article
-              className="project-card"
+              className={`project-card${index === activeSlide ? " is-active" : ""}`}
               key={project.id}
             >
               <Link
@@ -245,7 +307,7 @@ export function ProjectExplorer({ projects, locale, messages }: Props) {
                       src={project.coverImage}
                       alt={`${messages.projects.artAlt}: ${project.title}`}
                       fill
-                      sizes="(max-width: 800px) 100vw, 850px"
+                      sizes="(max-width: 800px) 84vw, 76vw"
                     />
                   ) : (
                     <ProjectScene slug={project.slug} messages={messages} />
