@@ -2753,6 +2753,7 @@ textarea:focus-visible {
   padding: 24px;
   border: 1px solid var(--line);
   border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255, 173, 59, 0.08), transparent 75%), var(--dark);
 }
 
 .services-grid h2,
@@ -2776,10 +2777,29 @@ textarea:focus-visible {
 .services-project-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 10px;
 }
 
-.services-project-links a,
+.services-project-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(250, 247, 240, 0.05);
+  color: var(--ink);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.services-project-links a:hover {
+  background: rgba(255, 173, 59, 0.12);
+  border-color: var(--accent);
+}
+
 .seo-breadcrumb a {
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -2804,4 +2824,140 @@ textarea:focus-visible {
   letter-spacing: normal;
   line-height: 1.6;
   text-transform: none;
+}
+.commercial-offers > h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.25;
+}
+
+.commercial-offers > p,
+.commercial-offer li,
+.commercial-note {
+  color: var(--ink-muted);
+  line-height: 1.8;
+}
+
+.commercial-offers .services-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.commercial-offer {
+  --offer-tint: 255, 173, 59;
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 5;
+  gap: 24px;
+  min-width: 0;
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(var(--offer-tint), 0.23), rgba(var(--offer-tint), 0.06) 85%), var(--dark);
+  border-top: 3px solid rgba(var(--offer-tint), 0.8);
+}
+
+.commercial-offer-business { --offer-tint: 139, 201, 193; }
+.commercial-offer-mobile { --offer-tint: 167, 199, 223; }
+.commercial-offer-automation { --offer-tint: 194, 213, 161; }
+
+.commercial-offer .eyebrow {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 100px;
+  background: rgba(var(--offer-tint), 0.14);
+  color: var(--ink);
+}
+
+.commercial-offer h3 {
+  margin: 20px 0 16px;
+  font-size: clamp(1.4rem, 2.3vw, 2rem);
+  line-height: 1.3;
+}
+
+.commercial-offer h4 {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.commercial-offer p {
+  margin: 0;
+}
+
+.commercial-offer ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.commercial-offer li {
+  margin: 10px 0;
+}
+
+.commercial-offer .button {
+  margin-top: 0;
+  white-space: normal;
+  width: 100%;
+  align-self: end;
+  text-align: center;
+  background: rgb(var(--offer-tint));
+  color: var(--dark);
+  border-color: rgb(var(--offer-tint));
+  min-height: 56px;
+  justify-content: center;
+}
+
+.commercial-offer .button:hover {
+  background: var(--paper-light);
+  border-color: var(--paper-light);
+}
+
+.commercial-offer .services-project-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.commercial-offer .services-project-links a {
+  background: rgba(var(--offer-tint), 0.14);
+  border-color: rgba(var(--offer-tint), 0.5);
+  overflow-wrap: anywhere;
+}
+
+.services-contact {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(24px, 4vw, 64px);
+  margin: 64px 0 0;
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 173, 59, 0.16), rgba(139, 201, 193, 0.08)), var(--dark);
+  scroll-margin-top: 100px;
+}
+
+.services-contact h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.25;
+}
+
+.services-contact > div > p {
+  color: var(--ink-muted);
+  line-height: 1.8;
+}
+
+@media (max-width: 800px) {
+  .commercial-offers .services-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .services-contact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .commercial-offer .services-project-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

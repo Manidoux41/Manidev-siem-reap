@@ -124,6 +124,7 @@ const english = {
     send: "Send message",
     sending: "Sending…",
     sent: "Thanks — your message has been recorded.",
+    notificationPending: "Your message is saved, but the email notification is pending. Please do not submit it again.",
     errors: {
       rejected: "The message could not be accepted. Please check the form.",
       rateLimit: "Too many attempts. Please try again later.",
@@ -274,6 +275,7 @@ const translations: Record<SiteLocale, SiteMessages> = {
       send: "Envoyer le message",
       sending: "Envoi…",
       sent: "Merci, votre message a bien été enregistré.",
+      notificationPending: "Votre message est enregistré, mais la notification par e-mail est en attente. Il n’est pas nécessaire de le renvoyer.",
       errors: {
         rejected: "Le message n’a pas pu être accepté. Vérifiez le formulaire.",
         rateLimit: "Trop de tentatives. Réessayez plus tard.",
@@ -419,6 +421,7 @@ const translations: Record<SiteLocale, SiteMessages> = {
       send: "Nachricht senden",
       sending: "Wird gesendet…",
       sent: "Danke — deine Nachricht wurde gespeichert.",
+      notificationPending: "Deine Nachricht ist gespeichert, aber die E-Mail-Benachrichtigung steht noch aus. Bitte sende sie nicht erneut.",
       errors: {
         rejected: "Die Nachricht wurde nicht angenommen. Bitte prüfe das Formular.",
         rateLimit: "Zu viele Versuche. Bitte versuche es später erneut.",
@@ -564,6 +567,7 @@ const translations: Record<SiteLocale, SiteMessages> = {
       send: "Enviar mensaje",
       sending: "Enviando…",
       sent: "Gracias: tu mensaje se ha guardado.",
+      notificationPending: "Tu mensaje está guardado, pero la notificación por correo está pendiente. No es necesario enviarlo otra vez.",
       errors: {
         rejected: "No se pudo aceptar el mensaje. Revisa el formulario.",
         rateLimit: "Demasiados intentos. Inténtalo más tarde.",

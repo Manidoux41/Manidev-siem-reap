@@ -36,6 +36,8 @@ export type ContactMessage = {
   message: string;
   status: "NEW" | "READ" | "REPLIED" | "ARCHIVED";
   createdAt: string;
+  notificationPending: boolean;
+  notifiedAt: string | null;
 };
 
 type FormValues = Omit<AdminProject, "id">;
@@ -708,6 +710,13 @@ export function AdminConsole({
                   <strong>{item.subject}</strong>
                   <span> — {item.name} · {item.email} · {item.status}</span>
                   <p>{item.message}</p>
+                  <p className="admin-note">
+                    {item.notifiedAt
+                      ? "Notification acceptée par Gmail"
+                      : item.notificationPending
+                        ? "Notification e-mail en attente — relancer avec contact:retry-email"
+                        : "Message antérieur : aucune notification prévue"}
+                  </p>
                   <time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString("fr-FR", { timeZone: "UTC" })} UTC</time>
                 </div>
                 <select

@@ -34,6 +34,18 @@ The About section presents the 2023 OpenClassrooms Web Developer diploma
 
 ## Référencement naturel (SEO)
 
+La page Services présente aussi quatre offres commerciales en EN/FR/DE/ES :
+site professionnel multilingue, application métier/API, prototype mobile et
+conseil IT/automatisation IA. Chaque offre détaille le public visé, le résultat,
+un périmètre proposé et les références pertinentes du portfolio, avec prise de
+contact pour un devis personnalisé. Aucun tarif ni délai fixe n'est affiché.
+Le contrat doit préciser le périmètre, les critères de réception et les coûts
+externes ; les prototypes cités ne sont pas présentés comme des services en production.
+L'offre IA reste distincte des références, sans attribuer des fonctions IA non vérifiées
+aux projets existants.
+Les boutons de devis et de contact ciblent le formulaire intégré à cette page
+(`#contact`), qui utilise la même API de contact que l'accueil.
+
 Les 14 projets ajoutés disposent d'illustrations SVG locales distinctes dans
 `public/images/projects/`, montrant leur objet sans prétendre être des captures
 d'écran. Elles apparaissent dans le carrousel, les fiches et les données publiques,
@@ -143,6 +155,34 @@ Le seed initial et la page d'accueil fonctionnent aussi sans `DATABASE_URL`
 avec un instantané local des quatre projets vérifiés. Dans ce mode, le formulaire
 de contact et l'administration répondent explicitement qu'une base doit être
 configurée ; aucun message n'est présenté comme envoyé s'il n'a pas été stocké.
+
+## Notifications Gmail du formulaire
+
+Les formulaires de l'accueil et de Services enregistrent le message dans PostgreSQL,
+puis envoient une notification SMTP à l'adresse de contact du propriétaire via Gmail,
+sans plateforme supplémentaire. L'expéditeur est le compte Gmail authentifié ;
+`Reply-To` correspond au visiteur pour lui répondre directement.
+
+1. Activer la validation en deux étapes sur le compte Google.
+2. Créer un [mot de passe d'application](https://myaccount.google.com/apppasswords).
+   Cette fonction peut être indisponible pour certains comptes ou politiques Google.
+3. Configurer dans Vercel (Production), et localement pour les tests :
+   `GMAIL_SMTP_USER` (adresse Gmail) et `GMAIL_SMTP_APP_PASSWORD` (les 16 lettres
+   du mot de passe d'application). Ne jamais partager ni committer ce secret.
+4. Appliquer `npm run db:deploy`, puis redéployer. Le SMTP utilise Gmail sur le
+   port 465 avec TLS et vérification de certificat ; aucun serveur mail n'est
+   hébergé dans Vercel.
+
+Le succès SMTP indique que Gmail a accepté la notification, pas une garantie de
+présence dans la boîte de réception : vérifier aussi les spams et les quotas Gmail.
+En cas de configuration absente ou d'échec SMTP, le message reste en base et le
+formulaire affiche explicitement que la notification est en attente, sans demander
+de soumettre à nouveau. `npm run contact:retry-email` relance jusqu'à 20 notifications
+en attente ; relancer pour les lots suivants. Aucun cron automatique n'est configuré.
+Une réservation en base limite les envois simultanés ; un échec après acceptation
+SMTP mais avant confirmation en base peut entraîner un doublon lors d'une relance
+(livraison au moins une fois, pas exactement une fois).
+Les anciens messages ne sont pas envoyés rétroactivement.
 
 ## Compte administrateur
 
@@ -323,9 +363,9 @@ téléversés par l'administration : utilisez un stockage objet ou un CDN
 compatible et renseignez son URL.
 
 Les messages de contact sont enregistrés dans PostgreSQL et consultables dans
-`/admin`. Aucun fournisseur e-mail n'est configuré ou appelé par défaut ; le
-visiteur n'est pas informé d'un envoi d'e-mail inexistant. Configurez un
-fournisseur transactionnel avant d'ajouter cette intégration.
+`/admin`, avec l'état de leur notification. Voir « Notifications Gmail du formulaire »
+pour activer l'envoi SMTP ; sans configuration, les notifications restent en attente
+et le visiteur en est informé.
 Le lien Telegram n'est affiché que lorsqu'une URL de profil ou de contact est
 configurée dans `/admin` (format HTTPS `t.me` ou `telegram.me`).
 
@@ -343,7 +383,7 @@ La spécification OpenAPI JSON est consultable sur `/api/v1/openapi`.
 | `GET /api/v1/skills` | Compétences publiées |
 | `GET /api/v1/experiences` | Expériences publiées |
 | `GET /api/v1/site-settings/public` | Liste blanche des réglages publics |
-| `POST /api/v1/contact` | Valide et enregistre un message |
+| `POST /api/v1/contact` | Enregistre un message, tente la notification Gmail et retourne `notification: accepted` ou `pending` |
 | `POST /api/v1/admin/auth/login` | Ouvre une session administrateur |
 | `POST /api/v1/admin/auth/logout` | Ferme une session |
 | `/api/v1/admin/projects` | Lecture et création des projets |

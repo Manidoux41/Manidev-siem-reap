@@ -100,6 +100,7 @@ async function AdminContent() {
       messages: messages.map((message) => ({
         ...message,
         createdAt: message.createdAt.toISOString(),
+        notifiedAt: message.notifiedAt?.toISOString() ?? null,
       })),
       settings: Object.fromEntries(
         settings.map(({ key, value }) => [key, value]),

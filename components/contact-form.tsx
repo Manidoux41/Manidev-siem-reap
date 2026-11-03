@@ -38,8 +38,14 @@ export function ContactForm({ locale }: { locale: SiteLocale }) {
         );
         return;
       }
+      const result: { notification?: string } = await response.json();
       form.reset();
-      setMessage(messages.contact.sent);
+      if (result.notification === "pending") {
+        setIsError(true);
+        setMessage(messages.contact.notificationPending);
+      } else {
+        setMessage(messages.contact.sent);
+      }
     } catch {
       setIsError(true);
       setMessage(messages.contact.errors.network);

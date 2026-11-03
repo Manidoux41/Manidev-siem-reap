@@ -1,6 +1,7 @@
 import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { isRateLimited, requestAddress, hasSameOrigin } from "@/lib/rate-limit";
 import { contactSchema } from "@/lib/validation";
+import { notifyContactMessage } from "@/lib/contact-notification";
 
 export async function POST(request: Request) {
   if (!hasSameOrigin(request)) {
@@ -55,11 +56,17 @@ export async function POST(request: Request) {
 
   try {
     const { name, email, subject, message } = parsed.data;
-    await getPrisma().contactMessage.create({
-      data: { name, email, subject, message },
+    const saved = await getPrisma().contactMessage.create({
+      data: { name, email, subject, message, notificationPending: true },
     });
+    let notification: "accepted" | "pending" = "pending";
+    try {
+      notification = await notifyContactMessage(saved.id);
+    } catch {
+      console.error("Message enregistré, notification e-mail non confirmée.", { messageId: saved.id });
+    }
     return Response.json(
-      { message: "Merci, votre message a bien été enregistré." },
+      { message: "Merci, votre message a bien été enregistré.", notification },
       { status: 201 },
     );
   } catch (error) {

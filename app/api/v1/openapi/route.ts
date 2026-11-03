@@ -79,7 +79,7 @@ export async function GET() {
       "/site-settings/public": { get: { summary: "Lire les paramètres publics autorisés", responses: { "200": { description: "Paramètres publics." } } } },
       "/contact": {
         post: {
-          summary: "Enregistrer un message de contact",
+          summary: "Enregistrer un message de contact et tenter sa notification Gmail",
           requestBody: {
             required: true,
             content: {
@@ -99,9 +99,29 @@ export async function GET() {
             },
           },
           responses: {
-            "201": { description: "Message enregistré." },
+            "201": {
+              description: "Message enregistré. Une notification en attente ne nécessite pas une nouvelle soumission.",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    required: ["message", "notification"],
+                    properties: {
+                      message: { type: "string" },
+                      notification: {
+                        type: "string", enum: ["accepted", "pending"],
+                        description: "accepted : Gmail a accepté l'e-mail ; pending : notification à relancer, message conservé.",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            "400": { description: "Corps JSON invalide." },
+            "403": { description: "Origine de requête invalide." },
             "422": { description: "Entrées invalides." },
             "429": { description: "Limite de requêtes dépassée." },
+            "500": { description: "Échec de l'enregistrement." },
             "503": { description: "Base de données indisponible." },
           },
         },
@@ -121,7 +141,7 @@ export async function GET() {
         delete: { summary: "Supprimer un projet (administration)", responses: { "200": { description: "Projet supprimé." }, "401": { description: "Authentification requise." } } },
       },
       "/admin/messages": {
-        get: { summary: "Lire les messages privés (administration)", responses: { "200": { description: "Messages privés." }, "401": { description: "Authentification requise." } } },
+        get: { summary: "Lire les messages privés (administration)", responses: { "200": { description: "Messages privés avec notificationPending, notificationClaimedAt et notifiedAt (acceptation SMTP, pas livraison garantie)." }, "401": { description: "Authentification requise." } } },
       },
       "/admin/messages/{id}": {
         patch: { summary: "Mettre à jour le statut d'un message (administration)", responses: { "200": { description: "Statut mis à jour." }, "401": { description: "Authentification requise." } } },
