@@ -30,16 +30,43 @@ test("public data works without a database even if Prisma cannot initialize", ()
         const { getPublicProjects, getPublicProject } = require("./lib/project-service.ts");
         const { getPublicSiteSettings } = require("./lib/site-settings.ts");
         const { isRateLimited } = require("./lib/rate-limit.ts");
+        const { GET: getProjects } = require("./app/api/v1/projects/route.ts");
+        const { GET: getProject } = require("./app/api/v1/projects/[slug]/route.ts");
+        const { GET: getCategories } = require("./app/api/v1/categories/route.ts");
+        const { GET: getFeatured } = require("./app/api/v1/projects/featured/route.ts");
         const { GET: getSkills } = require("./app/api/v1/skills/route.ts");
         const { getMessages } = require("./lib/i18n.ts");
         (async () => {
           assert.equal(databaseConfigured, false);
-          assert.equal((await getPublicProjects()).length, 4);
+          assert.equal((await getPublicProjects()).length, 18);
           assert.equal((await getPublicProject("saiway")).slug, "saiway");
           assert.equal((await getPublicSiteSettings())["site.locale"], "en");
           assert.equal(await isRateLimited("database-free-test", 2, 60000), false);
           assert.throws(() => getPrisma(), /DATABASE_URL must be configured/);
           for (const locale of ["en", "fr", "de", "es"]) {
+            const projectResponse = await getProjects(new Request("https://portfolio.example/api/v1/projects?locale=" + locale + "&perPage=50"));
+            assert.equal(projectResponse.status, 200);
+            const projectData = await projectResponse.json();
+            assert.equal(projectData.pagination.total, 18);
+            assert.equal(projectData.data.length, 18);
+            const learningResponse = await getProjects(new Request("https://portfolio.example/api/v1/projects?locale=" + locale + "&category=learning&perPage=50"));
+            assert.equal((await learningResponse.json()).pagination.total, 3);
+
+            const categoryResponse = await getCategories(new Request("https://portfolio.example/api/v1/categories?locale=" + locale));
+            const categoryData = await categoryResponse.json();
+            for (const slug of ["civic", "tools", "professional", "transport", "learning"]) {
+              assert.ok(categoryData.data.some(category => category.slug === slug && category.name.length > 0));
+            }
+            const featuredResponse = await getFeatured(new Request("https://portfolio.example/api/v1/projects/featured?locale=" + locale));
+            assert.equal((await featuredResponse.json()).data.length, 4);
+            const detailResponse = await getProject(
+              new Request("https://portfolio.example/api/v1/projects/test-vs-2?locale=" + locale),
+              { params: Promise.resolve({ slug: "test-vs-2" }) },
+            );
+            assert.equal(detailResponse.status, 200);
+            const detailData = await detailResponse.json();
+            assert.match(detailData.data.title, /fork|fork/i);
+
             const response = await getSkills(new Request("https://portfolio.example/api/v1/skills?locale=" + locale));
             assert.equal(response.status, 200);
             const { data } = await response.json();

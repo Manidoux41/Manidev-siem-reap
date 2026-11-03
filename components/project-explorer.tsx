@@ -159,9 +159,15 @@ function ProjectSlideshow({
 
 function ProjectScene({
   slug,
+  categorySlug,
+  categoryName,
+  title,
   messages,
 }: {
   slug: string;
+  categorySlug: string;
+  categoryName: string;
+  title: string;
   messages: SiteMessages;
 }) {
   const scene = messages.projects;
@@ -224,7 +230,8 @@ function ProjectScene({
     );
   }
 
-  return (
+  if (slug === "la-voix-des-enfants-places") {
+    return (
     <div className="scene-association" role="img" aria-label={scene.artAlt}>
       <div className="association-sun" />
       <div className="association-paper">
@@ -237,6 +244,25 @@ function ProjectScene({
         <div className="paper-footer">{scene.sceneAssociationFooter}</div>
       </div>
       <span className="scene-coordinate">EDITION / WEB</span>
+    </div>
+    );
+  }
+
+  return (
+    <div
+      className={`scene-project scene-project-${categorySlug}`}
+      role="img"
+      aria-label={`${scene.artAlt}: ${title}`}
+    >
+      <span className="scene-project-orbit" aria-hidden="true" />
+      <div className="scene-project-card" aria-hidden="true">
+        <span>{categoryName}</span>
+        <strong>{title}</strong>
+        <i>{slug.replaceAll("-", " / ").toUpperCase()}</i>
+      </div>
+      <span className="scene-coordinate" aria-hidden="true">
+        MANIDEV / {categorySlug.toUpperCase()}
+      </span>
     </div>
   );
 }
@@ -310,7 +336,13 @@ export function ProjectExplorer({ projects, locale, messages }: Props) {
                       sizes="(max-width: 800px) 84vw, 76vw"
                     />
                   ) : (
-                    <ProjectScene slug={project.slug} messages={messages} />
+                    <ProjectScene
+                      slug={project.slug}
+                      categorySlug={project.category.slug}
+                      categoryName={project.category.name}
+                      title={project.title}
+                      messages={messages}
+                    />
                   )}
                   <span className="project-number">
                     {String(index + 1).padStart(2, "0")}

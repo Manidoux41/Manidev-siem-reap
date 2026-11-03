@@ -1,5 +1,6 @@
 import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { cache } from "react";
+import { projectCover } from "./project-covers";
 import {
   verifiedProjects,
   type PortfolioProject,
@@ -25,7 +26,7 @@ function mapDatabaseProject(
     liveUrl: project.liveUrl,
     appUrl: project.appUrl,
     featured: project.featured,
-    coverImage: project.coverImage,
+    coverImage: projectCover(project.slug, project.coverImage),
     source: "database",
     updatedAt: project.updatedAt.toISOString(),
   };

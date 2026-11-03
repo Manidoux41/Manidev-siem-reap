@@ -166,6 +166,11 @@ const english = {
     web: "Website",
     transfers: "Airport transfers",
     travel: "Relocation & travel",
+    civic: "Civic platforms",
+    tools: "Digital tools",
+    professional: "Professional profiles",
+    transport: "Transport",
+    learning: "Experiments & tutorials",
   },
 };
 
@@ -311,6 +316,11 @@ const translations: Record<SiteLocale, SiteMessages> = {
       web: "Site web",
       transfers: "Transferts aéroport",
       travel: "Installation et voyage",
+      civic: "Plateformes citoyennes",
+      tools: "Outils numériques",
+      professional: "CV et profils professionnels",
+      transport: "Transport",
+      learning: "Expériences et tutoriels",
     },
   },
   de: {
@@ -451,6 +461,11 @@ const translations: Record<SiteLocale, SiteMessages> = {
       web: "Website",
       transfers: "Flughafentransfers",
       travel: "Umzug & Reisen",
+      civic: "Zivilgesellschaftliche Plattformen",
+      tools: "Digitale Werkzeuge",
+      professional: "Berufliche Profile",
+      transport: "Mobilität & Transport",
+      learning: "Experimente & Tutorials",
     },
   },
   es: {
@@ -591,6 +606,11 @@ const translations: Record<SiteLocale, SiteMessages> = {
       web: "Sitio web",
       transfers: "Traslados al aeropuerto",
       travel: "Instalación y viajes",
+      civic: "Plataformas ciudadanas",
+      tools: "Herramientas digitales",
+      professional: "Perfiles profesionales",
+      transport: "Transporte",
+      learning: "Experimentos y tutoriales",
     },
   },
 };
@@ -658,6 +678,158 @@ const projectCopies: Partial<
       solution:
         "Un site multilingue présente les services et permet de préparer une demande ; les offres sont informatives et la réservation et le paiement en ligne ne sont pas actifs.",
     },
+    "voix-et-enfance": {
+      title: "Voix & Enfance — Initiative citoyenne",
+      shortDescription:
+        "Un site d’information avec une proposition et des moyens de soutenir une initiative.",
+      description:
+        "L’application Next.js présente une initiative, renvoie vers sa proposition et propose un parcours de signature. Le résumé s’appuie sur la structure des pages et le manifeste ; le texte et les modalités de publication doivent être validés avant réutilisation.",
+      problem:
+        "Rendre une proposition et les moyens de soutenir une initiative accessibles en ligne.",
+      solution:
+        "Un site public présente des informations et oriente vers la proposition et la signature, sans laisser entendre qu’une institution l’approuve.",
+    },
+    "cv-builder-app": {
+      title: "CV Studio — Créateur de CV",
+      shortDescription:
+        "Un éditeur de CV avec aperçu en direct, mises en page personnalisables et export PDF depuis le navigateur.",
+      description:
+        "CV Studio est un créateur de CV Next.js avec des sections modifiables pour le profil, l’expérience, la formation, les projets et les compétences. Le README décrit un aperçu en direct et une impression au format A4 ; SQLite via Prisma peut servir aux brouillons locaux. Aucun stockage de production ni accès multi-utilisateur n’est revendiqué.",
+      problem:
+        "Créer et améliorer un CV sans mettre en page chaque rubrique manuellement.",
+      solution:
+        "Un formulaire et son aperçu proposent deux mises en page, des choix de style et l’impression A4 ou l’export PDF depuis le navigateur.",
+    },
+    "association-declaration": {
+      title: "Aide à la déclaration de manifestation",
+      shortDescription:
+        "Un outil dans le navigateur pour préparer et exporter des documents de déclaration de manifestation.",
+      description:
+        "Cet outil web autonome guide la préparation d’une déclaration de manifestation, génère un aperçu et permet d’exporter en TXT/JSON ou d’imprimer en PDF. Les brouillons restent dans le navigateur : aucun document n’est transmis à une mairie ou à une préfecture.",
+      problem:
+        "Organiser les informations nécessaires à la préparation d’une déclaration de manifestation.",
+      solution:
+        "Un formulaire guidé, des brouillons locaux et plusieurs formats d’export aident à préparer le document pour vérification et envoi manuel.",
+    },
+    "gestion-planning": {
+      title: "Maison douce — Prototype de planning quotidien",
+      shortDescription:
+        "Un tableau de bord mobile-first pour les routines familiales, les horaires et les tâches à venir.",
+      description:
+        "Le README décrit un premier tableau de bord responsive pour suivre une journée de garde, les heures mensuelles et les tâches prévues. Les données sont explicitement présentées comme des exemples locaux ; les flux métier persistants sont envisagés pour plus tard.",
+      problem:
+        "Réunir les routines quotidiennes, les heures et les tâches à venir dans une même vue.",
+      solution:
+        "Un tableau de bord mobile-first présente les informations du jour et du mois avec des données de démonstration.",
+    },
+    "nos-liens-nos-enfants-contre-l-ase": {
+      title: "Nos liens, nos enfants — Plateforme citoyenne",
+      shortDescription:
+        "Un site d’information et de participation avec ressources sourcées, sondage modéré et préparation d’une pétition.",
+      description:
+        "Le README décrit un récit familial anonymisé, des ressources sourcées, un sondage public modéré, des statistiques agrégées et un parcours de préparation de pétition. Le projet utilise Next.js, React, PostgreSQL et Prisma. Ce résumé ne reprend pas les détails personnels ou sensibles du contenu source.",
+      problem:
+        "Présenter des informations sourcées et proposer aux visiteurs des moyens structurés de participer.",
+      solution:
+        "Un site public associe ressources éditoriales, participation à un sondage, statistiques modérées et préparation d’une pétition.",
+    },
+    "cv-international-manfred": {
+      title: "Collection de CV internationaux",
+      shortDescription:
+        "Une collection de CV adaptés à différents postes, en documents et en pages HTML statiques.",
+      description:
+        "Ce dépôt rassemble des CV internationaux et ciblés, au format HTML et PDF. Il est présenté comme une collection de documents professionnels, et non comme une application web ; aucun déploiement ni actualité des documents n’est sous-entendu.",
+      problem:
+        "Organiser plusieurs versions et formats de CV dans un dépôt public.",
+      solution:
+        "Des pages HTML statiques et des documents PDF proposent différents formats selon le contexte professionnel.",
+    },
+    "mmcgodrivers-website": {
+      title: "MMC Go Drivers — Site public",
+      shortDescription:
+        "Le site d’information associé au service mobile MMC Go Drivers.",
+      description:
+        "Le site public présente les fonctionnalités, les tarifs, les avis et les informations du service MMC Go Drivers. Le code Next.js inclut du contenu lié à Supabase et une dépendance Resend ; ce dépôt web est distingué de l’application mobile Flutter.",
+      problem:
+        "Présenter le service mobile et ses offres sur le web.",
+      solution:
+        "Un site dédié rassemble les informations produit et les pages publiques, dans un dépôt distinct de l’application mobile.",
+    },
+    tuktukgo: {
+      title: "Angkor Move (TukTukGo) — Prototype de mobilité",
+      shortDescription:
+        "Un prototype mobile de service de mobilité pour chauffeurs, passagers, hôtels et entreprises de transport.",
+      description:
+        "Le README décrit un prototype Expo/React Native avec une base d’accueil et de tableaux de bord par rôle. Il présente la réservation et les opérations comme une direction produit ; ce portfolio ne prétend pas qu’un service de réservation est en production.",
+      problem:
+        "Explorer une base mobile pour coordonner les différents rôles et services de mobilité locale.",
+      solution:
+        "Un prototype organise des points d’entrée et des tableaux de bord selon les rôles ; le README place les réservations principales sur la feuille de route.",
+    },
+    "test-vs-2": {
+      title: "TechBoutik — Démonstration e-commerce (fork)",
+      shortDescription:
+        "Un fork clairement identifié d’une application de démonstration e-commerce.",
+      description:
+        "Ce dépôt est un fork de michaelbaze1987-cloud/test-vs-2. Son README décrit une boutique de démonstration avec catalogue, panier, commandes et paiement simulé ; les données sont en mémoire ou en fichiers locaux et aucun paiement réel n’est activé. Il n’est pas présenté comme une plateforme e-commerce originale en production.",
+      problem:
+        "Explorer des parcours de boutique et d’administration dans une application e-commerce de démonstration.",
+      solution:
+        "Le fork propose un catalogue, un panier, un paiement simulé et des écrans d’administration à des fins d’expérimentation.",
+    },
+    testapprn: {
+      title: "Outils de trajet et planning — Application de test",
+      shortDescription:
+        "Une application expérimentale pour les conducteurs, avec des écrans d’itinéraire et de planning.",
+      description:
+        "Le code Expo comprend un écran de calcul d’itinéraire GPS avec des utilitaires KML/GPX et un écran de planning qui extrait des informations de fichiers PDF. Le dépôt ne contient pas de README : il est donc signalé comme application de test, sans revendiquer de mise en production ni de backend.",
+      problem:
+        "Expérimenter des parcours de navigation et de planning dans une application mobile.",
+      solution:
+        "Le code comporte des écrans séparés pour la préparation d’itinéraires et le traitement de plannings PDF.",
+    },
+    "flutter-first-app": {
+      title: "Première application Flutter — Modèle de tutoriel",
+      shortDescription:
+        "Le projet de démarrage Flutter par défaut, conservé comme exercice d’apprentissage.",
+      description:
+        "Le README identifie un nouveau projet Flutter et renvoie au tutoriel officiel « première application ». Le fichier pubspec contient Flutter et la dépendance standard Cupertino Icons ; il s’agit volontairement d’un modèle pédagogique, pas d’un produit publié.",
+      problem: null,
+      solution: null,
+    },
+    "frontend2-simplon-best": {
+      title: "Cars Simplon — Client mobile des missions",
+      shortDescription:
+        "Un client mobile pour consulter les missions, les véhicules et l’activité de l’équipe.",
+      description:
+        "Le README décrit une application de gestion des missions de chauffeurs, et le code Expo consulté affiche des requêtes de tableau de bord pour les missions, les véhicules et les conducteurs via un service API. Le projet est traité comme un prototype mobile ; le README et le manifeste diffèrent légèrement sur la version d’Expo.",
+      problem:
+        "Donner aux chauffeurs et aux administrateurs une vue mobile des missions et de la flotte.",
+      solution:
+        "Un client mobile adapté aux rôles organise les vues du tableau de bord, des missions, des véhicules et des chauffeurs.",
+    },
+    "backend-for-frontend2-simplon-best": {
+      title: "Simplon Drivers — Prototype d’API backend",
+      shortDescription:
+        "Un prototype d’API pour l’authentification et la gestion des chauffeurs, véhicules, clients et missions.",
+      description:
+        "Le manifeste décrit un backend Node.js/Express pour la gestion de chauffeurs, et le code expose des routes d’authentification, d’utilisateurs, de véhicules, de clients et de missions avec Mongoose. Le README n’était pas disponible dans la révision publique consultée : le résumé se fonde sur le manifeste et le code, sans allégation de déploiement.",
+      problem:
+        "Fournir au client mobile des endpoints pour les chauffeurs, véhicules, clients et missions.",
+      solution:
+        "Un serveur Express regroupe les routes d’authentification et de gestion, avec des modèles MongoDB/Mongoose.",
+    },
+    "simplon-drivers-app": {
+      title: "Cars Simplon Drivers — Prototype SQLite local",
+      shortDescription:
+        "Un prototype de tableau de bord mobile pour les missions, véhicules et historiques de chauffeurs.",
+      description:
+        "Le README présente une application mobile de missions pour chauffeurs et administrateurs. Les hooks d’authentification et le tableau de bord consultés utilisent actuellement SQLite local ; bien que le README mentionne Supabase, ce portfolio ne prétend pas qu’une authentification ou une persistance Supabase distante soit connectée.",
+      problem:
+        "Explorer l’accès mobile aux missions attribuées et aux outils de flotte destinés aux chauffeurs.",
+      solution:
+        "Une application Expo organise les écrans du tableau de bord, des missions, des véhicules et de l’historique autour d’un prototype local.",
+    },
   },
   de: {
     "mmc-go-drivers": {
@@ -704,6 +876,158 @@ const projectCopies: Partial<
       solution:
         "Eine mehrsprachige Informationsseite stellt Leistungen vor und bereitet Anfragen vor. Die Angebote sind informativ; Online-Buchung und Zahlung sind nicht aktiv.",
     },
+    "voix-et-enfance": {
+      title: "Voix & Enfance — Bürgerinitiative",
+      shortDescription:
+        "Eine öffentliche Informationsseite mit Vorschlag und Möglichkeiten, eine Initiative zu unterstützen.",
+      description:
+        "Die öffentliche Next.js-Anwendung stellt eine Initiative vor und führt zu einem Vorschlag sowie einem digitalen Unterschriftenablauf. Diese Beschreibung basiert auf Seitenstruktur und Paketmanifest; Wortlaut und Veröffentlichungsdetails sollten vor einer Weiterverwendung bestätigt werden.",
+      problem:
+        "Einen Vorschlag und Unterstützungsmöglichkeiten online zugänglich machen.",
+      solution:
+        "Eine öffentliche Website informiert und verweist auf Vorschlags- und Unterschriftsseiten, ohne institutionelle Unterstützung zu behaupten.",
+    },
+    "cv-builder-app": {
+      title: "CV Studio — Lebenslauf-Editor",
+      shortDescription:
+        "Ein Lebenslauf-Editor mit Live-Vorschau, anpassbaren Layouts und PDF-Export im Browser.",
+      description:
+        "CV Studio ist ein Next.js-Editor mit veränderbaren Bereichen für Profil, Berufserfahrung, Ausbildung, Projekte und Kompetenzen. Das README beschreibt Live-Vorschau und A4-Druck; lokale Entwürfe können über Prisma mit SQLite gespeichert werden. Produktionsspeicherung und Mehrbenutzerzugriff werden nicht behauptet.",
+      problem:
+        "Einen Lebenslauf erstellen und überarbeiten, ohne jede Rubrik manuell zu layouten.",
+      solution:
+        "Formular und Vorschau bieten zwei Layouts, Stiloptionen sowie A4-Druck oder PDF-Export über den Browser.",
+    },
+    "association-declaration": {
+      title: "Hilfe zur Veranstaltungsanmeldung",
+      shortDescription:
+        "Ein browserbasiertes Werkzeug zur Vorbereitung und zum Export von Veranstaltungsunterlagen.",
+      description:
+        "Das eigenständige Webwerkzeug führt durch eine Veranstaltungsanmeldung, zeigt eine Vorschau und unterstützt TXT/JSON-Export sowie PDF-Druck im Browser. Entwürfe bleiben im lokalen Browserspeicher; eine Übermittlung an Behörden findet nicht statt.",
+      problem:
+        "Die nötigen Angaben für eine öffentliche Veranstaltungsanmeldung strukturiert erfassen.",
+      solution:
+        "Geführtes Formular, lokale Entwürfe und Exportoptionen helfen bei der Vorbereitung zur manuellen Prüfung und Einreichung.",
+    },
+    "gestion-planning": {
+      title: "Maison douce — Prototyp für Tagesplanung",
+      shortDescription:
+        "Ein mobiloptimiertes Dashboard für Familienroutinen, Arbeitsstunden und anstehende Aufgaben.",
+      description:
+        "Das README beschreibt ein frühes responsives Dashboard für Betreuungstage, Monatsstunden und kommende Aufgaben. Die Daten sind ausdrücklich lokale Beispieldaten; dauerhafte Geschäftsabläufe sind für spätere Schritte vorgesehen.",
+      problem:
+        "Tägliche Routinen, Arbeitsstunden und Aufgaben in einer Übersicht zusammenführen.",
+      solution:
+        "Ein mobiloptimiertes Dashboard zeigt Tages- und Monatsinformationen mit Demonstrationsdaten.",
+    },
+    "nos-liens-nos-enfants-contre-l-ase": {
+      title: "Nos liens, nos enfants — Bürgerplattform",
+      shortDescription:
+        "Eine Informations- und Beteiligungsseite mit Quellen, moderierter Umfrage und Petitionsvorbereitung.",
+      description:
+        "Das README beschreibt einen anonymisierten Familienbericht, Quellenmaterial, eine moderierte öffentliche Umfrage, aggregierte Statistiken und einen Ablauf zur Petitionsvorbereitung. Verwendet werden Next.js, React, PostgreSQL und Prisma. Persönliche oder sensible Einzelheiten aus dem Quellmaterial werden hier nicht wiederholt.",
+      problem:
+        "Quellenbasierte Informationen bereitstellen und strukturierte Beteiligung ermöglichen.",
+      solution:
+        "Die öffentliche Website verbindet redaktionelle Ressourcen, Umfrage, moderierte Statistiken und Petitionsvorbereitung.",
+    },
+    "cv-international-manfred": {
+      title: "Internationale Lebenslauf-Sammlung",
+      shortDescription:
+        "Eine Sammlung rollenbezogener Lebensläufe als Dokumente und statische HTML-Seiten.",
+      description:
+        "Dieses Repository enthält internationale und auf bestimmte Rollen zugeschnittene Lebensläufe in HTML- und PDF-Form. Es wird als Sammlung beruflicher Dokumente und nicht als Webanwendung dargestellt; ein Deployment oder die Aktualität der Dokumente wird nicht behauptet.",
+      problem:
+        "Mehrere Lebenslaufvarianten und Formate in einem öffentlichen Repository ordnen.",
+      solution:
+        "Statische HTML-Seiten und PDF-Dokumente bieten unterschiedliche Formate für berufliche Kontexte.",
+    },
+    "mmcgodrivers-website": {
+      title: "MMC Go Drivers — Öffentliche Website",
+      shortDescription:
+        "Die begleitende Informationswebsite für den mobilen Dienst MMC Go Drivers.",
+      description:
+        "Die Website stellt Funktionen, Preise, Bewertungen und Informationen zu MMC Go Drivers vor. Der Next.js-Quellcode enthält Supabase-bezogene Inhalte und eine Resend-Abhängigkeit; dieses Webrepository wird getrennt von der Flutter-App aufgeführt.",
+      problem:
+        "Den mobilen Dienst und seine Angebote öffentlich im Web erklären.",
+      solution:
+        "Eine eigene Website bündelt Produktinformationen und öffentliche Seiten in einem separaten Repository zur mobilen App.",
+    },
+    tuktukgo: {
+      title: "Angkor Move (TukTukGo) — Mobilitätsprototyp",
+      shortDescription:
+        "Ein mobiler Mobilitätsprototyp für Fahrer, Fahrgäste, Hotels und Transportunternehmen.",
+      description:
+        "Das README beschreibt einen Expo/React-Native-Prototyp mit rollenbezogenem Einstieg und Dashboard-Grundlagen. Buchungen und operative Abläufe werden als Produktziel beschrieben; ein produktiver Buchungsdienst wird hier nicht behauptet.",
+      problem:
+        "Eine mobile Grundlage zur Koordination lokaler Mobilitätsrollen und Dienste erkunden.",
+      solution:
+        "Der Prototyp ordnet rollenbezogene Einstiege und Dashboard-Grundlagen; zentrale Buchungsabläufe stehen laut README auf der Roadmap.",
+    },
+    "test-vs-2": {
+      title: "TechBoutik — E-Commerce-Demo (Fork)",
+      shortDescription:
+        "Ein klar gekennzeichneter Fork einer E-Commerce-Demonstrationsanwendung.",
+      description:
+        "Dieses Repository ist ein Fork von michaelbaze1987-cloud/test-vs-2. Das README beschreibt einen Demo-Shop mit Produktkatalog, Warenkorb, Bestellansichten und simuliertem Checkout; Demo-Daten liegen im Speicher oder in lokalen Dateien, echte Zahlungen sind nicht aktiviert. Es wird nicht als originales Produktions-Commerce-System präsentiert.",
+      problem:
+        "Shop- und Administrationsabläufe in einer E-Commerce-Demo erkunden.",
+      solution:
+        "Der Fork bietet Katalog, Warenkorb, simulierten Checkout und Admin-Ansichten zum Experimentieren.",
+    },
+    testapprn: {
+      title: "Routen- und Planungstool — Test-App",
+      shortDescription:
+        "Eine experimentelle Fahrer-App mit Routenplanung und Terminplanungsansichten.",
+      description:
+        "Der Expo-Quellcode enthält eine GPS-Routenansicht mit KML/GPX-Hilfsfunktionen und eine Planungskomponente, die Informationen aus PDF-Dateien extrahiert. Ein README fehlt; daher ist die Anwendung ausdrücklich als Test-App markiert, ohne Produktions- oder Backend-Anspruch.",
+      problem:
+        "Routen- und Planungsabläufe in einer mobilen Anwendung erproben.",
+      solution:
+        "Der Quellcode enthält getrennte Ansichten für Routenplanung und PDF-basierte Terminplanung.",
+    },
+    "flutter-first-app": {
+      title: "Erste Flutter-App — Tutorial-Vorlage",
+      shortDescription:
+        "Das Flutter-Standardstartprojekt, aufbewahrt als Lernübung.",
+      description:
+        "Das README bezeichnet das Repository als neues Flutter-Projekt und verweist auf das offizielle Erste-App-Tutorial. Die pubspec enthält Flutter und die Standardabhängigkeit Cupertino Icons; es ist ausdrücklich eine Lernvorlage und kein veröffentlichtes Produkt.",
+      problem: null,
+      solution: null,
+    },
+    "frontend2-simplon-best": {
+      title: "Cars Simplon — Mobile Missions-App",
+      shortDescription:
+        "Ein mobiler Client für Fahrer und Administration zur Ansicht von Missionen, Fahrzeugen und Teamaktivitäten.",
+      description:
+        "Das README beschreibt eine App für Busfahrermissionen; der geprüfte Expo-Quellcode fragt Missionen, Fahrzeuge und Fahrerdaten über einen API-Dienst für das Dashboard ab. Das Projekt wird als mobiler Prototyp behandelt; README und Manifest nennen leicht unterschiedliche Expo-Versionen.",
+      problem:
+        "Fahrern und Administratoren einen mobilen Überblick über Missionen und Flotte geben.",
+      solution:
+        "Ein rollenbasierter Client organisiert Dashboard-, Missions-, Fahrzeug- und Fahreransichten.",
+    },
+    "backend-for-frontend2-simplon-best": {
+      title: "Simplon Drivers — Backend-API-Prototyp",
+      shortDescription:
+        "Ein API-Prototyp für Authentifizierung sowie Fahrer-, Fahrzeug-, Kunden- und Missionsverwaltung.",
+      description:
+        "Das Paketmanifest beschreibt ein Node.js/Express-Backend zur Fahrerverwaltung; der Quellcode enthält Routen für Authentifizierung, Nutzer, Fahrzeuge, Kunden und Missionen mit Mongoose. Im geprüften öffentlichen Stand war kein README verfügbar; diese Beschreibung beruht daher auf Manifest und Quellcode und macht keine Deployment-Aussage.",
+      problem:
+        "Dem mobilen Client Endpunkte für Fahrer, Fahrzeuge, Kunden und Missionen bereitstellen.",
+      solution:
+        "Ein Express-Server bündelt Authentifizierungs- und Verwaltungsrouten mit MongoDB/Mongoose-Modellen.",
+    },
+    "simplon-drivers-app": {
+      title: "Cars Simplon Drivers — Lokaler SQLite-Prototyp",
+      shortDescription:
+        "Ein mobiles Dashboard für Busfahrermissionen, Fahrzeuge und Missionshistorie.",
+      description:
+        "Das README beschreibt eine Missions-App für Fahrer und Administratoren. Die geprüften Authentifizierungs-Hooks und das Dashboard verwenden derzeit lokales SQLite; obwohl das README Supabase erwähnt, wird hier keine verbundene entfernte Supabase-Authentifizierung oder -Speicherung behauptet.",
+      problem:
+        "Mobilen Zugriff auf zugewiesene Missionen und Fahrer-Flottenabläufe erkunden.",
+      solution:
+        "Eine Expo-App ordnet Dashboard-, Missions-, Fahrzeug- und Verlaufsansichten um einen lokalen Prototyp.",
+    },
   },
   es: {
     "mmc-go-drivers": {
@@ -749,6 +1073,158 @@ const projectCopies: Partial<
         "Quienes planean mudarse, iniciar un negocio o conocer Siem Reap necesitan orientación local clara.",
       solution:
         "Un sitio informativo multilingüe presenta los servicios y ayuda a preparar una solicitud; las ofertas son informativas y no hay reservas ni pagos en línea activos.",
+    },
+    "voix-et-enfance": {
+      title: "Voix & Enfance — Iniciativa ciudadana",
+      shortDescription:
+        "Un sitio informativo con una propuesta y formas de apoyar una iniciativa.",
+      description:
+        "La aplicación pública Next.js presenta una iniciativa y dirige a una propuesta y a un proceso de firma. El resumen se basa en la estructura de páginas y el manifiesto; el texto y los detalles de publicación deben validarse antes de reutilizarlos.",
+      problem:
+        "Facilitar en línea el acceso a una propuesta y a las formas de apoyar una iniciativa.",
+      solution:
+        "Un sitio público presenta información y dirige a la propuesta y a las páginas de firma, sin insinuar respaldo institucional.",
+    },
+    "cv-builder-app": {
+      title: "CV Studio — Creador de currículums",
+      shortDescription:
+        "Un editor de currículums con vista previa en directo, diseños personalizables y exportación PDF desde el navegador.",
+      description:
+        "CV Studio es un editor Next.js con secciones editables para perfil, experiencia, formación, proyectos y competencias. El README documenta la vista previa y la impresión A4; Prisma con SQLite puede guardar borradores locales. No se afirma que haya almacenamiento de producción ni acceso multiusuario.",
+      problem:
+        "Crear y mejorar un currículum sin maquetar cada sección manualmente.",
+      solution:
+        "Un formulario y su vista previa ofrecen dos diseños, opciones de estilo e impresión A4 o exportación PDF desde el navegador.",
+    },
+    "association-declaration": {
+      title: "Asistente para declarar eventos",
+      shortDescription:
+        "Una herramienta web para preparar y exportar documentos de declaración de eventos.",
+      description:
+        "Esta herramienta web independiente guía la preparación de una declaración de evento, genera una vista previa y permite exportar TXT/JSON o imprimir en PDF. Los borradores permanecen en el almacenamiento local del navegador; no se envían a ayuntamientos ni prefecturas.",
+      problem:
+        "Organizar la información necesaria para preparar una declaración de evento público.",
+      solution:
+        "Un formulario guiado, borradores locales y opciones de exportación ayudan a preparar el documento para su revisión y presentación manual.",
+    },
+    "gestion-planning": {
+      title: "Maison douce — Prototipo de planificación diaria",
+      shortDescription:
+        "Un panel adaptable a móviles para rutinas familiares, horarios y tareas próximas.",
+      description:
+        "El README describe un primer panel adaptable para seguir la jornada de cuidados, las horas mensuales y las tareas previstas. Los datos se identifican explícitamente como ejemplos locales; los procesos de trabajo persistentes quedan para una fase posterior.",
+      problem:
+        "Reunir las rutinas diarias, las horas y las próximas tareas en una sola vista.",
+      solution:
+        "Un panel diseñado primero para móviles presenta información diaria y mensual con datos de demostración.",
+    },
+    "nos-liens-nos-enfants-contre-l-ase": {
+      title: "Nos liens, nos enfants — Plataforma ciudadana",
+      shortDescription:
+        "Un sitio informativo y participativo con recursos citados, encuesta moderada y preparación de una petición.",
+      description:
+        "El README describe un relato familiar anonimizado, recursos con fuentes, una encuesta pública moderada, estadísticas agregadas y un proceso de preparación de petición. El proyecto utiliza Next.js, React, PostgreSQL y Prisma. Este resumen no repite detalles personales o sensibles del material original.",
+      problem:
+        "Presentar información documentada y ofrecer formas estructuradas de participar.",
+      solution:
+        "El sitio público combina recursos editoriales, participación en encuestas, estadísticas moderadas y preparación de peticiones.",
+    },
+    "cv-international-manfred": {
+      title: "Colección internacional de currículums",
+      shortDescription:
+        "Una colección de currículums adaptados a distintos puestos, en documentos y páginas HTML estáticas.",
+      description:
+        "Este repositorio reúne currículums internacionales y adaptados a puestos específicos en formatos HTML y PDF. Se presenta como una colección de documentos profesionales, no como una aplicación web; no se afirma que esté desplegada ni que los documentos estén actualizados.",
+      problem:
+        "Organizar varias versiones y formatos de currículum en un repositorio público.",
+      solution:
+        "Páginas HTML estáticas y documentos PDF ofrecen diferentes formatos según el contexto profesional.",
+    },
+    "mmcgodrivers-website": {
+      title: "MMC Go Drivers — Sitio público",
+      shortDescription:
+        "El sitio informativo complementario del servicio móvil MMC Go Drivers.",
+      description:
+        "El sitio público presenta las funciones, tarifas, opiniones e información del servicio MMC Go Drivers. El código Next.js incluye contenido relacionado con Supabase y una dependencia de Resend; este repositorio web se distingue de la aplicación móvil Flutter.",
+      problem:
+        "Explicar en la web el servicio móvil y sus planes.",
+      solution:
+        "Un sitio dedicado reúne información del producto y páginas públicas en un repositorio distinto de la aplicación móvil.",
+    },
+    tuktukgo: {
+      title: "Angkor Move (TukTukGo) — Prototipo de movilidad",
+      shortDescription:
+        "Un prototipo móvil de movilidad para conductores, pasajeros, hoteles y empresas de transporte.",
+      description:
+        "El README describe un prototipo Expo/React Native con incorporación por roles y bases de paneles de control. Presenta las reservas y operaciones como una dirección futura; este portafolio no afirma que exista un servicio de reservas en producción.",
+      problem:
+        "Explorar una base móvil para coordinar roles y servicios de movilidad local.",
+      solution:
+        "El prototipo organiza accesos y paneles por rol; el README sitúa los flujos principales de reserva en la hoja de ruta.",
+    },
+    "test-vs-2": {
+      title: "TechBoutik — Demostración e-commerce (fork)",
+      shortDescription:
+        "Un fork claramente identificado de una aplicación de demostración de comercio electrónico.",
+      description:
+        "Este repositorio es un fork de michaelbaze1987-cloud/test-vs-2. Su README describe una tienda de demostración con catálogo, carrito, pedidos y pago simulado; los datos se guardan en memoria o archivos locales y no hay pagos reales. No se presenta como una plataforma de comercio original en producción.",
+      problem:
+        "Explorar flujos de tienda y administración en una aplicación e-commerce de demostración.",
+      solution:
+        "El fork ofrece catálogo, carrito, pago simulado y pantallas administrativas para experimentar.",
+    },
+    testapprn: {
+      title: "Herramientas de rutas y horarios — App de prueba",
+      shortDescription:
+        "Una aplicación experimental para conductores con pantallas de rutas y horarios.",
+      description:
+        "El código Expo incluye una pantalla GPS con utilidades KML/GPX y otra de horarios que extrae información de archivos PDF. El repositorio no tiene README, por lo que se etiqueta expresamente como app de prueba y no se afirma que esté en producción ni que disponga de backend.",
+      problem:
+        "Experimentar con flujos de rutas y horarios en una aplicación móvil.",
+      solution:
+        "El código contiene pantallas separadas para planificar rutas y gestionar horarios a partir de PDF.",
+    },
+    "flutter-first-app": {
+      title: "Primera app Flutter — Plantilla tutorial",
+      shortDescription:
+        "El proyecto inicial predeterminado de Flutter, conservado como ejercicio de aprendizaje.",
+      description:
+        "El README identifica el repositorio como un nuevo proyecto Flutter y enlaza al tutorial oficial de primera aplicación. El pubspec contiene Flutter y la dependencia estándar Cupertino Icons; se etiqueta como plantilla educativa, no como producto publicado.",
+      problem: null,
+      solution: null,
+    },
+    "frontend2-simplon-best": {
+      title: "Cars Simplon — Cliente móvil de misiones",
+      shortDescription:
+        "Un cliente móvil para consultar misiones, vehículos y actividad del equipo.",
+      description:
+        "El README describe una aplicación de misiones para conductores de autobús, y el código Expo consultado solicita misiones, vehículos y datos de conductores mediante un servicio API. Se presenta como prototipo móvil; el README y el manifiesto difieren ligeramente en la versión de Expo.",
+      problem:
+        "Ofrecer a conductores y administradores una vista móvil de misiones y flota.",
+      solution:
+        "Un cliente móvil por roles organiza paneles, misiones, vehículos y vistas de conductores.",
+    },
+    "backend-for-frontend2-simplon-best": {
+      title: "Simplon Drivers — Prototipo de API backend",
+      shortDescription:
+        "Un prototipo de API para autenticación y gestión de conductores, vehículos, clientes y misiones.",
+      description:
+        "El manifiesto describe un backend Node.js/Express para la gestión de conductores, y el código incluye rutas de autenticación, usuarios, vehículos, clientes y misiones con Mongoose. No había README disponible en la revisión pública consultada; esta descripción se basa en el manifiesto y el código, sin afirmar que exista un despliegue.",
+      problem:
+        "Proporcionar al cliente móvil endpoints para conductores, vehículos, clientes y misiones.",
+      solution:
+        "Un servidor Express agrupa rutas de autenticación y gestión con modelos MongoDB/Mongoose.",
+    },
+    "simplon-drivers-app": {
+      title: "Cars Simplon Drivers — Prototipo local SQLite",
+      shortDescription:
+        "Un prototipo de panel móvil para misiones de conductores, vehículos e historial.",
+      description:
+        "El README describe una aplicación móvil de misiones para conductores y administradores. Los hooks de autenticación y el panel revisados usan actualmente SQLite local; aunque el README menciona Supabase, este portafolio no afirma que la autenticación o persistencia remota de Supabase esté conectada.",
+      problem:
+        "Explorar el acceso móvil a misiones asignadas y flujos de gestión para conductores.",
+      solution:
+        "Una aplicación Expo organiza paneles, misiones, vehículos e historial alrededor de un prototipo local.",
     },
   },
 };

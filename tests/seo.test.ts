@@ -77,19 +77,28 @@ test("sitemap includes all locales/services/published projects, real update date
     Module._load = function(name, ...args) {
       if (name === "next/server") return { connection: async () => {} };
       if (name === "@/lib/project-service") return { getPublicProjects: async () => [
-        { slug: "published-project", featured: true, updatedAt: "2026-11-01T12:00:00.000Z", coverImage: "/images/profile-portrait.webp" },
+        ...require("./lib/portfolio-data.ts").verifiedProjects.map(project => ({
+          ...project,
+          updatedAt: "2026-11-01T12:00:00.000Z",
+        })),
       ] };
       return original.call(this, name, ...args);
     };
     (async () => {
       const sitemap = await require("./app/sitemap.ts").default();
-      assert.equal(sitemap.length, 12);
+      const { verifiedProjects } = require("./lib/portfolio-data.ts");
+      assert.equal(sitemap.length, 8 + verifiedProjects.length * 4);
       assert.ok(sitemap.every(entry => entry.url.startsWith("https://canonical.example/")));
       assert.ok(sitemap.every(entry => Object.keys(entry.alternates.languages).length === 5));
       assert.ok(sitemap.every(entry => !/admin|api|localhost/.test(entry.url)));
       assert.equal(sitemap.filter(entry => entry.url.endsWith("/services")).length, 4);
       assert.ok(sitemap.filter(entry => entry.url.includes("/projects/")).every(entry => entry.lastModified === "2026-11-01T12:00:00.000Z"));
       assert.ok(sitemap.filter(entry => !entry.url.includes("/projects/")).every(entry => !entry.lastModified));
+      for (const project of verifiedProjects) {
+        for (const locale of ["en", "fr", "de", "es"]) {
+          assert.ok(sitemap.some(entry => entry.url.endsWith("/" + locale + "/projects/" + project.slug)));
+        }
+      }
     })().catch(error => { console.error(error); process.exitCode = 1; });
   `], { cwd: process.cwd(), encoding: "utf8", timeout: 30_000, env: { ...process.env, NEXT_PUBLIC_SITE_URL: "https://canonical.example", DATABASE_URL: "", DATABASE_URL_POOLED: "", POSTGRES_URL: "", PRISMA_DATABASE_URL: "" } });
   assert.equal(result.error, undefined);

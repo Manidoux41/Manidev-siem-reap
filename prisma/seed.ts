@@ -2,6 +2,7 @@ import { loadEnvConfig } from "@next/env";
 import { PrismaClient, ProjectStatus } from "@prisma/client";
 import { verifiedProjects } from "../lib/portfolio-data";
 import { resolveDatabaseUrl } from "../lib/database-url";
+import { githubRepositoryKey } from "../lib/github-repository";
 import { aiSkill } from "../lib/profile-skills";
 
 loadEnvConfig(process.cwd());
@@ -16,10 +17,34 @@ async function main() {
     update: {},
     create: { ...aiSkill, published: true },
   });
-  for (const project of verifiedProjects) {
+
+  const existingProjects = await prisma.project.findMany({
+    select: { slug: true, githubUrl: true, repoFullName: true },
+  });
+  const existingSlugs = new Set(existingProjects.map(({ slug }) => slug));
+  const existingRepositories = new Set(
+    existingProjects.flatMap(({ githubUrl, repoFullName }) =>
+      [githubUrl, repoFullName]
+        .map(githubRepositoryKey)
+        .filter((key): key is string => key !== null),
+    ),
+  );
+  let insertedProjects = 0;
+  let skippedProjects = 0;
+
+  for (const [sortOrder, project] of verifiedProjects.entries()) {
+    const repositoryKey = githubRepositoryKey(project.githubUrl);
+    if (
+      (repositoryKey && existingRepositories.has(repositoryKey)) ||
+      existingSlugs.has(project.slug)
+    ) {
+      skippedProjects += 1;
+      continue;
+    }
+
     const category = await prisma.category.upsert({
       where: { slug: project.category.slug },
-      update: { name: project.category.name },
+      update: {},
       create: {
         slug: project.category.slug,
         name: project.category.name,
@@ -42,19 +67,16 @@ async function main() {
       }),
     );
 
-    await prisma.project.upsert({
-      where: { slug: project.slug },
-      update: {
-        repoFullName: project.githubUrl?.replace("https://github.com/", "") ?? null,
-      },
-      create: {
+    const repoFullName = repositoryKey ?? undefined;
+    await prisma.project.create({
+      data: {
         title: project.title,
         slug: project.slug,
         shortDescription: project.shortDescription,
         description: project.description,
         problem: project.problem,
         solution: project.solution,
-        status: ProjectStatus.UNKNOWN,
+        status: ProjectStatus[project.status],
         categoryId: category.id,
         githubUrl: project.githubUrl,
         liveUrl: project.liveUrl,
@@ -62,13 +84,21 @@ async function main() {
         featured: project.featured,
         published: true,
         publishedAt: new Date(),
-        repoFullName: project.githubUrl?.replace("https://github.com/", "") ?? null,
+        sortOrder,
+        ...(repoFullName ? { repoFullName } : {}),
         technologies: {
           create: technologyIds.map((technologyId) => ({ technologyId })),
         },
       },
     });
+    existingSlugs.add(project.slug);
+    if (repositoryKey) existingRepositories.add(repositoryKey);
+    insertedProjects += 1;
   }
+
+  console.info(
+    `Added ${insertedProjects} curated projects; skipped ${skippedProjects} existing projects to preserve database edits.`,
+  );
 
   await Promise.all([
     prisma.siteSetting.upsert({

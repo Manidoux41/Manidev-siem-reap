@@ -8,6 +8,7 @@ import {
   localizedPath,
   locales,
 } from "../lib/i18n";
+import { githubRepositoryKey } from "../lib/github-repository";
 import { verifiedProjects } from "../lib/portfolio-data";
 
 test("the supported locales are English, French, German, and Spanish", () => {
@@ -63,7 +64,8 @@ test("curated project content is translated across the supported locales", () =>
   }
 });
 
-test("Saiway and KHMERA remain in the verified public project snapshot", () => {
+test("the public project snapshot contains unique repositories and labeled experiments", () => {
+  assert.equal(verifiedProjects.length, 18);
   assert.deepEqual(
     verifiedProjects.map(({ slug }) => slug),
     [
@@ -71,10 +73,62 @@ test("Saiway and KHMERA remain in the verified public project snapshot", () => {
       "la-voix-des-enfants-places",
       "saiway",
       "khmera",
+      "voix-et-enfance",
+      "cv-builder-app",
+      "association-declaration",
+      "gestion-planning",
+      "nos-liens-nos-enfants-contre-l-ase",
+      "cv-international-manfred",
+      "mmcgodrivers-website",
+      "tuktukgo",
+      "test-vs-2",
+      "testapprn",
+      "flutter-first-app",
+      "frontend2-simplon-best",
+      "backend-for-frontend2-simplon-best",
+      "simplon-drivers-app",
     ],
   );
+  const repositoryKeys = verifiedProjects.map(({ githubUrl }) =>
+    githubRepositoryKey(githubUrl),
+  );
+  assert.ok(repositoryKeys.every((key) => key !== null));
+  assert.equal(new Set(repositoryKeys).size, verifiedProjects.length);
+
+  const projectBySlug = new Map(verifiedProjects.map((project) => [project.slug, project]));
+  assert.equal(projectBySlug.get("test-vs-2")?.status, "TEST");
+  assert.match(projectBySlug.get("test-vs-2")?.title ?? "", /fork/i);
+  assert.match(projectBySlug.get("test-vs-2")?.description ?? "", /michaelbaze1987-cloud\/test-vs-2/);
+  assert.equal(projectBySlug.get("flutter-first-app")?.status, "TEST");
+  assert.match(projectBySlug.get("flutter-first-app")?.title ?? "", /tutorial/i);
+  assert.equal(projectBySlug.get("testapprn")?.status, "TEST");
+  assert.match(projectBySlug.get("testapprn")?.title ?? "", /test app/i);
+  assert.match(projectBySlug.get("simplon-drivers-app")?.description ?? "", /local SQLite/i);
+  assert.match(projectBySlug.get("simplon-drivers-app")?.description ?? "", /does not claim/i);
+  assert.equal(projectBySlug.has("manidev-siem-reap"), false);
+  assert.equal(projectBySlug.has("test"), false);
+});
+
+test("GitHub repository URLs and repository names normalize to the same identity", () => {
   assert.equal(
-    verifiedProjects.find(({ slug }) => slug === "khmera")?.liveUrl,
+    githubRepositoryKey("https://GitHub.com/Manidoux41/mmc-go-drivers.git/"),
+    "manidoux41/mmc-go-drivers",
+  );
+  assert.equal(
+    githubRepositoryKey("Manidoux41/MMC-Go-Drivers"),
+    "manidoux41/mmc-go-drivers",
+  );
+  assert.equal(githubRepositoryKey("https://example.com/owner/repo"), null);
+});
+
+test("existing MMC, La Voix, Saiway, and KHMERA entries remain present", () => {
+  const projectBySlug = new Map(verifiedProjects.map((project) => [project.slug, project]));
+  assert.ok(projectBySlug.has("mmc-go-drivers"));
+  assert.ok(projectBySlug.has("la-voix-des-enfants-places"));
+  assert.ok(projectBySlug.has("saiway"));
+  assert.ok(projectBySlug.has("khmera"));
+  assert.equal(
+    projectBySlug.get("khmera")?.liveUrl,
     "https://khmera.vercel.app",
   );
 });

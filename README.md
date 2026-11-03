@@ -34,6 +34,12 @@ The About section presents the 2023 OpenClassrooms Web Developer diploma
 
 ## Référencement naturel (SEO)
 
+Les 14 projets ajoutés disposent d'illustrations SVG locales distinctes dans
+`public/images/projects/`, montrant leur objet sans prétendre être des captures
+d'écran. Elles apparaissent dans le carrousel, les fiches et les données publiques,
+y compris lorsque la fiche existante en base n'a pas de couverture.
+Une couverture personnalisée reste prioritaire ; aucune mise à jour SQL n'est requise.
+
 L'identité publique associe **Manfred Parbatia**, **Manidev**, le développement web
 et **Siem Reap, Cambodge**. Les quatre langues disposent de titres et descriptions
 spécifiques, d'URL canoniques absolues, de liens `hreflang` réciproques et d'un
@@ -224,32 +230,72 @@ fournisseur.
 
 ## Projets et vérification des informations
 
-Les fiches publiques sont fondées sur les dépôts accessibles de Manidoux41,
-leurs README et les sites associés :
+Le portfolio présente **18 dépôts distincts** : les quatre projets déjà
+publiés et quatorze entrées ajoutées à partir des README, manifestes ou sources
+publiques de Manidoux41. Les fiches n'affirment pas qu'un prototype ou un
+parcours simulé est un service de production :
 
-- **MMC Go Drivers** — dépôt Flutter/Dart, site
-  <https://mmcgodrivers-website.vercel.app/>. Le dépôt et le site répondaient
-  lors de la vérification. Le statut de l'application et sa distribution
-  mobile ne sont pas déclarés ; aucun lien Google Play n'est publié.
-- **La Voix des Enfants Placés — Vienne** — dépôt TypeScript avec Next.js,
-  Prisma et PostgreSQL, site
-  <https://la-voix-des-enfants-places-vienne.vercel.app/>. Le dépôt avertit
-  que les contenus et coordonnées associatifs doivent être validés par
-  l'association avant publication.
-- **Saiway** — plateforme de transferts aéroport à Siem Reap, avec des flux de
-  réservation et des outils par rôle pour les clients, chauffeurs et
-  administrateurs. Dépôt Next.js/TypeScript avec Prisma et PostgreSQL ; site
+- **MMC Go Drivers** — application Flutter/Dart ; distribution mobile non
+  vérifiée. Le site associé est
+  <https://mmcgodrivers-website.vercel.app/>. Son dépôt web distinct
+  **MMC Go Drivers — Public Website** est également listé.
+- **La Voix des Enfants Placés — Vienne** — site éditorial Next.js, Prisma et
+  PostgreSQL, <https://la-voix-des-enfants-places-vienne.vercel.app/>. Le dépôt
+  demande à l'association de valider les contenus et coordonnées.
+- **Saiway** — transferts aéroport à Siem Reap et outils par rôle ; dépôt
+  Next.js/TypeScript avec Prisma et PostgreSQL,
   <https://gestion-planning-91ve.vercel.app>.
-- **KHMERA** — informations et services sur devis pour préparer une installation,
-  un projet professionnel ou un séjour à Siem Reap. Site Next.js/TypeScript en
-  anglais, français, espagnol et allemand ; les offres publiques sont
-  informatives et les réservations/paiements en ligne ne sont pas actifs.
-  <https://khmera.vercel.app>.
+- **KHMERA** — informations et services sur devis pour un séjour ou une
+  installation à Siem Reap ; site Next.js multilingue,
+  <https://khmera.vercel.app>. Réservation et paiement en ligne ne sont pas
+  actifs sur le site public.
+- **Voix & Enfance** — initiative publique avec proposition et parcours de
+  signature ; formulation à valider avant réutilisation.
+- **CV Studio** — éditeur de CV Next.js avec aperçu et export PDF ; stockage
+  local SQLite documenté, sans prétention de service multi-utilisateur en
+  production.
+- **Association Declaration Helper** — outil statique de préparation et
+  d'export ; les brouillons restent dans le navigateur et aucun document n'est
+  transmis à une administration.
+- **Maison douce** (`gestion_planning`) — premier tableau de bord avec données
+  de démonstration locales.
+- **Nos liens, nos enfants** — ressources sourcées, sondage modéré, statistiques
+  et préparation de pétition ; la fiche évite de reprendre les détails
+  personnels ou sensibles du dépôt.
+- **International CV Collection** — documents et pages de CV HTML statiques,
+  pas une application web.
+- **Angkor Move (TukTukGo)** — prototype mobile Expo/React Native ; les
+  réservations et opérations complètes restent une direction produit, pas un
+  service de production revendiqué.
+- **Cars Simplon — Driver Mission Client** et son **Backend API Prototype** —
+  client mobile Expo et API Express/MongoDB. Le dépôt backend n'avait pas de
+  README disponible à la révision vérifiée ; sa fiche se fonde sur le manifeste
+  et les modules source.
+- **Cars Simplon Drivers** — prototype mobile local. Le README mentionne
+  Supabase, mais le tableau de bord et les hooks examinés utilisent SQLite
+  local ; aucune intégration distante Supabase n'est revendiquée.
+- **TechBoutik** — fork explicite de
+  `michaelbaze1987-cloud/test-vs-2` ; la fiche le marque comme fork de
+  démonstration. Le paiement est simulé, sans transactions réelles.
+- **Route & Schedule Toolkit** (`testapprn`) — application de test sans README,
+  décrite uniquement à partir de ses écrans Expo de navigation et de planning.
+- **Flutter First App** — modèle de départ du tutoriel Flutter, pas un produit
+  publié.
 
-Le statut de cycle de vie des projets est conservé comme « à confirmer ». Les
-liens des deux nouveaux sites ont répondu en HTTP 200 lors de la vérification.
-Le dépôt public associé au site de nounou n'a pas pu être identifié avec les
-recherches GitHub par nom/description ; aucune fiche ni URL n'a été inventée.
+Les quatre sites existants MMC Go Drivers, La Voix, Saiway et KHMERA ont répondu
+en HTTP 200 lors de la vérification du 3 novembre 2026. Le dépôt
+`Manidev-siem-reap` est le dépôt de ce portfolio lui-même et n'est donc pas
+dupliqué comme projet ; le dépôt public `test` était vide et n'a pas de fiche.
+Les statuts non confirmés restent explicitement « à confirmer » ; les tests,
+forks et prototypes sont signalés dans leurs fiches.
+
+Pour une base de données déjà utilisée, l'ajout des projets est un import
+**additif** : `npm run db:seed` insère uniquement les dépôts ou slugs absents et
+ne remplace pas les projets existants ni leur contenu éditorial. Les nouveaux
+projets sélectionnés sont publiés par le seed : vérifiez leur contenu et la
+connexion ciblée avant d'exécuter cette commande. Le seed crée aussi les
+paramètres de site et la compétence IA initiale s'ils manquent ; aucune
+migration ni seed de production n'est lancé automatiquement.
 
 Une synchronisation facultative importe les dépôts publics du compte configuré :
 
@@ -258,11 +304,13 @@ npm run github:sync
 ```
 
 `GITHUB_USERNAME` vaut par défaut `Manidoux41`. La commande pagine l'API
-officielle GitHub. Les nouveaux dépôts sont créés comme brouillons « à
-compléter ». Les synchronisations ultérieures ne remplacent que les champs de
-métadonnées GitHub dédiés (`githubDescription`, `githubLanguage`, étoiles et
-date de mise à jour), jamais les textes éditoriaux, images, liens renseignés
-manuellement ou statut de publication.
+officielle GitHub et déduplique par dépôt, que l'identité existante soit stockée
+comme URL GitHub ou comme `repoFullName`. Les nouveaux dépôts non sélectionnés
+sont créés comme brouillons « à compléter ». Les synchronisations ultérieures
+ne remplacent que les champs de métadonnées GitHub dédiés
+(`githubDescription`, `githubLanguage`, étoiles et date de mise à jour), jamais
+les textes éditoriaux, images, liens renseignés manuellement ou statut de
+publication.
 
 ## Images et e-mail
 

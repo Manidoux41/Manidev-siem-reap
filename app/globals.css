@@ -772,7 +772,8 @@ textarea:focus-visible {
 .scene-driver,
 .scene-association,
 .scene-saiway,
-.scene-khmera {
+.scene-khmera,
+.scene-project {
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -782,8 +783,105 @@ textarea:focus-visible {
 .project-card-link:hover .scene-driver,
 .project-card-link:hover .scene-association,
 .project-card-link:hover .scene-saiway,
-.project-card-link:hover .scene-khmera {
+.project-card-link:hover .scene-khmera,
+.project-card-link:hover .scene-project {
   transform: scale(1.025);
+}
+
+.scene-project {
+  --scene-accent: var(--accent);
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 70% 24%, color-mix(in srgb, var(--scene-accent) 24%, transparent), transparent 38%),
+    #172728;
+}
+
+.scene-project::before {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 46px 46px;
+  content: "";
+}
+
+.scene-project-orbit {
+  position: absolute;
+  top: -34%;
+  right: -9%;
+  width: 58%;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--scene-accent) 66%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 24px color-mix(in srgb, var(--scene-accent) 10%, transparent),
+    0 0 0 58px color-mix(in srgb, var(--scene-accent) 7%, transparent);
+}
+
+.scene-project-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(74%, 650px);
+  min-height: 67%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(18px, 3.5vw, 42px);
+  background: rgba(247, 246, 241, 0.95);
+  box-shadow: 22px 27px 70px rgba(0, 0, 0, 0.3);
+  color: var(--dark);
+  transform: rotate(-2.2deg);
+}
+
+.scene-project-card > span,
+.scene-project-card > i {
+  color: #52615b;
+  font-family: var(--font-mono);
+  font-size: clamp(0.52rem, 0.8vw, 0.67rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scene-project-card > strong {
+  margin-block: 20px;
+  color: var(--dark);
+  font-size: clamp(1.5rem, 4vw, 4.2rem);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 0.98;
+  overflow-wrap: anywhere;
+}
+
+.scene-project-card > i {
+  font-style: normal;
+}
+
+.scene-project-civic {
+  --scene-accent: #e6b886;
+  background-color: #3a3834;
+}
+
+.scene-project-tools,
+.scene-project-professional {
+  --scene-accent: #c2d5a1;
+  background-color: #283c34;
+}
+
+.scene-project-transport {
+  --scene-accent: #8bc9c1;
+  background-color: #183c45;
+}
+
+.scene-project-learning {
+  --scene-accent: #e6aa86;
+  background-color: #3b2b36;
+}
+
+.scene-project-web {
+  --scene-accent: #a7c7df;
+  background-color: #243746;
 }
 
 .scene-driver {
