@@ -15,6 +15,7 @@ export function AdminApiBrowser({
   const [path, setPath] = useState(endpoint);
   const [locale, setLocale] = useState("en");
   const [slug, setSlug] = useState("");
+  const [id, setId] = useState("");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
   const [featured, setFeatured] = useState("");
@@ -66,7 +67,7 @@ export function AdminApiBrowser({
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const params = new URLSearchParams();
-    if (["/projects", "/projects/featured", "/projects/{slug}", "/categories"].includes(path)) {
+    if (["/projects", "/projects/featured", "/projects/{slug}", "/categories", "/skills"].includes(path)) {
       params.set("locale", locale);
     }
     if (path === "/projects") {
@@ -76,7 +77,7 @@ export function AdminApiBrowser({
       if (category.trim()) params.set("category", category.trim());
       if (featured) params.set("featured", featured);
     }
-    const resolvedPath = path.replace("{slug}", encodeURIComponent(slug.trim()));
+    const resolvedPath = path.replace("{slug}", encodeURIComponent(slug.trim())).replace("{id}", encodeURIComponent(id.trim()));
     setUrl(`/api/v1${resolvedPath}${params.size ? `?${params}` : ""}`);
     setRevision((value) => value + 1);
   }
@@ -101,7 +102,7 @@ export function AdminApiBrowser({
               </select>
             </label>
           )}
-          {["/projects", "/projects/featured", "/projects/{slug}", "/categories"].includes(path) && (
+          {["/projects", "/projects/featured", "/projects/{slug}", "/categories", "/skills"].includes(path) && (
             <label>
               Langue des contenus
               <select value={locale} onChange={(event) => setLocale(event.target.value)}>
@@ -115,6 +116,11 @@ export function AdminApiBrowser({
           {path === "/projects/{slug}" && (
             <label>Slug du projet publié
               <input value={slug} onChange={(event) => setSlug(event.target.value)} required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" />
+            </label>
+          )}
+          {path.includes("{id}") && (
+            <label>Identifiant de la carte enregistrée
+              <input value={id} onChange={(event) => setId(event.target.value)} required maxLength={100} />
             </label>
           )}
           {path === "/projects" && (

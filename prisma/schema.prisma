@@ -35,6 +35,19 @@ model AdminUser {
   updatedAt    DateTime       @updatedAt
   lastLoginAt  DateTime?
   sessions     AdminSession[]
+  businessCards BusinessCard[]
+}
+
+model BusinessCard {
+  id        String    @id @default(cuid())
+  label     String
+  data      Json
+  userId    String
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId, updatedAt])
 }
 
 model AdminSession {

@@ -34,6 +34,14 @@ test("language switching preserves the current localized route", () => {
   assert.equal(localizedPath("/fr/projects/khmera?from=share", "en"), "/en/projects/khmera?from=share");
 });
 
+test("AI specialization is described in all supported languages", () => {
+  for (const locale of locales) {
+    const { about } = getMessages(locale);
+    assert.ok(about.aiLabel.length > 10);
+    assert.ok(about.aiDescription.length > 50);
+  }
+  assert.match(getMessages("fr").about.aiDescription, /spécialisé dans l’utilisation de l’IA/);
+});
 test("curated project content is translated across the supported locales", () => {
   for (const locale of locales) {
     const messages = getMessages(locale);

@@ -3,6 +3,7 @@
 import { FormEvent, useRef, useState } from "react";
 import { AdminApiBrowser } from "@/components/admin-api-browser";
 import { BrandLogo } from "@/components/brand-logo";
+import { BusinessCardStudio } from "@/components/business-card-studio";
 import { adminSections, type AdminSection } from "@/lib/admin-navigation";
 
 type ProjectStatus = "IN_DEVELOPMENT" | "TEST" | "PRODUCTION" | "UNKNOWN";
@@ -432,6 +433,9 @@ export function AdminConsole({
       <p className={`admin-message${error ? " is-error" : ""}`} role="status">
         {feedback}
       </p>
+      <div hidden={section !== "business-cards"}>
+        <BusinessCardStudio />
+      </div>
       {section === "overview" && (
         <section className="admin-card">
           <p className="eyebrow">Votre portfolio en bref</p>

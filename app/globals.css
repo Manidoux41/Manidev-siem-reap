@@ -2017,6 +2017,30 @@ textarea:focus-visible {
   min-width: 0;
 }
 
+.business-card-preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+}
+
+.business-card-fields {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.business-card-studio > .admin-actions {
+  margin-top: 20px;
+}
+
+.business-card-crop-marks {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
 .admin-main .admin-toolbar {
   margin-top: 0;
 }

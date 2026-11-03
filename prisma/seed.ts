@@ -2,6 +2,7 @@ import { loadEnvConfig } from "@next/env";
 import { PrismaClient, ProjectStatus } from "@prisma/client";
 import { verifiedProjects } from "../lib/portfolio-data";
 import { resolveDatabaseUrl } from "../lib/database-url";
+import { aiSkill } from "../lib/profile-skills";
 
 loadEnvConfig(process.cwd());
 
@@ -10,6 +11,11 @@ if (!datasourceUrl) throw new Error("A PostgreSQL connection is required for see
 const prisma = new PrismaClient({ datasourceUrl });
 
 async function main() {
+  await prisma.skill.upsert({
+    where: { name_category: { name: aiSkill.name, category: aiSkill.category } },
+    update: {},
+    create: { ...aiSkill, published: true },
+  });
   for (const project of verifiedProjects) {
     const category = await prisma.category.upsert({
       where: { slug: project.category.slug },

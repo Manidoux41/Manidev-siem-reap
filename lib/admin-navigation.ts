@@ -4,6 +4,7 @@ export const adminSections = [
   { id: "editor", label: "Créer un projet", group: "Gestion" },
   { id: "messages", label: "Messages", group: "Gestion" },
   { id: "settings", label: "Paramètres du site", group: "Gestion" },
+  { id: "business-cards", label: "Cartes de visite", group: "Outils" },
   { id: "categories", label: "Catégories", group: "Consultation" },
   { id: "technologies", label: "Technologies", group: "Consultation" },
   { id: "skills", label: "Compétences", group: "Consultation" },
@@ -30,6 +31,8 @@ export const adminApiEndpoints = [
   { path: "/admin/messages", methods: ["GET"], label: "Lire les messages privés (100 derniers)", section: "messages" },
   { path: "/admin/messages/{id}", methods: ["PATCH"], label: "Changer le statut d’un message", section: "messages" },
   { path: "/admin/settings", methods: ["GET", "PATCH"], label: "Lire et modifier les paramètres", section: "settings" },
+  { path: "/admin/business-cards", methods: ["GET", "POST"], label: "Lister et enregistrer mes cartes de visite", section: "business-cards" },
+  { path: "/admin/business-cards/{id}", methods: ["GET", "PATCH", "DELETE"], label: "Charger, modifier et supprimer une carte de visite", section: "business-cards" },
   { path: "/openapi", methods: ["GET"], label: "Documentation OpenAPI", section: "api" },
 ] as const satisfies readonly {
   path: string;

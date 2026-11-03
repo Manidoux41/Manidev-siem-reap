@@ -103,6 +103,8 @@ const english = {
     education: "Web Developer diploma, level IV — obtained in 2023 through OpenClassrooms. Formal training complements my hands-on experience and commitment to continuous learning.",
     motto: "“If someone else has done it, you can too.”",
     skills: "Technologies found in these projects",
+    aiLabel: "Artificial intelligence specialization",
+    aiDescription: "I specialize in using AI tools to support development, automate workflows and integrate practical AI-assisted solutions.",
     skillsNote:
       "No arbitrary skill bars — just tools used in identifiable work.",
   },
@@ -246,6 +248,8 @@ const translations: Record<SiteLocale, SiteMessages> = {
       education: "Diplôme de développeur web de niveau IV, obtenu en 2023 via OpenClassrooms. Une formation diplômante qui complète mon expérience pratique et mon apprentissage continu.",
       motto: "« Si d’autres l’ont fait, tu le peux. »",
       skills: "Technologies repérées dans les projets",
+      aiLabel: "Spécialisation en intelligence artificielle",
+      aiDescription: "Je suis également spécialisé dans l’utilisation de l’IA pour accompagner le développement, automatiser les workflows et intégrer des solutions concrètes assistées par l’intelligence artificielle.",
       skillsNote:
         "Pas de jauges arbitraires — seulement des outils utilisés dans des réalisations identifiables.",
     },
@@ -384,6 +388,8 @@ const translations: Record<SiteLocale, SiteMessages> = {
       education: "Abschluss als Webentwickler, französisches Niveau IV — 2023 über OpenClassrooms erworben. Diese Ausbildung ergänzt meine praktische Erfahrung und mein kontinuierliches Lernen.",
       motto: "„Wenn andere es geschafft haben, kannst du es auch.“",
       skills: "In den Projekten verwendete Technologien",
+      aiLabel: "Spezialisierung auf künstliche Intelligenz",
+      aiDescription: "Ich bin auch auf den Einsatz von KI spezialisiert, um die Entwicklung zu unterstützen, Arbeitsabläufe zu automatisieren und praktische KI-gestützte Lösungen zu integrieren.",
       skillsNote:
         "Keine willkürlichen Balken — nur Werkzeuge aus nachvollziehbaren Projekten.",
     },
@@ -522,6 +528,8 @@ const translations: Record<SiteLocale, SiteMessages> = {
       education: "Diploma de desarrollador web, nivel IV francés — obtenido en 2023 a través de OpenClassrooms. Una formación que complementa mi experiencia práctica y mi aprendizaje continuo.",
       motto: "«Si otros lo han hecho, tú también puedes.»",
       skills: "Tecnologías presentes en estos proyectos",
+      aiLabel: "Especialización en inteligencia artificial",
+      aiDescription: "También me especializo en el uso de la IA para apoyar el desarrollo, automatizar flujos de trabajo e integrar soluciones prácticas asistidas por inteligencia artificial.",
       skillsNote:
         "Sin barras arbitrarias: solo herramientas utilizadas en proyectos identificables.",
     },

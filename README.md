@@ -127,6 +127,34 @@ L'envoi d'un contact reste dans le formulaire public. Aucun CRUD de comptes,
 compétences ou expériences n'est ajouté. Le paramètre `site.locale` est éditable
 via l'API existante mais ne change pas la redirection de `/` vers `/en`.
 
+### Cartes de visite
+
+Le menu « Cartes de visite » ouvre un atelier avec coordonnées éditables,
+portrait du site remplaçable et import séparé des QR codes WhatsApp/Telegram
+(PNG/JPEG/WebP, maximum 5 Mo et 20 millions de pixels). La photo est facultative,
+son contour est discret, et des icônes remplacent les noms des messageries sur la carte.
+Les images sont normalisées localement en PNG (maximum 700 000 caractères par
+data URL, environ 500 Ko par image). Le bouton « Enregistrer en base » conserve
+le modèle, ses coordonnées, ses images et ses options dans PostgreSQL ; une copie
+peut être créée, chargée, modifiée ou supprimée. Les brouillons non enregistrés
+restent perdus au rechargement. Aucun service tiers ne reçoit ces données.
+Les modèles appartiennent au compte administrateur connecté et ne sont jamais
+exposés par l'API publique. Les routes privées `/api/v1/admin/business-cards`
+et `/api/v1/admin/business-cards/{id}` appliquent l'authentification, le contrôle
+d'origine pour les écritures et une limite de corps de 2,2 Mo.
+
+Appliquer la migration avant utilisation : `npm run db:deploy` sur la même base
+que le déploiement. Elle ajoute la table `BusinessCard` et la compétence IA publiée.
+Le seed assure aussi la présence de cette compétence sans écraser les données existantes.
+La spécialisation dans l'utilisation de l'IA est présentée dans les quatre langues,
+et disponible via `/api/v1/skills?locale=fr` (ou `en`, `de`, `es`).
+La composition utilise `public/images/banniere.png` et un aperçu Canvas,
+exporté via jsPDF en PDF A4 portrait : 10 rectos de 85 × 55 mm, deux colonnes
+et cinq lignes, espace de 2 mm, repères de découpe facultatifs, sans fond perdu.
+Imprimer à 100 %, sans ajustement. Les QR codes sont importés, pas générés :
+vérifier leur lisibilité avant impression. Les champs téléphone sont laissés
+vides jusqu'à saisie ; aucun numéro n'est inventé.
+
 Les limites de connexion et de formulaire sont stockées dans PostgreSQL sous
 forme de clés IP hachées. Le proxy de production doit fournir `x-real-ip` ;
 sans base, le limiteur utilise seulement la mémoire du processus. Les règles

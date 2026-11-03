@@ -222,6 +222,10 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
               </div>
             </div>
             <div className="skills-block reveal">
+              <div className="education-note">
+                <p className="eyebrow">{messages.about.aiLabel}</p>
+                <p>{messages.about.aiDescription}</p>
+              </div>
               <p className="eyebrow">{messages.about.skills}</p>
               <div className="skills-list">
                 {technologies.map((technology) => (
