@@ -96,6 +96,24 @@ réglages publics. Les sessions sont stockées côté serveur et utilisent un
 cookie `HttpOnly`, `SameSite=Strict`, `Secure` en production. Les mutations
 vérifient l'origine et l'utilisateur connecté.
 
+Le menu latéral sépare la vue d'ensemble, la liste et l'éditeur des projets,
+les messages, les paramètres, les catégories, les technologies, les compétences,
+les expériences et l'explorateur API. Sur mobile, le bouton « Menu admin »
+ouvre la navigation. Le menu « Éditeur de projet » permet de reprendre un brouillon
+après un changement d'écran ; le bouton « Créer un projet » démarre un nouveau
+formulaire et demande confirmation avant d'abandonner les modifications en cours.
+Les projets sont recherchables et les messages filtrables par statut.
+Le statut « Répondu » ne déclenche pas l'envoi d'un e-mail.
+
+Les ressources publiques sans endpoint d'écriture sont consultées en lecture
+seule. L'explorateur couvre tous les endpoints existants : requêtes GET,
+filtres, pagination et langues des projets, détail par slug, paramètres publics,
+réponses JSON et documentation OpenAPI. Les mutations sont réalisées depuis
+les écrans de gestion, jamais par un outil d'envoi arbitraire de requêtes.
+L'envoi d'un contact reste dans le formulaire public. Aucun CRUD de comptes,
+compétences ou expériences n'est ajouté. Le paramètre `site.locale` est éditable
+via l'API existante mais ne change pas la redirection de `/` vers `/en`.
+
 Les limites de connexion et de formulaire sont stockées dans PostgreSQL sous
 forme de clés IP hachées. Le proxy de production doit fournir `x-real-ip` ;
 sans base, le limiteur utilise seulement la mémoire du processus. Les règles

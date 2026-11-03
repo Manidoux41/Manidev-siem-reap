@@ -1,6 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
+import { AdminApiBrowser } from "@/components/admin-api-browser";
+import { adminSections, type AdminSection } from "@/lib/admin-navigation";
 
 type ProjectStatus = "IN_DEVELOPMENT" | "TEST" | "PRODUCTION" | "UNKNOWN";
 
@@ -198,10 +200,7 @@ export function AdminConsole({
     setEditingId(id);
     setForm(values);
     setFeedback("");
-    document.getElementById("admin-project-form")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    navigate("editor");
   }
 
   async function submitProject(event: FormEvent<HTMLFormElement>) {
@@ -238,6 +237,7 @@ export function AdminConsole({
       setEditingId(null);
       setForm(emptyForm);
       await loadContent();
+      navigate("projects");
     } catch (reason) {
       setError(true);
       setFeedback(
@@ -250,6 +250,9 @@ export function AdminConsole({
 
   async function deleteProject(project: AdminProject) {
     if (!window.confirm(`Supprimer « ${project.title} » ?`)) return;
+    setBusy(true);
+    setError(false);
+    setFeedback("");
     try {
       await readResponse(
         await fetch(`/api/v1/admin/projects/${encodeURIComponent(project.id)}`, {
@@ -257,12 +260,18 @@ export function AdminConsole({
         }),
       );
       setFeedback("Projet supprimé.");
+      if (editingId === project.id) {
+        setEditingId(null);
+        setForm(emptyForm);
+      }
       await loadContent();
     } catch (reason) {
       setError(true);
       setFeedback(
         reason instanceof Error ? reason.message : "Suppression impossible.",
       );
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -270,6 +279,9 @@ export function AdminConsole({
     id: string,
     status: ContactMessage["status"],
   ) {
+    setBusy(true);
+    setError(false);
+    setFeedback("");
     try {
       await readResponse(
         await fetch(`/api/v1/admin/messages/${encodeURIComponent(id)}`, {
@@ -279,15 +291,21 @@ export function AdminConsole({
         }),
       );
       await loadContent();
+      setFeedback("Statut du message mis à jour.");
     } catch (reason) {
       setError(true);
       setFeedback(
         reason instanceof Error ? reason.message : "Mise à jour impossible.",
       );
+    } finally {
+      setBusy(false);
     }
   }
 
   async function logout() {
+    setBusy(true);
+    setError(false);
+    setFeedback("");
     try {
       await readResponse(
         await fetch("/api/v1/admin/auth/logout", { method: "POST" }),
@@ -298,6 +316,8 @@ export function AdminConsole({
       setFeedback(
         reason instanceof Error ? reason.message : "Déconnexion impossible.",
       );
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -305,6 +325,7 @@ export function AdminConsole({
     event.preventDefault();
     setFeedback("");
     setError(false);
+    setBusy(true);
     try {
       await readResponse(
         await fetch("/api/v1/admin/settings", {
@@ -313,25 +334,127 @@ export function AdminConsole({
           body: JSON.stringify(settings),
         }),
       );
+      await loadContent();
       setFeedback("Paramètres enregistrés.");
     } catch (reason) {
       setError(true);
       setFeedback(
         reason instanceof Error ? reason.message : "Enregistrement impossible.",
       );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const [section, setSection] = useState<AdminSection>("overview");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [projectSearch, setProjectSearch] = useState("");
+  const [messageStatus, setMessageStatus] = useState("");
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const hasProjectDraft = editingId !== null || JSON.stringify(form) !== JSON.stringify(emptyForm);
+  const unreadCount = messages.filter((item) => item.status === "NEW").length;
+  const visibleProjects = projects.filter((item) =>
+    `${item.title} ${item.slug} ${item.category}`.toLowerCase().includes(projectSearch.toLowerCase()),
+  );
+  const visibleMessages = messages.filter((item) => !messageStatus || item.status === messageStatus);
+  const sectionTitle = section === "editor" && editingId
+    ? "Modifier un projet"
+    : adminSections.find((item) => item.id === section)?.label;
+
+  function navigate(next: AdminSection) {
+    setSection(next);
+    setMenuOpen(false);
+    headingRef.current?.focus();
+  }
+
+  function createNewProject() {
+    if (hasProjectDraft && !window.confirm("Abandonner les modifications du projet en cours et créer un nouveau projet ?")) return;
+    setEditingId(null);
+    setForm(emptyForm);
+    setFeedback("");
+    setError(false);
+    navigate("editor");
+  }
+
+  async function refresh() {
+    setBusy(true);
+    setError(false);
+    setFeedback("");
+    try {
+      await loadContent();
+      setFeedback("Données actualisées.");
+    } catch (reason) {
+      setError(true);
+      setFeedback(reason instanceof Error ? reason.message : "Actualisation impossible.");
+    } finally {
+      setBusy(false);
     }
   }
 
   return (
-    <>
+    <div className="admin-workspace">
+      <aside className="admin-sidebar">
+        <div className="admin-sidebar-heading">
+          <p className="eyebrow">Espace éditeur</p>
+          <button type="button" className="admin-menu-toggle" aria-expanded={menuOpen} aria-controls="admin-navigation" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? "Fermer le menu" : "Menu admin"}
+          </button>
+        </div>
+        <nav id="admin-navigation" className={menuOpen ? "is-open" : ""} aria-label="Tâches d’administration">
+          {["Gestion", "Consultation", "Outils"].map((group) => (
+            <div className="admin-nav-group" key={group}>
+              <p>{group}</p>
+              {adminSections.filter((item) => item.group === group).map((item) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  aria-current={section === item.id ? "page" : undefined}
+                  disabled={busy}
+                  onClick={() => navigate(item.id)}
+                >
+                  {item.id === "editor" && hasProjectDraft ? "Éditeur de projet" : item.label}
+                  {item.id === "messages" && unreadCount > 0 && <span className="admin-badge" aria-label={`${unreadCount} nouveaux messages`}>{unreadCount}</span>}
+                </button>
+              ))}
+            </div>
+          ))}
+          <a href="/en" target="_blank" rel="noreferrer">Voir le site public ↗</a>
+          <button type="button" disabled={busy} onClick={logout}>Se déconnecter</button>
+        </nav>
+      </aside>
+      <div className="admin-main">
       <div className="admin-toolbar">
-        <p className="eyebrow">Espace éditeur</p>
-        <button type="button" onClick={logout}>Se déconnecter</button>
+        <h2 ref={headingRef} tabIndex={-1}>{sectionTitle}</h2>
+        <button type="button" disabled={busy} onClick={refresh}>{busy ? "En cours…" : "Actualiser les données"}</button>
       </div>
       <p className={`admin-message${error ? " is-error" : ""}`} role="status">
         {feedback}
       </p>
-      <section className="admin-card" id="admin-project-form">
+      {section === "overview" && (
+        <section className="admin-card">
+          <p className="eyebrow">Votre portfolio en bref</p>
+          <div className="admin-stats">
+            <button type="button" onClick={() => navigate("projects")}><strong>{projects.length}</strong>Projets</button>
+            <button type="button" onClick={() => navigate("projects")}><strong>{projects.filter((item) => item.published).length}</strong>Publiés</button>
+            <button type="button" onClick={() => navigate("messages")}><strong>{unreadCount}</strong>Nouveaux messages</button>
+          </div>
+          <p className="admin-note">
+            Créez et gérez les projets, leur publication, leur mise en avant,
+            leur ordre, leurs liens et leur couverture. Classez les messages
+            reçus et modifiez les paramètres publics du site.
+          </p>
+          <div className="admin-actions">
+            <button type="button" disabled={busy} onClick={createNewProject}>Créer un projet</button>
+            <button type="button" onClick={() => navigate("api")}>Explorer l’API</button>
+          </div>
+          <p className="admin-note">
+            Les compétences et expériences sont consultables uniquement :
+            aucun endpoint de modification n’existe actuellement. Les catégories
+            et technologies sont créées ou associées lors de l’enregistrement des projets.
+          </p>
+        </section>
+      )}
+      <section className="admin-card" id="admin-project-form" hidden={section !== "editor"}>
         <p className="eyebrow">{editingId ? "Modifier" : "Nouveau projet"}</p>
         <p className="admin-note">
           Les textes de projet sont saisis en anglais, langue par défaut du site.
@@ -406,7 +529,11 @@ export function AdminConsole({
                 onChange={(event) => updateField("category", event.target.value)}
                 required
                 maxLength={60}
+                list="admin-categories"
               />
+              <datalist id="admin-categories">
+                {Array.from(new Set(projects.map((item) => item.category))).map((name) => <option key={name} value={name} />)}
+              </datalist>
             </label>
             <label>
               Technologies (séparées par des virgules)
@@ -419,6 +546,7 @@ export function AdminConsole({
                   )
                 }
               />
+              <span className="admin-note">Déjà utilisées : {Array.from(new Set(projects.flatMap((item) => item.technologies))).join(", ") || "Aucune"}</span>
             </label>
           </div>
           <div className="form-row">
@@ -505,55 +633,81 @@ export function AdminConsole({
             <button type="submit" disabled={busy}>
               {busy ? "Enregistrement…" : editingId ? "Enregistrer" : "Créer le projet"}
             </button>
-            {editingId && (
               <button
                 type="button"
+                disabled={busy}
                 onClick={() => {
                   setEditingId(null);
                   setForm(emptyForm);
+                  navigate("projects");
                 }}
               >
                 Annuler
               </button>
-            )}
           </div>
         </form>
       </section>
 
-      <section className="admin-card">
+      <section className="admin-card" hidden={section !== "projects"}>
         <p className="eyebrow">Projets / {projects.length.toString().padStart(2, "0")}</p>
+        <div className="admin-form">
+          <label>Rechercher un projet
+            <input type="search" value={projectSearch} onChange={(event) => setProjectSearch(event.target.value)} />
+          </label>
+        </div>
+        <div className="admin-actions">
+          <button type="button" disabled={busy} onClick={createNewProject}>Créer un projet</button>
+          <button type="button" onClick={() => navigate("api")}>Consulter les projets publics via l’API</button>
+        </div>
+        {visibleProjects.length === 0 && <p className="admin-note">Aucun projet correspondant.</p>}
         <ul className="admin-project-list">
-          {projects.map((project) => (
+          {visibleProjects.map((project) => (
             <li key={project.id}>
               <div>
                 <strong>{project.title}</strong>
                 <span> · {project.published ? "Publié" : "Brouillon"}</span>
+                <p className="admin-note">{project.category} · {project.status} · Ordre {project.sortOrder}{project.featured ? " · Mis en avant" : ""}</p>
+                {project.published && <a href={`/en/projects/${encodeURIComponent(project.slug)}`} target="_blank" rel="noreferrer">Voir le projet public</a>}
               </div>
               <div className="admin-actions">
-                <button type="button" onClick={() => editProject(project)}>Modifier</button>
-                <button type="button" onClick={() => deleteProject(project)}>Supprimer</button>
+                <button type="button" disabled={busy} onClick={() => editProject(project)}>Modifier</button>
+                <button type="button" disabled={busy} onClick={() => deleteProject(project)}>Supprimer</button>
               </div>
             </li>
           ))}
         </ul>
       </section>
 
-      <section className="admin-card">
+      <section className="admin-card" hidden={section !== "messages"}>
         <p className="eyebrow">Messages de contact / {messages.length.toString().padStart(2, "0")}</p>
-        {messages.length === 0 ? (
-          <p className="admin-note">Aucun message enregistré.</p>
+        <p className="admin-note">Les 100 derniers messages reçus. « Répondu » est un classement : cette action n’envoie aucun e-mail.</p>
+        <div className="admin-form">
+          <label>Filtrer par statut
+            <select value={messageStatus} onChange={(event) => setMessageStatus(event.target.value)}>
+              <option value="">Tous les messages</option>
+              <option value="NEW">Nouveau</option>
+              <option value="READ">Lu</option>
+              <option value="REPLIED">Répondu</option>
+              <option value="ARCHIVED">Archivé</option>
+            </select>
+          </label>
+        </div>
+        {visibleMessages.length === 0 ? (
+          <p className="admin-note">Aucun message correspondant.</p>
         ) : (
           <ul className="admin-project-list">
-            {messages.map((item) => (
+            {visibleMessages.map((item) => (
               <li key={item.id}>
                 <div>
                   <strong>{item.subject}</strong>
                   <span> — {item.name} · {item.email} · {item.status}</span>
                   <p>{item.message}</p>
+                  <time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString("fr-FR", { timeZone: "UTC" })} UTC</time>
                 </div>
                 <select
                   aria-label={`Statut du message de ${item.name}`}
                   value={item.status}
+                  disabled={busy}
                   onChange={(event) =>
                     changeMessageStatus(
                       item.id,
@@ -572,7 +726,7 @@ export function AdminConsole({
         )}
       </section>
 
-      <section className="admin-card">
+      <section className="admin-card" hidden={section !== "settings"}>
         <p className="eyebrow">Paramètres du site</p>
         <form className="admin-form" onSubmit={saveSettings}>
           <label>
@@ -602,6 +756,16 @@ export function AdminConsole({
             />
           </label>
           <label>
+            Langue par défaut (paramètre API)
+            <select value={settings["site.locale"]} onChange={(event) => setSettings((current) => ({ ...current, "site.locale": event.target.value }))}>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="es">Español</option>
+            </select>
+          </label>
+          <p className="admin-note">Le paramètre est enregistré dans l’API. L’URL d’accueil reste redirigée vers /en ; les visiteurs choisissent leur langue via le sélecteur.</p>
+          <label>
             Lien GitHub public
             <input
               type="url"
@@ -627,9 +791,18 @@ export function AdminConsole({
               }
             />
           </label>
-          <button type="submit">Enregistrer les paramètres</button>
+          <button type="submit" className="button button-dark" disabled={busy}>{busy ? "Enregistrement…" : "Enregistrer les paramètres"}</button>
         </form>
       </section>
-    </>
+      {(["categories", "technologies", "skills", "experiences", "api"] as AdminSection[]).includes(section) && (
+        <AdminApiBrowser
+          key={section}
+          endpoint={section === "api" ? "/projects" : `/${section}`}
+          explorer={section === "api"}
+          onNavigate={navigate}
+        />
+      )}
+      </div>
+    </div>
   );
 }

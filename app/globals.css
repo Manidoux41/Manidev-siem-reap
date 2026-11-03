@@ -1699,7 +1699,7 @@ textarea:focus-visible {
 
 .admin-page {
   min-height: 100svh;
-  padding: 122px max(22px, calc((100vw - 1060px) / 2)) 90px;
+  padding: 122px max(22px, calc((100vw - 1360px) / 2)) 90px;
 }
 
 .admin-page h1 {
@@ -1850,6 +1850,258 @@ textarea:focus-visible {
 
 .admin-login {
   max-width: 500px;
+}
+
+.admin-workspace {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  align-items: start;
+  gap: 32px;
+  margin-top: 36px;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 100px;
+  max-height: calc(100svh - 120px);
+  padding: 20px 16px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  background: var(--dark);
+}
+
+.admin-sidebar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-sidebar nav {
+  display: grid;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.admin-nav-group {
+  display: grid;
+  gap: 6px;
+}
+
+.admin-nav-group > p {
+  margin: 0 0 4px;
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+}
+
+.admin-sidebar button,
+.admin-sidebar a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  text-decoration: none;
+}
+
+.admin-sidebar button:hover,
+.admin-sidebar a:hover {
+  border-color: var(--line);
+  background: var(--dark-soft);
+}
+
+.admin-sidebar button[aria-current="page"] {
+  background: var(--accent);
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.admin-sidebar .admin-menu-toggle {
+  display: none;
+}
+
+.admin-badge {
+  padding: 2px 6px;
+  border: 1px solid currentColor;
+  border-radius: 20px;
+  font-size: 0.72rem;
+}
+
+.admin-main {
+  min-width: 0;
+}
+
+.admin-main .admin-toolbar {
+  margin-top: 0;
+}
+
+.admin-main h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: -0.04em;
+}
+
+.admin-main .admin-card {
+  max-width: none;
+  margin-top: 24px;
+}
+
+.admin-card[hidden] {
+  display: none;
+}
+
+.admin-card a {
+  color: var(--ink);
+  text-underline-offset: 4px;
+}
+
+.admin-card button:disabled,
+.admin-sidebar button:disabled,
+.admin-toolbar button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-block: 24px;
+}
+
+.admin-stats button {
+  display: grid;
+  gap: 8px;
+  padding: 20px 12px;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.admin-stats strong {
+  font-size: 2rem;
+}
+
+.admin-actions {
+  flex-wrap: wrap;
+}
+
+.admin-card > .admin-actions,
+.admin-card > .admin-form {
+  margin-bottom: 20px;
+}
+
+.admin-project-list li > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-project-list time {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+}
+
+.admin-project-list select {
+  min-height: 42px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+}
+
+.admin-api-result {
+  max-height: 600px;
+  margin: 20px 0 0;
+  padding: 18px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.admin-api-endpoints {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-api-endpoints li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+
+.admin-api-endpoints p {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+}
+
+.admin-api-endpoints button {
+  flex-shrink: 0;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+  .admin-workspace {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .admin-sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .admin-sidebar .admin-menu-toggle {
+    display: block;
+    border-color: var(--line);
+  }
+
+  .admin-sidebar nav {
+    display: none;
+  }
+
+  .admin-sidebar nav.is-open {
+    display: grid;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-main .admin-card {
+    padding: 20px 16px;
+  }
+
+  .admin-toolbar,
+  .admin-project-list li,
+  .admin-api-endpoints li {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
 }
 
 @keyframes cue-line {
