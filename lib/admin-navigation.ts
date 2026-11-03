@@ -3,6 +3,7 @@ export const adminSections = [
   { id: "projects", label: "Projets", group: "Gestion" },
   { id: "editor", label: "Créer un projet", group: "Gestion" },
   { id: "messages", label: "Messages", group: "Gestion" },
+  { id: "testimonials", label: "Témoignages", group: "Gestion" },
   { id: "settings", label: "Paramètres du site", group: "Gestion" },
   { id: "business-cards", label: "Cartes de visite", group: "Outils" },
   { id: "categories", label: "Catégories", group: "Consultation" },
@@ -15,6 +16,9 @@ export const adminSections = [
 export type AdminSection = (typeof adminSections)[number]["id"];
 
 export const adminApiEndpoints = [
+  { path: "/testimonials", methods: ["GET", "POST"], label: "Lire les témoignages approuvés ou soumettre avec consentement", section: "testimonials" },
+  { path: "/admin/testimonials", methods: ["GET"], label: "Lire les témoignages à modérer", section: "testimonials" },
+  { path: "/admin/testimonials/{id}", methods: ["PATCH", "DELETE"], label: "Approuver, rejeter ou supprimer un témoignage", section: "testimonials" },
   { path: "/projects", methods: ["GET"], label: "Projets publiés", section: "projects" },
   { path: "/projects/featured", methods: ["GET"], label: "Projets mis en avant", section: "projects" },
   { path: "/projects/{slug}", methods: ["GET"], label: "Détail d’un projet publié", section: "projects" },

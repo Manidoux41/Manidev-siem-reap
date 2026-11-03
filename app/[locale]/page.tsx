@@ -4,6 +4,9 @@ import Image from "next/image";
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { ContactForm } from "@/components/contact-form";
+import { TestimonialSection } from "@/components/testimonial-section";
+import { getPublicTestimonials } from "@/lib/testimonials";
+import { databaseConfigured } from "@/lib/prisma";
 import { ProjectExplorer } from "@/components/project-explorer";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { SiteHeader } from "@/components/site-header";
@@ -96,9 +99,10 @@ function HomeFallback({ locale }: { locale: ReturnType<typeof getSiteLocale> }) 
 
 async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale> }) {
   await connection();
-  const [projects, settings] = await Promise.all([
+  const [projects, settings, testimonials] = await Promise.all([
     getPublicProjects(),
     getPublicSiteSettings(),
+    getPublicTestimonials(),
   ]);
   const messages = getMessages(locale);
   const localizedProjects = projects.map((project) =>
@@ -234,6 +238,12 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
           </div>
         </section>
 
+        <TestimonialSection
+          locale={locale}
+          testimonials={testimonials}
+          projects={localizedProjects.filter(project => project.source === "database")}
+          available={databaseConfigured}
+        />
         <section className="contact-section section" id="contact">
           <div className="contact-heading reveal">
             <p className="eyebrow">{messages.contact.eyebrow}</p>

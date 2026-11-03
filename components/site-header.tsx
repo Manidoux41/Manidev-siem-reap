@@ -5,6 +5,7 @@ import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { LinkedInLink } from "@/components/linkedin-link";
 import { seoContent } from "@/lib/seo-content";
+import { testimonialMessages } from "@/lib/testimonial-messages";
 import {
   getMessages,
   isSiteLocale,
@@ -31,6 +32,7 @@ export function SiteHeader({
     { href: `/${locale}/services`, label: seoContent[locale].navigation },
     { href: `/${locale}/#projets`, label: messages.header.projects },
     { href: `/${locale}/#apropos`, label: messages.header.about },
+    { href: `/${locale}/#testimonials`, label: testimonialMessages[locale].title },
     { href: `/${locale}/#contact`, label: messages.header.contact },
   ];
 

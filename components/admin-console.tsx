@@ -5,6 +5,8 @@ import { AdminApiBrowser } from "@/components/admin-api-browser";
 import { BrandLogo } from "@/components/brand-logo";
 import { BusinessCardStudio } from "@/components/business-card-studio";
 import { adminSections, type AdminSection } from "@/lib/admin-navigation";
+import { readResponse } from "@/lib/read-response";
+import type { AdminTestimonial } from "@/lib/testimonials";
 
 type ProjectStatus = "IN_DEVELOPMENT" | "TEST" | "PRODUCTION" | "UNKNOWN";
 
@@ -51,6 +53,7 @@ export type SiteSettings = {
 export type AdminConsoleInitialData = {
   projects: AdminProject[];
   messages: ContactMessage[];
+  testimonials: AdminTestimonial[];
   settings: Partial<SiteSettings>;
 };
 
@@ -72,12 +75,6 @@ const emptyForm: FormValues = {
   published: false,
   sortOrder: 0,
 };
-
-async function readResponse<T>(response: Response): Promise<T> {
-  const body = (await response.json()) as T & { error?: string };
-  if (!response.ok) throw new Error(body.error ?? "Une erreur est survenue.");
-  return body;
-}
 
 export function AdminLogin() {
   const [message, setMessage] = useState("");
@@ -162,6 +159,7 @@ export function AdminConsole({
 }) {
   const [projects, setProjects] = useState<AdminProject[]>(initialData.projects);
   const [messages, setMessages] = useState<ContactMessage[]>(initialData.messages);
+  const [testimonials, setTestimonials] = useState<AdminTestimonial[]>(initialData.testimonials);
   const [settings, setSettings] = useState<SiteSettings>({
     "site.title": "",
     "site.description": "",
@@ -177,18 +175,21 @@ export function AdminConsole({
   const [busy, setBusy] = useState(false);
 
   async function loadContent() {
-    const [projectResponse, messageResponse, settingsResponse] = await Promise.all([
+    const [projectResponse, messageResponse, settingsResponse, testimonialResponse] = await Promise.all([
       fetch("/api/v1/admin/projects"),
       fetch("/api/v1/admin/messages"),
       fetch("/api/v1/admin/settings"),
+      fetch("/api/v1/admin/testimonials"),
     ]);
-    const [projectPayload, messagePayload, settingsPayload] = await Promise.all([
+    const [projectPayload, messagePayload, settingsPayload, testimonialPayload] = await Promise.all([
       readResponse<{ data: AdminProject[] }>(projectResponse),
       readResponse<{ data: ContactMessage[] }>(messageResponse),
       readResponse<{ data: Partial<SiteSettings> }>(settingsResponse),
+      readResponse<{ data: AdminTestimonial[] }>(testimonialResponse),
     ]);
     setProjects(projectPayload.data);
     setMessages(messagePayload.data);
+    setTestimonials(testimonialPayload.data);
     setSettings((current) => ({ ...current, ...settingsPayload.data }));
   }
 
@@ -348,6 +349,33 @@ export function AdminConsole({
     } finally {
       setBusy(false);
     }
+
+  }
+
+  async function moderateTestimonial(item: AdminTestimonial, status?: "APPROVED" | "REJECTED") {
+      if (!status && !window.confirm(`Supprimer définitivement le témoignage de ${item.displayName} ? Cette action est irréversible.`)) return;
+      setBusy(true);
+      setError(false);
+      setFeedback("");
+      try {
+        const result = await readResponse<{ message: string }>(await fetch(
+          `/api/v1/admin/testimonials/${encodeURIComponent(item.id)}`,
+          status ? {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          } : { method: "DELETE" },
+        ));
+        setTestimonials(current => status
+          ? current.map(row => row.id === item.id ? { ...row, status } : row)
+          : current.filter(row => row.id !== item.id));
+        setFeedback(result.message);
+      } catch (reason) {
+        setError(true);
+        setFeedback(reason instanceof Error ? reason.message : "Modération impossible.");
+      } finally {
+        setBusy(false);
+      }
   }
 
   async function saveSettings(event: FormEvent<HTMLFormElement>) {
@@ -705,6 +733,38 @@ export function AdminConsole({
               <div className="admin-actions">
                 <button type="button" disabled={busy} onClick={() => editProject(project)}>Modifier</button>
                 <button type="button" disabled={busy} onClick={() => deleteProject(project)}>Supprimer</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="admin-card" hidden={section !== "testimonials"}>
+        <p className="eyebrow">Témoignages / {testimonials.length}</p>
+        <p className="admin-note">
+          Seuls les témoignages approuvés avec consentement et liés à un projet publié sont publics.
+          L’approbation manuelle ne vérifie pas l’identité. Aucun e-mail, entreprise ou note n’est collecté.
+          Le consentement fourni par le visiteur ne peut pas être modifié ici.
+          En cas de retrait du consentement, rejetez pour dépublier immédiatement puis supprimez définitivement.
+        </p>
+        {!testimonials.length && <p className="admin-note">Aucun témoignage à modérer.</p>}
+        <ul className="admin-project-list">
+          {testimonials.map(item => (
+            <li key={item.id}>
+              <div>
+                <strong>{item.displayName}</strong>
+                <span> — {item.project.title} · {item.status}</span>
+                <p className="testimonial-text">{item.testimony}</p>
+                <p className="admin-note">
+                  Projet {item.project.published ? "publié" : "non publié"} ·
+                  Consentement {item.publicationConsent ? "accordé" : "absent"}
+                </p>
+                <time dateTime={item.consentedAt}>Consentement : {new Date(item.consentedAt).toLocaleString("fr-FR", { timeZone: "UTC" })} UTC</time>
+              </div>
+              <div className="admin-actions">
+                <button type="button" disabled={busy || !item.publicationConsent || !item.project.published || item.status === "APPROVED"} onClick={() => moderateTestimonial(item, "APPROVED")}>Approuver</button>
+                <button type="button" disabled={busy || item.status === "REJECTED"} onClick={() => moderateTestimonial(item, "REJECTED")}>Rejeter / Dépublier</button>
+                <button type="button" disabled={busy} onClick={() => moderateTestimonial(item)}>Supprimer</button>
               </div>
             </li>
           ))}

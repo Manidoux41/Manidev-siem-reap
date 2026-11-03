@@ -18,6 +18,9 @@ import { getPublicSiteSettings } from "@/lib/site-settings";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { seoContent } from "@/lib/seo-content";
 import { StructuredData } from "@/components/structured-data";
+import { TestimonialSection } from "@/components/testimonial-section";
+import { getPublicTestimonials } from "@/lib/testimonials";
+import { databaseConfigured } from "@/lib/prisma";
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> };
 
@@ -59,6 +62,7 @@ async function ProjectContent({ params }: PageProps) {
     getPublicSiteSettings(),
   ]);
   if (!project) notFound();
+  const testimonials = await getPublicTestimonials(project.id);
 
   const localizedProject = localizeProject(project, locale);
   const otherProjects = projects
@@ -183,6 +187,12 @@ async function ProjectContent({ params }: PageProps) {
             <ProjectDestinations project={localizedProject} locale={locale} />
           </aside>
         </section>
+        <TestimonialSection
+          locale={locale}
+          testimonials={testimonials}
+          projects={project.source === "database" ? [localizedProject] : []}
+          available={databaseConfigured}
+        />
         {otherProjects.length > 0 && (
           <section className="next-project section">
             <p className="eyebrow">{messages.detail.next}</p>

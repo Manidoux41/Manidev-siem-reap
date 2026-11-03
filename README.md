@@ -504,3 +504,39 @@ Le workflow GitHub Actions exécute lint, TypeScript, tests et build sur les
 pull requests et les pushes. L'envoi d'e-mails, l'upload d'images, les
 informations de profil supplémentaires et le dépôt du site de nounou restent
 à configurer ou à fournir.
+# Public moderated testimonials
+
+The homepage `#testimonials` and published project pages let visitors submit a
+display name (first name, pseudonym, or chosen name), a published project ID and
+a testimony (20–2000 characters). Explicit publication consent is required and
+recorded with its timestamp. No email, company or star rating is collected.
+Visitors should not put private information in their public name or testimony.
+Submissions are persisted as **PENDING**; success means saved for review, not
+published. No message, SMTP notification or external service is invoked.
+
+Authenticated administrators use the independent **Témoignages** menu to read,
+approve, reject/unpublish, or permanently delete submissions. Approval requires
+the original visitor consent and a currently published project; administrators
+cannot create or alter consent through this workflow. Manual approval is content
+moderation, **not identity verification**. Public pages and `GET /api/v1/testimonials`
+expose only approved, consented testimonials attached to published projects:
+display name, project title and testimony. There are no invented testimonials
+or review/rating structured data. Public responses are not cached.
+
+Visitors can withdraw publication consent or request deletion by contacting the
+administrator via the contact section. Reject immediately to unpublish, then
+delete permanently to honor a deletion request. Unpublishing a project hides its
+testimonials; deleting the project cascades testimonial deletion. Backups must
+also follow the operator’s retention/deletion policy.
+
+The additive migration is
+`prisma/migrations/20261103080000_moderated_testimonials/migration.sql`.
+Review and apply it only with deployment approval using the existing migration
+workflow; client generation alone does not apply it. Database-free mode shows
+no testimonials and disables submission, rather than pretending to save.
+
+API: public `GET/POST /api/v1/testimonials`, authenticated
+`GET /api/v1/admin/testimonials`, and same-origin authenticated
+`PATCH/DELETE /api/v1/admin/testimonials/{id}`. Public POST is separately
+rate-limited to five attempts per hour and validates the project server-side.
+OpenAPI and the admin API explorer document these operations.

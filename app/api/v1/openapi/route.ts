@@ -11,7 +11,77 @@ export async function GET() {
       description: "API REST versionnée du portfolio de Manfred Parbatia.",
     },
     servers: [{ url: "/api/v1" }],
+    components: {
+      securitySchemes: {
+        adminSession: { type: "apiKey", in: "cookie", name: "portfolio_admin_session" },
+      },
+    },
     paths: {
+      "/testimonials": {
+        get: {
+          summary: "Lire uniquement les témoignages approuvés avec consentement sur des projets publiés",
+          parameters: [{ name: "projectId", in: "query", schema: { type: "string", maxLength: 100 } }],
+          responses: {
+            "200": { description: "Liste publique (100 derniers). Aucun identifiant, consentement ou donnée de modération exposé.", content: { "application/json": { schema: {
+              type: "object", properties: { data: { type: "array", items: {
+                type: "object", additionalProperties: false,
+                required: ["displayName", "testimony", "project"],
+                properties: {
+                  displayName: { type: "string" }, testimony: { type: "string" },
+                  project: { type: "object", additionalProperties: false, required: ["title"], properties: { title: { type: "string" } } },
+                },
+              } } },
+            } } } },
+            "503": { description: "Témoignages indisponibles." },
+          },
+        },
+        post: {
+          summary: "Soumettre un témoignage avec consentement explicite, enregistré PENDING sans notification",
+          description: "Origine identique requise. 5 tentatives par heure, clé indépendante. Aucun e-mail, entreprise ou note collecté. L’approbation manuelle ne garantit pas l’identité.",
+          requestBody: { required: true, content: { "application/json": { schema: {
+            type: "object", additionalProperties: false,
+            required: ["projectId", "displayName", "testimony", "publicationConsent"],
+            properties: {
+              projectId: { type: "string", minLength: 1, maxLength: 100, description: "Identifiant d’un projet publié, validé côté serveur." },
+              displayName: { type: "string", minLength: 2, maxLength: 100 },
+              testimony: { type: "string", minLength: 20, maxLength: 2000 },
+              publicationConsent: { type: "boolean", const: true },
+              website: { type: "string", maxLength: 0 },
+            },
+          } } } },
+          responses: {
+            "201": { description: "Témoignage enregistré, non public.", content: { "application/json": { schema: { type: "object", required: ["status"], properties: { status: { type: "string", const: "PENDING" } } } } } },
+            "400": { description: "JSON invalide." }, "403": { description: "Origine invalide." },
+            "422": { description: "Entrées, consentement ou projet publié invalides." },
+            "429": { description: "Limite de tentatives dépassée." }, "500": { description: "Échec d’enregistrement." },
+            "503": { description: "Formulaire indisponible." },
+          },
+        },
+      },
+      "/admin/testimonials": {
+        get: {
+          summary: "Lire tous les témoignages, statuts et consentements (administration)",
+          security: [{ adminSession: [] }],
+          responses: { "200": { description: "Témoignages avec projet, publicationConsent et consentedAt." }, "401": { description: "Authentification requise." }, "500": { description: "Échec de chargement." }, "503": { description: "Base indisponible." } },
+        },
+      },
+      "/admin/testimonials/{id}": {
+        parameters: [{ name: "id", in: "path", required: true, schema: { type: "string" } }],
+        patch: {
+          summary: "Approuver ou rejeter/dépublier sans modifier le consentement",
+          security: [{ adminSession: [] }],
+          requestBody: { required: true, content: { "application/json": { schema: {
+            type: "object", additionalProperties: false, required: ["status"],
+            properties: { status: { type: "string", enum: ["APPROVED", "REJECTED"] } },
+          } } } },
+          responses: { "200": { description: "Statut persisté. APPROVED exige le consentement existant et un projet publié." }, "400": { description: "JSON invalide." }, "401": { description: "Authentification requise." }, "403": { description: "Origine invalide." }, "404": { description: "Absent ou approbation impossible." }, "422": { description: "Statut invalide ou champs interdits." }, "500": { description: "Échec de modération." }, "503": { description: "Base indisponible." } },
+        },
+        delete: {
+          summary: "Supprimer définitivement un témoignage, notamment après retrait du consentement",
+          security: [{ adminSession: [] }],
+          responses: { "200": { description: "Témoignage supprimé." }, "401": { description: "Authentification requise." }, "403": { description: "Origine invalide." }, "404": { description: "Introuvable." }, "500": { description: "Échec de suppression." }, "503": { description: "Base indisponible." } },
+        },
+      },
       "/projects": {
         get: {
           summary: "Lister les projets publiés",

@@ -8,6 +8,7 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { getAdminUser } from "@/lib/admin-session";
 import { databaseConfigured, getPrisma } from "@/lib/prisma";
+import { getAdminTestimonials } from "@/lib/testimonials";
 
 export default function AdminPage() {
   return (
@@ -39,12 +40,13 @@ async function AdminContent() {
   let initialData: AdminConsoleInitialData = {
     projects: [],
     messages: [],
+    testimonials: [],
     settings: {},
   };
 
   if (admin) {
     const prisma = getPrisma();
-    const [projects, messages, settings] = await Promise.all([
+    const [projects, messages, settings, testimonials] = await Promise.all([
       prisma.project.findMany({
         include: {
           category: { select: { name: true } },
@@ -72,9 +74,16 @@ async function AdminContent() {
         },
         select: { key: true, value: true },
       }),
+      getAdminTestimonials(),
     ]);
 
     initialData = {
+      testimonials: testimonials.map(item => ({
+        ...item,
+        createdAt: item.createdAt.toISOString(),
+        updatedAt: item.updatedAt.toISOString(),
+        consentedAt: item.consentedAt.toISOString(),
+      })),
       projects: projects.map((project) => ({
         id: project.id,
         title: project.title,
