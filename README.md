@@ -2,8 +2,10 @@
 
 English-first multilingual portfolio built with Next.js App Router, TypeScript,
 PostgreSQL, and Prisma. The public site is available in English, French, German,
-and Spanish at `/en`, `/fr`, `/de`, and `/es`; `/` redirects to `/en`. The
-language selector preserves the current page, and older unprefixed project
+Spanish, Khmer, simplified Chinese and Japanese at `/en`, `/fr`, `/de`, `/es`,
+`/km`, `/zh` and `/ja`; `/` redirects to `/en`. The language selector uses a full
+document navigation to apply the translated root layout and HTML language reliably,
+preserving the actual page, query parameters and anchor. Older unprefixed project
 links redirect to their English equivalents. The site uses an editorial dark
 design, original CSS illustrations, and light parallax disabled when
 `prefers-reduced-motion` is enabled. Manfred is based in Siem Reap, Cambodia.
@@ -30,11 +32,11 @@ Its navy lettering is adapted to warm off-white, and the illustration's blues
 are brightened for readability on dark surfaces. Orange and cyan remain.
 No white panel or border surrounds the logo.
 The About section presents the 2023 OpenClassrooms Web Developer diploma
-(level IV, as provided by the portfolio owner) in all four languages.
+(level IV, as provided by the portfolio owner) in all seven languages.
 
 ## Référencement naturel (SEO)
 
-La page Services présente aussi quatre offres commerciales en EN/FR/DE/ES :
+La page Services présente aussi quatre offres commerciales en EN/FR/DE/ES/KM/ZH/JA :
 site professionnel multilingue, application métier/API, prototype mobile et
 conseil IT/automatisation IA. Chaque offre détaille le public visé, le résultat,
 un périmètre proposé et les références pertinentes du portfolio, avec prise de
@@ -43,6 +45,15 @@ Le contrat doit préciser le périmètre, les critères de réception et les co�
 externes ; les prototypes cités ne sont pas présentés comme des services en production.
 L'offre IA reste distincte des références, sans attribuer des fonctions IA non vérifiées
 aux projets existants.
+L'accueil et Services présentent ChatGPT, Claude et Gemini : capacités générales,
+usage pendant le développement, revue humaine et précautions sur les données,
+en sept langues. Les fonctionnalités dépendent des versions et abonnements ;
+aucun partenariat n'est revendiqué.
+La comparaison est présentée dans un tableau à en-têtes accessibles sur ordinateur
+et en fiches empilées sur mobile, avec les mêmes informations sans slideshow automatique.
+Les icônes locales dans `public/images/ai/`
+proviennent de [Lobe Icons](https://github.com/lobehub/lobe-icons), sous licence MIT
+conservée dans ce dossier. Les marques restent la propriété de leurs éditeurs.
 Les boutons de devis et de contact ciblent le formulaire intégré à cette page
 (`#contact`), qui utilise la même API de contact que l'accueil.
 
@@ -53,7 +64,7 @@ y compris lorsque la fiche existante en base n'a pas de couverture.
 Une couverture personnalisée reste prioritaire ; aucune mise à jour SQL n'est requise.
 
 L'identité publique associe **Manfred Parbatia**, **Manidev**, le développement web
-et **Siem Reap, Cambodge**. Les quatre langues disposent de titres et descriptions
+et **Siem Reap, Cambodge**. Les sept langues disposent de titres et descriptions
 spécifiques, d'URL canoniques absolues, de liens `hreflang` réciproques et d'un
 `x-default` anglais. L'accueil conserve les réglages anglais personnalisés de
 l'administration ; les anciens textes de départ sont remplacés dans les métadonnées
@@ -71,7 +82,7 @@ Aucun avis, note, prix, horaire ni certification supplémentaire n'est inventé.
 Les questions visibles ne sont pas présentées comme éligibles à un résultat
 enrichi FAQ Google. L'image Open Graph/Twitter optimisée fait 1200 × 630 pixels.
 
-`/sitemap.xml` liste uniquement les pages publiques canoniques dans les quatre
+`/sitemap.xml` liste uniquement les pages publiques canoniques dans les sept
 langues, avec leurs variantes et les dates réelles de modification des projets
 en base. Aucune date fictive de fraîcheur n'est appliquée à l'accueil.
 Le sitemap fonctionne aussi sans base. `/robots.txt` annonce son URL ;
@@ -258,8 +269,8 @@ d'origine pour les écritures et une limite de corps de 2,2 Mo.
 Appliquer la migration avant utilisation : `npm run db:deploy` sur la même base
 que le déploiement. Elle ajoute la table `BusinessCard` et la compétence IA publiée.
 Le seed assure aussi la présence de cette compétence sans écraser les données existantes.
-La spécialisation dans l'utilisation de l'IA est présentée dans les quatre langues,
-et disponible via `/api/v1/skills?locale=fr` (ou `en`, `de`, `es`).
+La spécialisation dans l'utilisation de l'IA est présentée dans les sept langues,
+et disponible via `/api/v1/skills?locale=fr` (ou `en`, `de`, `es`, `km`, `zh`, `ja`).
 La composition utilise `public/images/banniere.png` et un aperçu Canvas,
 exporté via jsPDF en PDF A4 portrait : 10 rectos de 85 × 55 mm, deux colonnes
 et cinq lignes, espace de 2 mm, repères de découpe facultatifs, sans fond perdu.
@@ -399,7 +410,7 @@ La spécification OpenAPI JSON est consultable sur `/api/v1/openapi`.
 
 Les textes éditoriaux des nouveaux projets sont rédigés en anglais, langue
 source par défaut ; les projets sélectionnés disposent de traductions en
-français, allemand et espagnol. Les erreurs de validation utilisent des codes
+français, allemand, espagnol, khmer, chinois simplifié et japonais. Les erreurs de validation utilisent des codes
 HTTP explicites. Les messages privés ne sont jamais renvoyés par les routes
 publiques. Les URL de projets et de réseaux doivent utiliser HTTPS ; les
 couvertures doivent provenir d'un hôte configuré.

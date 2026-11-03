@@ -7,6 +7,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import { StructuredData } from "@/components/structured-data";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { ContactForm } from "@/components/contact-form";
+import { AiTools } from "@/components/ai-tools";
 import { getSiteLocale, type SiteLocale } from "@/lib/i18n";
 import { seoContent } from "@/lib/seo-content";
 import { absoluteUrl, identityGraph, pageMetadata } from "@/lib/seo";
@@ -31,7 +32,7 @@ export default async function ServicesPage({ params }: Props) {
 async function ServicesHeader({ locale }: { locale: SiteLocale }) {
   await connection();
   const settings = await getPublicSiteSettings();
-  return <SiteHeader locale={locale} currentPath={`/${locale}/services`} githubUrl={settings["site.github"]} telegramUrl={settings["site.telegram"]} />;
+  return <SiteHeader locale={locale} githubUrl={settings["site.github"]} telegramUrl={settings["site.telegram"]} />;
 }
 
 function ServicesContent({ locale }: { locale: SiteLocale }) {
@@ -79,7 +80,7 @@ function ServicesContent({ locale }: { locale: SiteLocale }) {
   return (
     <>
       <ScrollEffects />
-      <Suspense fallback={<SiteHeader locale={locale} currentPath={path} />}>
+      <Suspense fallback={<SiteHeader locale={locale} />}>
         <ServicesHeader locale={locale} />
       </Suspense>
       <StructuredData data={data} />
@@ -136,6 +137,7 @@ function ServicesContent({ locale }: { locale: SiteLocale }) {
           </div>
           <p className="services-copy">{commercial.terms}</p>
         </section>
+        <AiTools locale={locale} />
         <section className="services-copy">
           <h2>{content.processTitle}</h2>
           <ol>{content.process.map((step) => <li key={step}>{step}</li>)}</ol>

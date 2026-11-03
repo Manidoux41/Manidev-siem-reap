@@ -35,7 +35,8 @@ test("public data works without a database even if Prisma cannot initialize", ()
         const { GET: getCategories } = require("./app/api/v1/categories/route.ts");
         const { GET: getFeatured } = require("./app/api/v1/projects/featured/route.ts");
         const { GET: getSkills } = require("./app/api/v1/skills/route.ts");
-        const { getMessages } = require("./lib/i18n.ts");
+        const { GET: getOpenApi } = require("./app/api/v1/openapi/route.ts");
+        const { getMessages, locales } = require("./lib/i18n.ts");
         (async () => {
           assert.equal(databaseConfigured, false);
           assert.equal((await getPublicProjects()).length, 18);
@@ -43,7 +44,15 @@ test("public data works without a database even if Prisma cannot initialize", ()
           assert.equal((await getPublicSiteSettings())["site.locale"], "en");
           assert.equal(await isRateLimited("database-free-test", 2, 60000), false);
           assert.throws(() => getPrisma(), /DATABASE_URL must be configured/);
-          for (const locale of ["en", "fr", "de", "es"]) {
+          const documentation = await (await getOpenApi()).json();
+          for (const path of Object.values(documentation.paths)) {
+            for (const operation of Object.values(path)) {
+              for (const parameter of operation.parameters ?? []) {
+                if (parameter.name === "locale") assert.deepEqual(parameter.schema.enum, locales);
+              }
+            }
+          }
+          for (const locale of locales) {
             const projectResponse = await getProjects(new Request("https://portfolio.example/api/v1/projects?locale=" + locale + "&perPage=50"));
             assert.equal(projectResponse.status, 200);
             const projectData = await projectResponse.json();

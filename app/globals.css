@@ -44,6 +44,23 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html:lang(km) {
+  --font-sans: "Noto Sans Khmer", "Khmer MN", "Leelawadee UI", sans-serif;
+}
+
+html:lang(zh) {
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+}
+
+html:lang(ja) {
+  --font-sans: "Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", sans-serif;
+}
+
+html:is(:lang(km), :lang(zh), :lang(ja)) :is(h1, h2, h3, .eyebrow, .primary-navigation a, .language-switch select) {
+  letter-spacing: normal;
+  line-height: 1.45;
+}
+
 button,
 input,
 textarea {
@@ -1413,6 +1430,190 @@ textarea:focus-visible {
   border-top: 1px solid var(--line-light);
 }
 
+.ai-tools {
+  margin: 40px 0;
+  color: var(--ink);
+}
+
+.ai-tools h2 {
+  margin: 0 0 16px;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: -0.04em;
+}
+
+.ai-tools p,
+.ai-tools td {
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+.ai-tools > header {
+  max-width: 850px;
+}
+
+.ai-tools-comparison {
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--dark);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.ai-tools-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ai-tools-table thead th {
+  padding: 22px 26px;
+  background: var(--dark-soft);
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.ai-tools-table thead th:first-child {
+  width: 25%;
+}
+
+.ai-tools-table :is(tbody th, td) {
+  padding: 30px 26px;
+  vertical-align: top;
+  border-top: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+
+.ai-tools-table tbody th {
+  border-left: 4px solid rgb(var(--ai-tint));
+}
+
+.ai-tools-table td + td {
+  border-left: 1px solid rgba(var(--ai-tint), 0.18);
+}
+
+.ai-tools-table td p {
+  margin: 0;
+}
+
+.ai-tool {
+  --ai-tint: 109, 213, 186;
+  background: linear-gradient(110deg, rgba(var(--ai-tint), 0.12), transparent 60%);
+  transition: background-color 180ms ease;
+}
+
+.ai-tool:hover {
+  background-color: rgba(var(--ai-tint), 0.06);
+}
+
+.ai-tool-usage {
+  background: rgba(var(--ai-tint), 0.06);
+}
+
+.ai-tool-claude {
+  --ai-tint: 230, 165, 128;
+}
+
+.ai-tool-gemini {
+  --ai-tint: 148, 183, 255;
+}
+
+.ai-tool-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ai-tool-logo {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 24px rgba(var(--ai-tint), 0.12);
+}
+
+.ai-tool-heading h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.ai-tool-index {
+  display: block;
+  margin-bottom: 6px;
+  color: rgb(var(--ai-tint));
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 400;
+}
+
+.ai-tool-mobile-label {
+  display: none;
+}
+
+.ai-tools-safeguards {
+  padding: 20px 24px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  background: var(--dark-soft);
+}
+
+.ai-tools .ai-tools-disclaimer {
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .ai-tools-table,
+  .ai-tools-table tbody {
+    display: block;
+  }
+
+  .ai-tools-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .ai-tools-table tr.ai-tool {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-left: 4px solid rgb(var(--ai-tint));
+  }
+
+  .ai-tools-table :is(tbody th, td) {
+    display: block;
+    padding: 20px 22px;
+    border-left: 0;
+  }
+
+  .ai-tools-table tbody tr:first-child th {
+    border-top: 0;
+  }
+
+  .ai-tool-mobile-label {
+    display: block;
+    margin-bottom: 12px;
+    color: rgb(var(--ai-tint));
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-tool {
+    transition: none;
+  }
+}
+
 .skills-block > .eyebrow {
   margin-bottom: 23px;
   color: var(--ink-muted);
@@ -1815,6 +2016,7 @@ textarea:focus-visible {
 
 .next-project {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 25px;
@@ -1828,6 +2030,9 @@ textarea:focus-visible {
 }
 
 .next-project a {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   font-size: clamp(1.2rem, 3vw, 2.2rem);
   letter-spacing: -0.06em;
   text-decoration: none;

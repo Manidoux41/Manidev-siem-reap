@@ -6,6 +6,10 @@ import { seoContent } from "./seo-content";
 export const siteUrl = new URL(env.NEXT_PUBLIC_SITE_URL ?? "https://manidev-siem-reap.vercel.app");
 export const linkedinUrl = "https://www.linkedin.com/in/manfred-p-804a72198/";
 export const socialImage = "/images/manidev-social.jpg";
+const openGraphLocales = {
+  en: "en_US", fr: "fr_FR", de: "de_DE", es: "es_ES",
+  km: "km_KH", zh: "zh_CN", ja: "ja_JP",
+};
 
 export function absoluteUrl(path: string) {
   return new URL(path, siteUrl).toString();
@@ -28,9 +32,9 @@ export function pageMetadata(locale: SiteLocale, suffix: string, title: string, 
     openGraph: {
       title, description, url, siteName: "Manidev",
       type: "website",
-      locale: { en: "en_US", fr: "fr_FR", de: "de_DE", es: "es_ES" }[locale],
+      locale: openGraphLocales[locale],
       alternateLocale: locales.filter((language) => language !== locale).map((language) =>
-        ({ en: "en_US", fr: "fr_FR", de: "de_DE", es: "es_ES" })[language]),
+        openGraphLocales[language]),
       images: [{ url: absoluteUrl(socialImage), width: 1200, height: 630, alt: "Manidev — Manfred Parbatia · Web & IT · Siem Reap" }],
     },
     twitter: { card: "summary_large_image", title, description, images: [absoluteUrl(socialImage)] },

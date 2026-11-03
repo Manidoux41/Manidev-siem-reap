@@ -11,8 +11,8 @@ import {
 import { githubRepositoryKey } from "../lib/github-repository";
 import { verifiedProjects } from "../lib/portfolio-data";
 
-test("the supported locales are English, French, German, and Spanish", () => {
-  assert.deepEqual(locales, ["en", "fr", "de", "es"]);
+test("the seven public locales include Khmer, simplified Chinese and Japanese", () => {
+  assert.deepEqual(locales, ["en", "fr", "de", "es", "km", "zh", "ja"]);
   assert.equal(isSiteLocale("de"), true);
   assert.equal(isSiteLocale("it"), false);
   assert.equal(getSiteLocale("unsupported"), "en");
@@ -21,7 +21,7 @@ test("the supported locales are English, French, German, and Spanish", () => {
 test("the professional qualification is included in every language", () => {
   for (const locale of locales) {
     const { about } = getMessages(locale);
-    assert.match(about.education, /2023/);
+    assert.match(about.education, /2023|២០២៣/);
     assert.match(about.education, /OpenClassrooms/);
     assert.match(about.education, /IV/);
     assert.ok(about.educationLabel);
@@ -33,13 +33,18 @@ test("language switching preserves the current localized route", () => {
   assert.equal(localizedPath("/en", "es"), "/es");
   assert.equal(localizedPath("/projects/saiway", "fr"), "/fr/projects/saiway");
   assert.equal(localizedPath("/fr/projects/khmera?from=share", "en"), "/en/projects/khmera?from=share");
+  for (const locale of locales) {
+    assert.equal(localizedPath("/ja/services?from=share#contact", locale), `/${locale}/services?from=share#contact`);
+    assert.equal(localizedPath("/km/projects/saiway#details", locale), `/${locale}/projects/saiway#details`);
+  }
 });
 
 test("AI specialization is described in all supported languages", () => {
   for (const locale of locales) {
     const { about } = getMessages(locale);
-    assert.ok(about.aiLabel.length > 10);
-    assert.ok(about.aiDescription.length > 50);
+    const compactScript = locale === "zh" || locale === "ja";
+    assert.ok(about.aiLabel.length > (compactScript ? 3 : 10));
+    assert.ok(about.aiDescription.length > (compactScript ? 15 : 50));
   }
   assert.match(getMessages("fr").about.aiDescription, /spécialisé dans l’utilisation de l’IA/);
 });
@@ -59,6 +64,34 @@ test("curated project content is translated across the supported locales", () =>
           verifiedProjects.find(({ slug }) => slug === project.slug)
             ?.shortDescription,
         );
+      }
+    }
+  }
+});
+
+test("new locale dictionaries are complete and project descriptions use the requested script", () => {
+  const expectedKeys = (value: unknown, prefix = ""): string[] => {
+    if (!value || typeof value !== "object") return [prefix];
+    return Object.entries(value).flatMap(([key, entry]) => expectedKeys(entry, `${prefix}.${key}`));
+  };
+  const scripts = { km: /[\u1780-\u17ff]/, zh: /[\u3400-\u9fff]/, ja: /[\u3040-\u30ff]/ };
+  for (const locale of ["km", "zh", "ja"] as const) {
+    const messages = getMessages(locale);
+    assert.deepEqual(expectedKeys(messages), expectedKeys(getMessages("en")));
+    for (const section of [messages.header, messages.hero, messages.about, messages.contact, messages.detail]) {
+      assert.match(JSON.stringify(section), scripts[locale]);
+    }
+    for (const project of verifiedProjects) {
+      const localized = localizeProject(project, locale);
+      assert.match(localized.shortDescription, scripts[locale], `${locale}/${project.slug}`);
+      assert.match(localized.description, scripts[locale], `${locale}/${project.slug}`);
+      if (project.problem) {
+        assert.ok(localized.problem);
+        assert.match(localized.problem, scripts[locale], `${locale}/${project.slug}`);
+      }
+      if (project.solution) {
+        assert.ok(localized.solution);
+        assert.match(localized.solution, scripts[locale], `${locale}/${project.slug}`);
       }
     }
   }

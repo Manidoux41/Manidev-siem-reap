@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { LinkedInLink } from "@/components/linkedin-link";
 import { seoContent } from "@/lib/seo-content";
 import {
   getMessages,
+  isSiteLocale,
   localeLabels,
   localizedPath,
   locales,
@@ -16,19 +16,16 @@ import {
 
 export function SiteHeader({
   locale,
-  currentPath,
   githubUrl = "https://github.com/Manidoux41",
   telegramUrl,
   showLanguageSwitcher = true,
 }: {
   locale: SiteLocale;
-  currentPath: string;
   githubUrl?: string;
   telegramUrl?: string;
   showLanguageSwitcher?: boolean;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
   const messages = getMessages(locale);
   const links = [
     { href: `/${locale}/services`, label: seoContent[locale].navigation },
@@ -95,9 +92,14 @@ export function SiteHeader({
               aria-label={messages.header.language}
               value={locale}
               onChange={(event) => {
-                const nextLocale = event.target.value as SiteLocale;
+                const nextLocale = event.target.value;
+                if (!isSiteLocale(nextLocale)) return;
                 setMenuOpen(false);
-                router.push(localizedPath(currentPath, nextLocale));
+                // Locale changes must replace the root document, including its lang.
+                window.location.assign(localizedPath(
+                  `${window.location.pathname}${window.location.search}${window.location.hash}`,
+                  nextLocale,
+                ));
               }}
             >
               {locales.map((item) => (

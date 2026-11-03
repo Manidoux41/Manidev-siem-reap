@@ -40,17 +40,10 @@ export default function ProjectPage({ params }: PageProps) {
 }
 
 function ProjectFallback() {
-  const locale = "en";
-  const messages = getMessages(locale);
   return (
-    <>
-      <SiteHeader locale={locale} currentPath={`/${locale}`} />
-      <main className="detail-page">
-        <section className="detail-hero" aria-busy="true">
-          <p className="eyebrow">{messages.detail.selected}</p>
-        </section>
-      </main>
-    </>
+    <main className="detail-page" aria-busy="true">
+      <section className="detail-hero" />
+    </main>
   );
 }
 
@@ -107,7 +100,6 @@ async function ProjectContent({ params }: PageProps) {
       <StructuredData data={data} />
       <SiteHeader
         locale={locale}
-        currentPath={`/${locale}/projects/${slug}`}
         githubUrl={settings["site.github"]}
         telegramUrl={settings["site.telegram"]}
       />

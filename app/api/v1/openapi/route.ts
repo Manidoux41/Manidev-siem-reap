@@ -1,4 +1,5 @@
 import { connection } from "next/server";
+import { locales } from "@/lib/i18n";
 
 export async function GET() {
   await connection();
@@ -18,7 +19,7 @@ export async function GET() {
             {
               name: "locale",
               in: "query",
-              schema: { type: "string", enum: ["en", "fr", "de", "es"], default: "en" },
+              schema: { type: "string", enum: locales, default: "en" },
             },
             { name: "category", in: "query", schema: { type: "string" } },
             { name: "featured", in: "query", schema: { type: "boolean" } },
@@ -40,7 +41,7 @@ export async function GET() {
             {
               name: "locale",
               in: "query",
-              schema: { type: "string", enum: ["en", "fr", "de", "es"], default: "en" },
+              schema: { type: "string", enum: locales, default: "en" },
             },
           ],
           responses: { "200": { description: "Projets mis en avant." } },
@@ -54,7 +55,7 @@ export async function GET() {
             {
               name: "locale",
               in: "query",
-              schema: { type: "string", enum: ["en", "fr", "de", "es"], default: "en" },
+              schema: { type: "string", enum: locales, default: "en" },
             },
           ],
           responses: { "200": { description: "Projet." }, "404": { description: "Projet introuvable." } },
@@ -67,14 +68,14 @@ export async function GET() {
             {
               name: "locale",
               in: "query",
-              schema: { type: "string", enum: ["en", "fr", "de", "es"], default: "en" },
+              schema: { type: "string", enum: locales, default: "en" },
             },
           ],
           responses: { "200": { description: "Catégories." } },
         },
       },
       "/technologies": { get: { summary: "Lister les technologies utilisées", responses: { "200": { description: "Technologies." } } } },
-      "/skills": { get: { summary: "Lister les compétences publiées, dont la spécialisation IA", parameters: [{ name: "locale", in: "query", schema: { type: "string", enum: ["en", "fr", "de", "es"], default: "en" } }], responses: { "200": { description: "Compétences." } } } },
+      "/skills": { get: { summary: "Lister les compétences publiées, dont la spécialisation IA", parameters: [{ name: "locale", in: "query", schema: { type: "string", enum: locales, default: "en" } }], responses: { "200": { description: "Compétences." } } } },
       "/experiences": { get: { summary: "Lister les expériences publiées", responses: { "200": { description: "Expériences." } } } },
       "/site-settings/public": { get: { summary: "Lire les paramètres publics autorisés", responses: { "200": { description: "Paramètres publics." } } } },
       "/contact": {

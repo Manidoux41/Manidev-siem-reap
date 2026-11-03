@@ -9,11 +9,16 @@ import { absoluteUrl, homeStructuredData, languageAlternates, pageMetadata, seri
 import robots from "../app/robots";
 import nextConfig from "../next.config";
 
+const metadataLocales = {
+  en: "en_US", fr: "fr_FR", de: "de_DE", es: "es_ES",
+  km: "km_KH", zh: "zh_CN", ja: "ja_JP",
+};
+
 test("localized metadata has unique identity/local intent, absolute canonicals and matching share URLs", () => {
   for (const locale of locales) {
     const content = seoContent[locale];
     assert.match(content.title, /Manfred Parbatia.*Manidev.*Siem Reap/);
-    assert.match(content.description, /Siem Reap/);
+    assert.match(content.description, /Siem Reap|សៀមរាប|暹粒|シェムリアップ/);
     assert.ok(content.description.length <= 180);
     for (const suffix of ["", "/services", "/projects/saiway"]) {
       const metadata = pageMetadata(locale, suffix, content.title, content.description);
@@ -26,7 +31,8 @@ test("localized metadata has unique identity/local intent, absolute canonicals a
     }
     assert.equal(content.offers.length, 3);
     assert.equal(content.faqs.length, 4);
-    assert.ok(content.process.every((step) => step.length > 60));
+    assert.ok(content.process.every((step) => step.length > (locale === "zh" || locale === "ja" ? 15 : 60)));
+    assert.equal(metadataLocales[locale], pageMetadata(locale, "", content.title, content.description).openGraph?.locale);
   }
 });
 
@@ -87,15 +93,16 @@ test("sitemap includes all locales/services/published projects, real update date
     (async () => {
       const sitemap = await require("./app/sitemap.ts").default();
       const { verifiedProjects } = require("./lib/portfolio-data.ts");
-      assert.equal(sitemap.length, 8 + verifiedProjects.length * 4);
+      const { locales } = require("./lib/i18n.ts");
+      assert.equal(sitemap.length, (2 + verifiedProjects.length) * locales.length);
       assert.ok(sitemap.every(entry => entry.url.startsWith("https://canonical.example/")));
-      assert.ok(sitemap.every(entry => Object.keys(entry.alternates.languages).length === 5));
+      assert.ok(sitemap.every(entry => Object.keys(entry.alternates.languages).length === locales.length + 1));
       assert.ok(sitemap.every(entry => !/admin|api|localhost/.test(entry.url)));
-      assert.equal(sitemap.filter(entry => entry.url.endsWith("/services")).length, 4);
+      assert.equal(sitemap.filter(entry => entry.url.endsWith("/services")).length, locales.length);
       assert.ok(sitemap.filter(entry => entry.url.includes("/projects/")).every(entry => entry.lastModified === "2026-11-01T12:00:00.000Z"));
       assert.ok(sitemap.filter(entry => !entry.url.includes("/projects/")).every(entry => !entry.lastModified));
       for (const project of verifiedProjects) {
-        for (const locale of ["en", "fr", "de", "es"]) {
+        for (const locale of locales) {
           assert.ok(sitemap.some(entry => entry.url.endsWith("/" + locale + "/projects/" + project.slug)));
         }
       }

@@ -14,7 +14,6 @@ export default function AdminPage() {
     <>
       <SiteHeader
         locale="fr"
-        currentPath="/fr"
         showLanguageSwitcher={false}
       />
       <main className="admin-page">

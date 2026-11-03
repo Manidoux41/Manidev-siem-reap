@@ -9,6 +9,7 @@ import { ScrollEffects } from "@/components/scroll-effects";
 import { SiteHeader } from "@/components/site-header";
 import { BrandLogo } from "@/components/brand-logo";
 import { LinkedInLink } from "@/components/linkedin-link";
+import { AiTools } from "@/components/ai-tools";
 import { getMessages, getSiteLocale, localizeProject } from "@/lib/i18n";
 import { getPublicProjects } from "@/lib/project-service";
 import { getPublicSiteSettings } from "@/lib/site-settings";
@@ -72,7 +73,7 @@ function HomeFallback({ locale }: { locale: ReturnType<typeof getSiteLocale> }) 
   const messages = getMessages(locale);
   return (
     <>
-      <SiteHeader locale={locale} currentPath={`/${locale}`} />
+      <SiteHeader locale={locale} />
       <main className="hero" aria-busy="true">
         <div className="hero-content">
           <p className="eyebrow hero-eyebrow">Portfolio / Manfred Parbatia</p>
@@ -113,7 +114,6 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
       <StructuredData data={homeStructuredData(locale, settings["site.github"])} />
       <SiteHeader
         locale={locale}
-        currentPath={`/${locale}`}
         githubUrl={settings["site.github"]}
         telegramUrl={settings["site.telegram"]}
       />
@@ -222,6 +222,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
                 <p className="eyebrow">{messages.about.aiLabel}</p>
                 <p>{messages.about.aiDescription}</p>
               </div>
+              <AiTools locale={locale} />
               <p className="eyebrow">{messages.about.skills}</p>
               <div className="skills-list">
                 {technologies.map((technology) => (
