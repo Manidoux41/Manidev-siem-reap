@@ -9,6 +9,10 @@ const optionalUrl = z.preprocess(
 const EnvironmentSchema = z.object({
   DATABASE_URL: optionalUrl,
   NEXT_PUBLIC_SITE_URL: optionalUrl,
+  GOOGLE_SITE_VERIFICATION: z.preprocess(
+    (value) => value === "" ? undefined : value,
+    z.string().trim().min(1).max(200).optional(),
+  ),
   GITHUB_USERNAME: z
     .string()
     .trim()

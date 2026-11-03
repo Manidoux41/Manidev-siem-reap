@@ -1,4 +1,5 @@
 import { getPrisma, databaseConfigured } from "@/lib/prisma";
+import { cache } from "react";
 import {
   verifiedProjects,
   type PortfolioProject,
@@ -26,6 +27,7 @@ function mapDatabaseProject(
     featured: project.featured,
     coverImage: project.coverImage,
     source: "database",
+    updatedAt: project.updatedAt.toISOString(),
   };
 }
 
@@ -42,14 +44,14 @@ function findDatabaseProjects() {
   });
 }
 
-export async function getPublicProjects(): Promise<PortfolioProject[]> {
+export const getPublicProjects = cache(async (): Promise<PortfolioProject[]> => {
   if (!databaseConfigured) return verifiedProjects;
   return (await findDatabaseProjects()).map(mapDatabaseProject);
-}
+});
 
-export async function getPublicProject(
+export const getPublicProject = cache(async (
   slug: string,
-): Promise<PortfolioProject | null> {
+): Promise<PortfolioProject | null> => {
   if (!databaseConfigured) {
     return verifiedProjects.find((project) => project.slug === slug) ?? null;
   }
@@ -64,4 +66,4 @@ export async function getPublicProject(
     },
   });
   return project ? mapDatabaseProject(project) : null;
-}
+});

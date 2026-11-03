@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { LinkedInLink } from "@/components/linkedin-link";
+import { seoContent } from "@/lib/seo-content";
 import {
   getMessages,
   localeLabels,
@@ -30,6 +31,7 @@ export function SiteHeader({
   const router = useRouter();
   const messages = getMessages(locale);
   const links = [
+    { href: `/${locale}/services`, label: seoContent[locale].navigation },
     { href: `/${locale}/#projets`, label: messages.header.projects },
     { href: `/${locale}/#apropos`, label: messages.header.about },
     { href: `/${locale}/#contact`, label: messages.header.contact },

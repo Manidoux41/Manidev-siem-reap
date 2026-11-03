@@ -12,7 +12,9 @@ import { LinkedInLink } from "@/components/linkedin-link";
 import { getMessages, getSiteLocale, localizeProject } from "@/lib/i18n";
 import { getPublicProjects } from "@/lib/project-service";
 import { getPublicSiteSettings } from "@/lib/site-settings";
-import { env } from "@/lib/env";
+import { homeStructuredData, pageMetadata } from "@/lib/seo";
+import { seoContent } from "@/lib/seo-content";
+import { StructuredData } from "@/components/structured-data";
 import profilePortrait from "@/public/images/profile-portrait.webp";
 
 type PageProps = { params: Promise<{ locale: string }> };
@@ -41,37 +43,19 @@ function HeroPortrait({ locale }: { locale: ReturnType<typeof getSiteLocale> }) 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: routeLocale } = await params;
   const locale = getSiteLocale(routeLocale);
-  const messages = getMessages(locale);
+  const content = seoContent[locale];
   const settings = await getPublicSiteSettings();
+  const legacyTitle = "Manfred Parbatia — Full-Stack Developer";
+  const legacyDescription = "Portfolio of Manfred Parbatia, a full-stack developer building practical digital products for web and mobile.";
   const title =
-    locale === "en" && settings["site.title"]
+    locale === "en" && settings["site.title"] && settings["site.title"] !== legacyTitle
       ? settings["site.title"]
-      : messages.metadata.title;
+      : content.title;
   const description =
-    locale === "en" && settings["site.description"]
+    locale === "en" && settings["site.description"] && settings["site.description"] !== legacyDescription
       ? settings["site.description"]
-      : messages.metadata.description;
-  const baseUrl = env.NEXT_PUBLIC_SITE_URL;
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `/${locale}`,
-      languages: Object.fromEntries(
-        ["en", "fr", "de", "es"].map((language) => [
-          language,
-          `${baseUrl ?? ""}/${language}`,
-        ]),
-      ),
-    },
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      locale: { en: "en_US", fr: "fr_FR", de: "de_DE", es: "es_ES" }[locale],
-    },
-  };
+      : content.description;
+  return pageMetadata(locale, "", title, description);
 }
 
 export default async function Home({ params }: PageProps) {
@@ -94,6 +78,7 @@ function HomeFallback({ locale }: { locale: ReturnType<typeof getSiteLocale> }) 
           <p className="eyebrow hero-eyebrow">Portfolio / Manfred Parbatia</p>
           <div className="hero-layout">
             <h1>
+              <span className="hero-identity">{seoContent[locale].identity}</span>
               {messages.hero.lineOne}
               <br />
               {messages.hero.lineTwo}
@@ -125,6 +110,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
   return (
     <>
       <ScrollEffects />
+      <StructuredData data={homeStructuredData(locale, settings["site.github"])} />
       <SiteHeader
         locale={locale}
         currentPath={`/${locale}`}
@@ -143,6 +129,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
             </p>
             <div className="hero-layout">
               <h1 id="hero-title">
+                <span className="hero-identity">{seoContent[locale].identity}</span>
                 {messages.hero.lineOne}
                 <br />
                 {messages.hero.lineTwo}
@@ -156,7 +143,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
             </div>
             <div className="hero-bottom">
               <p>
-                {messages.hero.intro}
+                {seoContent[locale].identity}
                 <br />
                 {messages.hero.introSecond}
               </p>
@@ -195,6 +182,15 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
             messages={messages}
           />
           <p className="project-note">{messages.projects.note}</p>
+        </section>
+
+        <section className="section seo-services" aria-labelledby="services-title">
+          <p className="eyebrow">{seoContent[locale].servicesLabel}</p>
+          <h2 id="services-title">{seoContent[locale].servicesTitle}</h2>
+          <p>{seoContent[locale].introduction}</p>
+          <Link className="button button-dark" href={`/${locale}/services`}>
+            {seoContent[locale].viewServices}
+          </Link>
         </section>
 
         <section className="manifesto-section" id="apropos">

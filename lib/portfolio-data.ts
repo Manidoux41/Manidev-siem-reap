@@ -21,6 +21,7 @@ export type PortfolioProject = {
   featured: boolean;
   coverImage: string | null;
   source: "verified-github-snapshot" | "database";
+  updatedAt?: string;
 };
 
 export const verifiedProjects: PortfolioProject[] = [

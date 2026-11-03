@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSiteLocale, isSiteLocale, locales } from "@/lib/i18n";
+import { siteUrl } from "@/lib/seo";
+import { env } from "@/lib/env";
 import "../globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl,
+  verification: { google: env.GOOGLE_SITE_VERIFICATION },
   title: {
     default: "Manfred Parbatia — Full-Stack Developer",
     template: "%s | Manfred Parbatia",
   },
   applicationName: "Manidev — Portfolio",
-  robots: { index: true, follow: true },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
 };
 
 export function generateStaticParams() {

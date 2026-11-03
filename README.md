@@ -32,6 +32,67 @@ No white panel or border surrounds the logo.
 The About section presents the 2023 OpenClassrooms Web Developer diploma
 (level IV, as provided by the portfolio owner) in all four languages.
 
+## Référencement naturel (SEO)
+
+L'identité publique associe **Manfred Parbatia**, **Manidev**, le développement web
+et **Siem Reap, Cambodge**. Les quatre langues disposent de titres et descriptions
+spécifiques, d'URL canoniques absolues, de liens `hreflang` réciproques et d'un
+`x-default` anglais. L'accueil conserve les réglages anglais personnalisés de
+l'administration ; les anciens textes de départ sont remplacés dans les métadonnées
+par le nouveau positionnement SEO.
+
+Les pages `/en/services`, `/fr/services`, `/de/services` et `/es/services`
+présentent les prestations web, mobile, API, conseil IT et automatisation assistée
+par IA, la méthode de travail, les projets locaux et des réponses aux questions
+de clients. Elles sont reliées à l'accueil, aux projets et au contact. Leur contenu
+est rendu côté serveur, sans attendre une interaction ni une requête navigateur.
+
+Le JSON-LD décrit `Person`, `Organization`, `WebSite`, `ProfilePage`, `Service`,
+les projets et les fils d'Ariane, à partir des informations visibles et vérifiables.
+Aucun avis, note, prix, horaire ni certification supplémentaire n'est inventé.
+Les questions visibles ne sont pas présentées comme éligibles à un résultat
+enrichi FAQ Google. L'image Open Graph/Twitter optimisée fait 1200 × 630 pixels.
+
+`/sitemap.xml` liste uniquement les pages publiques canoniques dans les quatre
+langues, avec leurs variantes et les dates réelles de modification des projets
+en base. Aucune date fictive de fraîcheur n'est appliquée à l'accueil.
+Le sitemap fonctionne aussi sans base. `/robots.txt` annonce son URL ;
+l'administration est `noindex` dans le HTML et les en-têtes HTTP. Elle n'est pas
+bloquée dans robots.txt pour permettre aux moteurs de lire cette directive ;
+l'authentification continue de protéger les données. L'API est bloquée au crawl
+et dispose aussi de `X-Robots-Tag: noindex, nofollow`.
+
+### Mise en ligne et suivi Google
+
+1. Déployer, puis vérifier `NEXT_PUBLIC_SITE_URL` : utiliser la seule URL publique
+   principale, actuellement `https://manidev-siem-reap.vercel.app`. Sans variable,
+   cette URL de production est utilisée explicitement pour le SEO. Si un domaine
+   personnalisé est adopté, changer cette variable puis redéployer et rediriger
+   l'ancien domaine vers le principal. Ne pas utiliser une URL de preview.
+2. Ajouter le site dans [Google Search Console](https://search.google.com/search-console).
+   Une propriété « Préfixe d'URL » convient au domaine Vercel. Pour la validation
+   HTML, copier uniquement le jeton dans `GOOGLE_SITE_VERIFICATION`, puis redéployer.
+   Pour un domaine personnel, une propriété de domaine peut être validée par DNS.
+3. Soumettre `/sitemap.xml` et inspecter l'accueil ainsi que la page de services
+   anglaise/française. Demander leur indexation après déploiement.
+4. Contrôler le HTML avec l'inspection d'URL et les données structurées avec le
+   [Rich Results Test](https://search.google.com/test/rich-results). Le balisage
+   valide ne garantit ni résultat enrichi ni classement.
+5. Suivre chaque mois les requêtes liées au nom, à Manidev, à Siem Reap et aux
+   prestations, les impressions, clics, pages indexées et Core Web Vitals.
+   Les liens GitHub/LinkedIn et les liens depuis les projets doivent pointer vers
+   le même domaine principal. Obtenir des liens pertinents et consentis depuis
+   partenaires/projets et publier des retours d'expérience utiles, sans achats de
+   liens ni pages artificielles répétant des villes ou mots-clés.
+
+Une fiche Google Business Profile peut aider si l'activité respecte les conditions
+d'éligibilité (contacts clients en personne, adresse ou zone de service conforme).
+Ne pas créer une fausse implantation, inventer des avis ou publier une adresse privée
+uniquement pour le SEO. L'indexation et les positions restent décidées par Google :
+aucun délai ni première place n'est garanti.
+
+Vérifications locales : `npm test`, `npm run lint`, `npm run build`.
+
 ## Prérequis
 
 - Node.js 22.6 ou supérieur.

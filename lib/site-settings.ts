@@ -1,4 +1,5 @@
 import { databaseConfigured, getPrisma } from "@/lib/prisma";
+import { cache } from "react";
 
 export type PublicSiteSettings = {
   "site.title": string;
@@ -17,7 +18,7 @@ const defaultSettings: PublicSiteSettings = {
   "site.telegram": "",
 };
 
-export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
+export const getPublicSiteSettings = cache(async (): Promise<PublicSiteSettings> => {
   if (!databaseConfigured) return defaultSettings;
 
   const entries = await getPrisma().siteSetting.findMany({
@@ -30,4 +31,4 @@ export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
     ...defaultSettings,
     ...Object.fromEntries(entries.map(({ key, value }) => [key, value])),
   } as PublicSiteSettings;
-}
+});

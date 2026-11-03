@@ -14,7 +14,9 @@ import {
 } from "@/lib/i18n";
 import { getPublicProject, getPublicProjects } from "@/lib/project-service";
 import { getPublicSiteSettings } from "@/lib/site-settings";
-import { env } from "@/lib/env";
+import { absoluteUrl, pageMetadata } from "@/lib/seo";
+import { seoContent } from "@/lib/seo-content";
+import { StructuredData } from "@/components/structured-data";
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> };
 
@@ -23,30 +25,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = getSiteLocale(routeLocale);
   const project = await getPublicProject(slug);
   const messages = getMessages(locale);
-  if (!project) return { title: messages.detail.notFoundTitle };
+  if (!project) return { title: messages.detail.notFoundTitle, robots: { index: false, follow: false } };
 
   const localizedProject = localizeProject(project, locale);
-  const path = `/${locale}/projects/${slug}`;
-  const baseUrl = env.NEXT_PUBLIC_SITE_URL;
-  return {
-    title: `${localizedProject.title} — ${messages.projects.title}`,
-    description: localizedProject.shortDescription,
-    alternates: {
-      canonical: path,
-      languages: Object.fromEntries(
-        ["en", "fr", "de", "es"].map((language) => [
-          language,
-          `${baseUrl ?? ""}/${language}/projects/${slug}`,
-        ]),
-      ),
-    },
-    openGraph: {
-      title: localizedProject.title,
-      description: localizedProject.shortDescription,
-      type: "article",
-      locale: { en: "en_US", fr: "fr_FR", de: "de_DE", es: "es_ES" }[locale],
-    },
-  };
+  return pageMetadata(locale, `/projects/${slug}`, `${localizedProject.title} — ${messages.projects.title} | Manidev · Manfred Parbatia`, localizedProject.shortDescription);
 }
 
 export default function ProjectPage({ params }: PageProps) {
@@ -88,10 +70,41 @@ async function ProjectContent({ params }: PageProps) {
   const otherProjects = projects
     .filter((item) => item.slug !== project.slug)
     .map((item) => localizeProject(item, locale));
+  const path = `/${locale}/projects/${slug}`;
+  const data = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage", "@id": absoluteUrl(`${path}#webpage`),
+        url: absoluteUrl(path), name: localizedProject.title,
+        description: localizedProject.shortDescription, inLanguage: locale,
+        isPartOf: { "@id": absoluteUrl("/#website") },
+        mainEntity: { "@id": absoluteUrl(`${path}#project`) },
+        breadcrumb: { "@id": absoluteUrl(`${path}#breadcrumb`) },
+      },
+      {
+        "@type": "CreativeWork", "@id": absoluteUrl(`${path}#project`),
+        name: localizedProject.title, description: localizedProject.description,
+        url: absoluteUrl(path), inLanguage: locale,
+        creator: { "@type": "Person", "@id": absoluteUrl("/#person"), name: "Manfred Parbatia" },
+        keywords: localizedProject.technologies,
+        ...(localizedProject.coverImage ? { image: absoluteUrl(localizedProject.coverImage) } : {}),
+        ...(localizedProject.githubUrl ? { codeRepository: localizedProject.githubUrl, "@type": "SoftwareSourceCode" } : {}),
+      },
+      {
+        "@type": "BreadcrumbList", "@id": absoluteUrl(`${path}#breadcrumb`),
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: seoContent[locale].home, item: absoluteUrl(`/${locale}`) },
+          { "@type": "ListItem", position: 2, name: localizedProject.title, item: absoluteUrl(path) },
+        ],
+      },
+    ],
+  };
 
   return (
     <>
       <ScrollEffects />
+      <StructuredData data={data} />
       <SiteHeader
         locale={locale}
         currentPath={`/${locale}/projects/${slug}`}
