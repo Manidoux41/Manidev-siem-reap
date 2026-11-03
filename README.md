@@ -7,6 +7,9 @@ language selector preserves the current page, and older unprefixed project
 links redirect to their English equivalents. The site uses an editorial dark
 design, original CSS illustrations, and light parallax disabled when
 `prefers-reduced-motion` is enabled. Manfred is based in Siem Reap, Cambodia.
+The home hero features a locally cropped, lightly brightened and sharpened
+portrait, optimized as WebP. The original photo is preserved; the portrait
+sits beside the heading on desktop and below it on mobile.
 
 ## Prérequis
 

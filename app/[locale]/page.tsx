@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { ContactForm } from "@/components/contact-form";
@@ -10,8 +11,30 @@ import { getMessages, getSiteLocale, localizeProject } from "@/lib/i18n";
 import { getPublicProjects } from "@/lib/project-service";
 import { getPublicSiteSettings } from "@/lib/site-settings";
 import { env } from "@/lib/env";
+import profilePortrait from "@/public/images/profile-portrait.webp";
 
 type PageProps = { params: Promise<{ locale: string }> };
+
+function HeroPortrait({ locale }: { locale: ReturnType<typeof getSiteLocale> }) {
+  return (
+    <figure className="hero-portrait">
+      <div className="hero-portrait-frame">
+        <Image
+          src={profilePortrait}
+          alt="Manfred Parbatia"
+          className="hero-portrait-image"
+          sizes="(max-width: 800px) 280px, (max-width: 1200px) 32vw, 380px"
+          placeholder="blur"
+          preload
+        />
+      </div>
+      <figcaption>
+        <span className="status-dot" aria-hidden="true" />
+        {getMessages(locale).location}
+      </figcaption>
+    </figure>
+  );
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: routeLocale } = await params;
@@ -67,13 +90,16 @@ function HomeFallback({ locale }: { locale: ReturnType<typeof getSiteLocale> }) 
       <main className="hero" aria-busy="true">
         <div className="hero-content">
           <p className="eyebrow hero-eyebrow">Portfolio / Manfred Parbatia</p>
-          <h1>
-            {messages.hero.lineOne}
-            <br />
-            {messages.hero.lineTwo}
-            <br />
-            <span>{messages.hero.lineThree}</span>
-          </h1>
+          <div className="hero-layout">
+            <h1>
+              {messages.hero.lineOne}
+              <br />
+              {messages.hero.lineTwo}
+              <br />
+              <span>{messages.hero.lineThree}</span>
+            </h1>
+            <HeroPortrait locale={locale} />
+          </div>
         </div>
       </main>
     </>
@@ -113,16 +139,19 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
             <p className="eyebrow hero-eyebrow">
               <span className="status-dot" /> {messages.hero.eyebrow}
             </p>
-            <h1 id="hero-title">
-              {messages.hero.lineOne}
-              <br />
-              {messages.hero.lineTwo}
-              <br />
-              <span>
-                {messages.hero.lineThree}
-                <span className="hero-period">.</span>
-              </span>
-            </h1>
+            <div className="hero-layout">
+              <h1 id="hero-title">
+                {messages.hero.lineOne}
+                <br />
+                {messages.hero.lineTwo}
+                <br />
+                <span>
+                  {messages.hero.lineThree}
+                  <span className="hero-period">.</span>
+                </span>
+              </h1>
+              <HeroPortrait locale={locale} />
+            </div>
             <div className="hero-bottom">
               <p>
                 {messages.hero.intro}
