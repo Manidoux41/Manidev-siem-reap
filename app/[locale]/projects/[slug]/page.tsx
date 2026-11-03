@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { SiteHeader } from "@/components/site-header";
 import { BrandLogo } from "@/components/brand-logo";
+import { ProjectDestinations } from "@/components/project-destinations";
 import {
   getMessages,
   getSiteLocale,
@@ -179,24 +180,7 @@ async function ProjectContent({ params }: PageProps) {
                 {messages.detail.repository} <span aria-hidden="true">↗</span>
               </a>
             )}
-            {localizedProject.liveUrl && (
-              <a
-                href={localizedProject.liveUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {messages.detail.website} <span aria-hidden="true">↗</span>
-              </a>
-            )}
-            {localizedProject.appUrl && (
-              <a
-                href={localizedProject.appUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {messages.detail.application} <span aria-hidden="true">↗</span>
-              </a>
-            )}
+            <ProjectDestinations project={localizedProject} locale={locale} />
           </aside>
         </section>
         {otherProjects.length > 0 && (

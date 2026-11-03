@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { SiteLocale, SiteMessages } from "@/lib/i18n";
 import type { PortfolioProject } from "@/lib/portfolio-data";
+import { ProjectDestinations } from "@/components/project-destinations";
 
 type Props = {
   projects: PortfolioProject[];
@@ -373,6 +374,11 @@ export function ProjectExplorer({ projects, locale, messages }: Props) {
                   ))}
                 </div>
               </Link>
+              {(project.liveUrl || project.appUrl) && (
+                <div className="project-destinations">
+                  <ProjectDestinations project={project} locale={locale} />
+                </div>
+              )}
             </article>
           ))}
         </ProjectSlideshow>

@@ -768,6 +768,30 @@ textarea:focus-visible {
   line-height: 1.65;
 }
 
+.project-destinations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.project-destinations a {
+  padding: 10px 18px;
+  border: 1px solid rgba(var(--accent-rgb), 0.5);
+  border-radius: 100px;
+  background: rgba(var(--accent-rgb), 0.12);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.project-destinations a:hover {
+  background: rgba(var(--accent-rgb), 0.22);
+}
+
+.project-destinations a span {
+  color: var(--accent);
+}
+
 .technology-list,
 .detail-tech {
   display: flex;

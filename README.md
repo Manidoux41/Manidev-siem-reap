@@ -56,6 +56,13 @@ proviennent de [Lobe Icons](https://github.com/lobehub/lobe-icons), sous licence
 conservée dans ce dossier. Les marques restent la propriété de leurs éditeurs.
 Les boutons de devis et de contact ciblent le formulaire intégré à cette page
 (`#contact`), qui utilise la même API de contact que l'accueil.
+Les projets affichent aussi leurs liens directs « Site web » et « Application »
+dans le diaporama et sur leur fiche, lorsqu'une destination est renseignée.
+Les liens publics vérifiés dans les métadonnées ou README GitHub sont inclus dans
+l'instantané du portfolio. Ils complètent uniquement les liens absents des projets
+en base correspondant au même dépôt ; les liens personnalisés restent prioritaires.
+Aucun domaine n'est déduit du nom du dépôt. La présence d'un lien ne garantit pas
+que le service reste disponible et aucun statut de production n'en est déduit.
 
 Les 14 projets ajoutés disposent d'illustrations SVG locales distinctes dans
 `public/images/projects/`, montrant leur objet sans prétendre être des captures

@@ -1,6 +1,7 @@
 import { getPrisma, databaseConfigured } from "@/lib/prisma";
 import { cache } from "react";
 import { projectCover } from "./project-covers";
+import { githubRepositoryKey } from "./github-repository";
 import {
   verifiedProjects,
   type PortfolioProject,
@@ -9,6 +10,10 @@ import {
 function mapDatabaseProject(
   project: Awaited<ReturnType<typeof findDatabaseProjects>>[number],
 ): PortfolioProject {
+  const repository = githubRepositoryKey(project.githubUrl);
+  const verified = repository
+    ? verifiedProjects.find((item) => githubRepositoryKey(item.githubUrl) === repository)
+    : undefined;
   return {
     id: project.id,
     title: project.title,
@@ -23,8 +28,8 @@ function mapDatabaseProject(
       ({ technology }) => technology.name,
     ),
     githubUrl: project.githubUrl,
-    liveUrl: project.liveUrl,
-    appUrl: project.appUrl,
+    liveUrl: project.liveUrl ?? verified?.liveUrl ?? null,
+    appUrl: project.appUrl ?? verified?.appUrl ?? null,
     featured: project.featured,
     coverImage: projectCover(project.slug, project.coverImage),
     source: "database",
