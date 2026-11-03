@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
+import { LinkedInLink } from "@/components/linkedin-link";
 import {
   getMessages,
   localeLabels,
@@ -74,6 +75,7 @@ export function SiteHeader({
         >
           {messages.header.github} <span aria-hidden="true">↗</span>
         </a>
+        <LinkedInLink />
         {telegramUrl && (
           <a
             href={telegramUrl}

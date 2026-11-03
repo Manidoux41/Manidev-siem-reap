@@ -8,6 +8,7 @@ import { ProjectExplorer } from "@/components/project-explorer";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { SiteHeader } from "@/components/site-header";
 import { BrandLogo } from "@/components/brand-logo";
+import { LinkedInLink } from "@/components/linkedin-link";
 import { getMessages, getSiteLocale, localizeProject } from "@/lib/i18n";
 import { getPublicProjects } from "@/lib/project-service";
 import { getPublicSiteSettings } from "@/lib/site-settings";
@@ -259,6 +260,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
                 {messages.contact.telegram} <span aria-hidden="true">↗</span>
               </a>
             )}
+            <LinkedInLink />
           </div>
           <div className="contact-form-wrap reveal">
             <ContactForm locale={locale} />
@@ -279,6 +281,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
             GitHub ↗
           </a>
           <Link href="/admin">{messages.footer.admin}</Link>
+          <LinkedInLink />
         </div>
         <span>© {new Date().getFullYear()} Manfred Parbatia</span>
       </footer>
