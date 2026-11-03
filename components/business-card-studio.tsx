@@ -106,14 +106,14 @@ export function BusinessCardStudio() {
         if (portrait) {
           context.save();
           context.beginPath();
-          context.roundRect(1330, 55, 290, 340, 80);
+          context.roundRect(1230, 80, 220, 258, 60);
           context.clip();
-          drawCover(context, portrait, 1330, 55, 290, 340);
+          drawCover(context, portrait, 1230, 80, 220, 258);
           context.restore();
           context.strokeStyle = "rgba(250,247,240,0.4)";
           context.lineWidth = 2;
           context.beginPath();
-          context.roundRect(1330, 55, 290, 340, 80);
+          context.roundRect(1230, 80, 220, 258, 60);
           context.stroke();
         }
         function text(value: string, x: number, y: number, size: number, width: number, bold = false) {
