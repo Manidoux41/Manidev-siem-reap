@@ -9,6 +9,10 @@ preserving the actual page, query parameters and anchor. Older unprefixed projec
 links redirect to their English equivalents. The site uses an editorial dark
 design, original CSS illustrations, and light parallax disabled when
 `prefers-reduced-motion` is enabled. Manfred is based in Siem Reap, Cambodia.
+Content blocks assemble from alternating left/right edges as they enter the viewport
+and reverse as they leave it. Progress follows scroll position rather than a one-shot
+timer. Keyboard focus keeps interactive blocks visible; reduced-motion preferences
+disable assembly and parallax. Streamed content is registered as it arrives.
 The home hero features a locally cropped, lightly brightened and sharpened
 portrait, optimized as WebP. The original photo is preserved; the portrait
 sits beside the heading on desktop and below it on mobile.

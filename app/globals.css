@@ -1837,18 +1837,21 @@ textarea:focus-visible {
   gap: 22px;
 }
 
-.reveal {
-  transition: opacity 650ms ease, transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
+@media (prefers-reduced-motion: no-preference) {
+  main {
+    overflow-x: clip;
+  }
 
-.motion-ready .reveal:not(.is-visible) {
-  opacity: 0;
-  transform: translate3d(0, 24px, 0);
-}
+  .motion-ready .scroll-assemble {
+    --assembly-progress: 1;
+    opacity: calc(0.12 + var(--assembly-progress) * 0.88);
+    transform: translateX(calc(var(--assembly-direction, -1) * (1 - var(--assembly-progress)) * clamp(28px, 6vw, 90px)));
+  }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+  .motion-ready .scroll-assemble:focus-within {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .parallax-back {
