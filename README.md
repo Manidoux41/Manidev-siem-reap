@@ -10,6 +10,14 @@ design, original CSS illustrations, and light parallax disabled when
 The home hero features a locally cropped, lightly brightened and sharpened
 portrait, optimized as WebP. The original photo is preserved; the portrait
 sits beside the heading on desktop and below it on mobile.
+Projects retain their illustrated cards in a horizontal, scroll-snapping
+slideshow with previous/next controls, keyboard arrows and native touch
+swiping. Category filters restart at the first matching project; navigation
+respects reduced-motion preferences and does not auto-advance.
+The brighter forest-green palette uses high-contrast text and distinct
+form feedback colors, including dark text on the light admin cards.
+The About section presents the 2023 OpenClassrooms Web Developer diploma
+(level IV, as provided by the portfolio owner) in all four languages.
 
 ## Prérequis
 
@@ -68,6 +76,13 @@ La commande demande un e-mail et un mot de passe de 16 caractères minimum,
 puis stocke un hash scrypt salé. Il n'existe aucun compte ni mot de passe par
 défaut dans le code. Relancer la commande pour la même adresse remplace le hash
 du mot de passe.
+
+Pour accéder au site déployé, utilisez dans `.env.local` les connexions de
+la même base que Vercel, puis lancez `npm run admin:create`. Ouvrez ensuite
+<https://manidev-siem-reap.vercel.app/admin> et saisissez l'e-mail et le mot de
+passe choisis. La création du compte ne connecte pas automatiquement votre
+navigateur. Si les migrations et le seed n'ont pas encore été exécutés sur
+cette base, lancez d'abord `npm run db:deploy && npm run db:seed`.
 
 L'interface se trouve sur `/admin`. Elle permet de créer, modifier, publier,
 dépublier, réordonner et supprimer des projets, de gérer leurs catégories,

@@ -17,6 +17,16 @@ test("the supported locales are English, French, German, and Spanish", () => {
   assert.equal(getSiteLocale("unsupported"), "en");
 });
 
+test("the professional qualification is included in every language", () => {
+  for (const locale of locales) {
+    const { about } = getMessages(locale);
+    assert.match(about.education, /2023/);
+    assert.match(about.education, /OpenClassrooms/);
+    assert.match(about.education, /IV/);
+    assert.ok(about.educationLabel);
+    assert.doesNotMatch(about.description, /self-taught|autodidact/i);
+  }
+});
 test("language switching preserves the current localized route", () => {
   assert.equal(localizedPath("/fr/projects/khmera", "de"), "/de/projects/khmera");
   assert.equal(localizedPath("/en", "es"), "/es");

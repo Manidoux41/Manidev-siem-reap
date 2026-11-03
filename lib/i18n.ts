@@ -69,6 +69,9 @@ const english = {
       "Project details and links are based on public repositories and verified websites. Unknown lifecycle details remain unconfirmed.",
     all: "All",
     filters: "Filter projects",
+    slideshow: "Project slideshow",
+    previous: "Previous project",
+    next: "Next project",
     discover: "Discover the {title} project",
     statusUnknown: "Status to be confirmed",
     statusProduction: "In production",
@@ -95,7 +98,9 @@ const english = {
     second: "by curiosity,",
     third: "a builder by conviction.",
     description:
-      "Self-taught and solution-oriented, I enjoy understanding a need, exploring the right approach, and seeing it through. From web to mobile, I build accessible, useful experiences designed to last.",
+      "A qualified, experienced and solution-oriented developer, I enjoy understanding a need, exploring the right approach, and seeing it through. From web to mobile, I build accessible, useful experiences designed to last.",
+    educationLabel: "Training & qualification",
+    education: "Web Developer diploma, level IV — obtained in 2023 through OpenClassrooms. Formal training complements my hands-on experience and commitment to continuous learning.",
     motto: "“If someone else has done it, you can too.”",
     skills: "Technologies found in these projects",
     skillsNote:
@@ -207,6 +212,9 @@ const translations: Record<SiteLocale, SiteMessages> = {
         "Les informations et liens proviennent des dépôts publics et des sites vérifiés. Les détails encore inconnus restent à confirmer.",
       all: "Tous",
       filters: "Filtrer les projets",
+      slideshow: "Diaporama des projets",
+      previous: "Projet précédent",
+      next: "Projet suivant",
       discover: "Découvrir le projet {title}",
       statusUnknown: "Statut à confirmer",
       statusProduction: "En production",
@@ -233,7 +241,9 @@ const translations: Record<SiteLocale, SiteMessages> = {
       second: "par curiosité,",
       third: "bâtisseur par conviction.",
       description:
-        "Autodidacte et orienté solutions, j’aime comprendre un besoin, explorer les bonnes pistes et aller jusqu’à une réalisation concrète. Du web au mobile, je construis des expériences accessibles, utiles et faites pour durer.",
+        "Développeur diplômé, confirmé et orienté solutions, j’aime comprendre un besoin, explorer les bonnes pistes et aller jusqu’à une réalisation concrète. Du web au mobile, je construis des expériences accessibles, utiles et faites pour durer.",
+      educationLabel: "Formation et diplôme",
+      education: "Diplôme de développeur web de niveau IV, obtenu en 2023 via OpenClassrooms. Une formation diplômante qui complète mon expérience pratique et mon apprentissage continu.",
       motto: "« Si d’autres l’ont fait, tu le peux. »",
       skills: "Technologies repérées dans les projets",
       skillsNote:
@@ -340,6 +350,9 @@ const translations: Record<SiteLocale, SiteMessages> = {
         "Projektangaben und Links basieren auf öffentlichen Repositories und geprüften Websites. Nicht bestätigte Details bleiben ausdrücklich offen.",
       all: "Alle",
       filters: "Projekte filtern",
+      slideshow: "Projekt-Diashow",
+      previous: "Vorheriges Projekt",
+      next: "Nächstes Projekt",
       discover: "Projekt {title} entdecken",
       statusUnknown: "Status noch zu bestätigen",
       statusProduction: "Im Produktivbetrieb",
@@ -366,7 +379,9 @@ const translations: Record<SiteLocale, SiteMessages> = {
       second: "aus Neugier,",
       third: "und Überzeugung.",
       description:
-        "Als Autodidakt mit Lösungsfokus möchte ich Bedürfnisse verstehen, passende Wege erkunden und konkrete Ergebnisse schaffen. Von Web bis Mobile entwickle ich zugängliche, nützliche und nachhaltige Erlebnisse.",
+        "Als ausgebildeter, erfahrener Entwickler mit Lösungsfokus möchte ich Bedürfnisse verstehen, passende Wege erkunden und konkrete Ergebnisse schaffen. Von Web bis Mobile entwickle ich zugängliche, nützliche und nachhaltige Erlebnisse.",
+      educationLabel: "Ausbildung und Abschluss",
+      education: "Abschluss als Webentwickler, französisches Niveau IV — 2023 über OpenClassrooms erworben. Diese Ausbildung ergänzt meine praktische Erfahrung und mein kontinuierliches Lernen.",
       motto: "„Wenn andere es geschafft haben, kannst du es auch.“",
       skills: "In den Projekten verwendete Technologien",
       skillsNote:
@@ -473,6 +488,9 @@ const translations: Record<SiteLocale, SiteMessages> = {
         "La información y los enlaces se basan en repositorios públicos y sitios verificados. Los detalles no confirmados se indican como tales.",
       all: "Todos",
       filters: "Filtrar proyectos",
+      slideshow: "Presentación de proyectos",
+      previous: "Proyecto anterior",
+      next: "Proyecto siguiente",
       discover: "Descubrir el proyecto {title}",
       statusUnknown: "Estado por confirmar",
       statusProduction: "En producción",
@@ -499,7 +517,9 @@ const translations: Record<SiteLocale, SiteMessages> = {
       second: "por curiosidad,",
       third: "constructor por convicción.",
       description:
-        "Autodidacta y orientado a soluciones, disfruto entendiendo una necesidad, explorando el enfoque adecuado y convirtiéndolo en algo concreto. De la web al móvil, creo experiencias accesibles, útiles y duraderas.",
+        "Desarrollador titulado, experimentado y orientado a soluciones, disfruto entendiendo una necesidad, explorando el enfoque adecuado y convirtiéndolo en algo concreto. De la web al móvil, creo experiencias accesibles, útiles y duraderas.",
+      educationLabel: "Formación y diploma",
+      education: "Diploma de desarrollador web, nivel IV francés — obtenido en 2023 a través de OpenClassrooms. Una formación que complementa mi experiencia práctica y mi aprendizaje continuo.",
       motto: "«Si otros lo han hecho, tú también puedes.»",
       skills: "Tecnologías presentes en estos proyectos",
       skillsNote:

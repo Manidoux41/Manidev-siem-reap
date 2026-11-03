@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import type { SiteLocale, SiteMessages } from "@/lib/i18n";
 import type { PortfolioProject } from "@/lib/portfolio-data";
 
@@ -11,6 +11,89 @@ type Props = {
   locale: SiteLocale;
   messages: SiteMessages;
 };
+
+function ProjectSlideshow({
+  children,
+  count,
+  messages,
+}: {
+  children: ReactNode;
+  count: number;
+  messages: SiteMessages["projects"];
+}) {
+  const track = useRef<HTMLDivElement>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  function goToSlide(index: number) {
+    const element = track.current;
+    const slide = element?.children.item(index);
+    if (!element || !(slide instanceof HTMLElement)) return;
+    element.scrollTo({
+      left: slide.offsetLeft,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
+  }
+
+  return (
+    <section className="project-slideshow" aria-label={messages.slideshow}>
+      <div
+        className="project-track"
+        ref={track}
+        tabIndex={0}
+        aria-label={messages.slideshow}
+        onKeyDown={(event) => {
+          if (event.target !== event.currentTarget) return;
+          if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+            event.preventDefault();
+            goToSlide(Math.max(0, Math.min(count - 1,
+              activeSlide + (event.key === "ArrowRight" ? 1 : -1),
+            )));
+          }
+        }}
+        onScroll={() => {
+          const element = track.current;
+          if (!element) return;
+          let nearest = 0;
+          let distance = Infinity;
+          Array.from(element.children).forEach((child, index) => {
+            if (!(child instanceof HTMLElement)) return;
+            const difference = Math.abs(child.offsetLeft - element.scrollLeft);
+            if (difference < distance) {
+              nearest = index;
+              distance = difference;
+            }
+          });
+          setActiveSlide(nearest);
+        }}
+      >
+        {children}
+      </div>
+      <div className="project-slideshow-controls">
+        <button
+          type="button"
+          aria-label={messages.previous}
+          disabled={activeSlide === 0}
+          onClick={() => goToSlide(activeSlide - 1)}
+        >
+          <span aria-hidden="true">←</span>
+        </button>
+        <p className="project-slide-count" role="status" aria-live="polite">
+          {String(activeSlide + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+        </p>
+        <button
+          type="button"
+          aria-label={messages.next}
+          disabled={activeSlide === count - 1}
+          onClick={() => goToSlide(activeSlide + 1)}
+        >
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </section>
+  );
+}
 
 function ProjectScene({
   slug,
@@ -137,10 +220,14 @@ export function ProjectExplorer({ projects, locale, messages }: Props) {
         ))}
       </div>
       {visibleProjects.length > 0 ? (
-        <div className="project-grid">
+        <ProjectSlideshow
+          key={activeCategory}
+          count={visibleProjects.length}
+          messages={messages.projects}
+        >
           {visibleProjects.map((project, index) => (
             <article
-              className={`project-card reveal project-card-${index % 2 ? "offset" : "lead"}`}
+              className="project-card"
               key={project.id}
             >
               <Link
@@ -158,7 +245,7 @@ export function ProjectExplorer({ projects, locale, messages }: Props) {
                       src={project.coverImage}
                       alt={`${messages.projects.artAlt}: ${project.title}`}
                       fill
-                      sizes="(max-width: 800px) 100vw, 58vw"
+                      sizes="(max-width: 800px) 100vw, 850px"
                     />
                   ) : (
                     <ProjectScene slug={project.slug} messages={messages} />
@@ -194,7 +281,7 @@ export function ProjectExplorer({ projects, locale, messages }: Props) {
               </Link>
             </article>
           ))}
-        </div>
+        </ProjectSlideshow>
       ) : (
         <p className="empty-state">{messages.projects.empty}</p>
       )}

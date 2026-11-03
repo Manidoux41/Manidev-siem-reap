@@ -214,6 +214,10 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
                 <p>{messages.about.description}</p>
                 <p className="personal-motto">{messages.about.motto}</p>
               </div>
+              <div className="education-note">
+                <p className="eyebrow">{messages.about.educationLabel}</p>
+                <p>{messages.about.education}</p>
+              </div>
             </div>
             <div className="skills-block reveal">
               <p className="eyebrow">{messages.about.skills}</p>
