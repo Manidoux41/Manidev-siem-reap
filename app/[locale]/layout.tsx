@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     default: "Manfred Parbatia — Full-Stack Developer",
     template: "%s | Manfred Parbatia",
   },
-  applicationName: "Manfred Parbatia — Portfolio",
+  applicationName: "Manidev — Portfolio",
   robots: { index: true, follow: true },
 };
 

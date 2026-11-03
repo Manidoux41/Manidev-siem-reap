@@ -6,6 +6,7 @@ import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { SiteHeader } from "@/components/site-header";
+import { BrandLogo } from "@/components/brand-logo";
 import {
   getMessages,
   getSiteLocale,
@@ -209,7 +210,7 @@ async function ProjectContent({ params }: PageProps) {
       </main>
       <footer className="site-footer">
         <Link className="wordmark" href={`/${locale}`}>
-          MP<span className="wordmark-dot">.</span>
+          <BrandLogo />
         </Link>
         <p>{messages.about.motto}</p>
         <Link href={`/${locale}/#contact`}>

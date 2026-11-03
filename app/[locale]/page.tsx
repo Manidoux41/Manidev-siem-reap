@@ -7,6 +7,7 @@ import { ContactForm } from "@/components/contact-form";
 import { ProjectExplorer } from "@/components/project-explorer";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { SiteHeader } from "@/components/site-header";
+import { BrandLogo } from "@/components/brand-logo";
 import { getMessages, getSiteLocale, localizeProject } from "@/lib/i18n";
 import { getPublicProjects } from "@/lib/project-service";
 import { getPublicSiteSettings } from "@/lib/site-settings";
@@ -196,7 +197,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
         </section>
 
         <section className="manifesto-section" id="apropos">
-          <div className="manifesto-backdrop parallax-mid" aria-hidden="true">MP</div>
+          <div className="manifesto-backdrop parallax-mid" aria-hidden="true">M</div>
           <div className="section manifesto-content">
             <div className="manifesto-label reveal">
               <p className="eyebrow">{messages.about.eyebrow}</p>
@@ -270,7 +271,7 @@ async function HomeContent({ locale }: { locale: ReturnType<typeof getSiteLocale
           href={`/${locale}`}
           aria-label={messages.footer.home}
         >
-          MP<span className="wordmark-dot">.</span>
+          <BrandLogo />
         </Link>
         <p>{messages.footer.made}</p>
         <div>

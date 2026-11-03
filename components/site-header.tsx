@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 import {
   getMessages,
   localeLabels,
@@ -41,7 +42,7 @@ export function SiteHeader({
         aria-label={messages.header.home}
         onClick={() => setMenuOpen(false)}
       >
-        MP<span className="wordmark-dot">.</span>
+        <BrandLogo />
       </Link>
       <button
         className="menu-toggle"

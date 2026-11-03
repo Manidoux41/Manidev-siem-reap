@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef, useState } from "react";
 import { AdminApiBrowser } from "@/components/admin-api-browser";
+import { BrandLogo } from "@/components/brand-logo";
 import { adminSections, type AdminSection } from "@/lib/admin-navigation";
 
 type ProjectStatus = "IN_DEVELOPMENT" | "TEST" | "PRODUCTION" | "UNKNOWN";
@@ -395,6 +396,7 @@ export function AdminConsole({
     <div className="admin-workspace">
       <aside className="admin-sidebar">
         <div className="admin-sidebar-heading">
+          <BrandLogo />
           <p className="eyebrow">Espace éditeur</p>
           <button type="button" className="admin-menu-toggle" aria-expanded={menuOpen} aria-controls="admin-navigation" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? "Fermer le menu" : "Menu admin"}

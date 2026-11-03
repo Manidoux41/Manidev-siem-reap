@@ -17,8 +17,18 @@ controls, keyboard arrows, native touch swiping and mouse dragging are supported
 Dragging does not open project links; normal clicks still do. Category filters
 restart at the first matching project; navigation
 respects reduced-motion preferences and does not auto-advance.
-The brighter forest-green palette uses high-contrast text and distinct
-form feedback colors, including dark text on the light admin cards.
+The Manidev identity uses neutral charcoal surfaces, warm off-white text and
+accessible orange accents. Cyan and navy from the logo remain secondary details,
+not large blue backgrounds.
+Navigation, project cards and illustrations, buttons, forms, footer and admin
+share this palette; success/error colors remain distinct for clear feedback.
+The logo appears in the shared header, public footers, admin sidebar and error
+pages, with a matching browser favicon. The original
+`public/images/logo-manidev.png` is preserved; the cropped, optimized
+`public/images/logo-manidev-brand.webp` removes the white background and margins.
+Its navy lettering is adapted to warm off-white, and the illustration's blues
+are brightened for readability on dark surfaces. Orange and cyan remain.
+No white panel or border surrounds the logo.
 The About section presents the 2023 OpenClassrooms Web Developer diploma
 (level IV, as provided by the portfolio owner) in all four languages.
 
